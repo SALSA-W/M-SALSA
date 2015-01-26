@@ -1,4 +1,4 @@
-package com.salsa.algorithm;
+package com.salsaw.salsa.algorithm;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

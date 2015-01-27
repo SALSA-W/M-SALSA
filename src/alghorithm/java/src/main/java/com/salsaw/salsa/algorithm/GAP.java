@@ -18,14 +18,20 @@ package com.salsaw.salsa.algorithm;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
+/**
+ * Class that defines the GAP. Provides methods to move them, put them together and divide (split);
+ * 
+ * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
+ *
+ */
 public final class GAP {
 	// FIELDS
 	private final int row;
-	private final int begin;
-	private int end;
 	private final int sequencesLength;
+	private int begin;
+	private int end;	
 
-	private final GAP previous;
+	private GAP previous;
 	private GAP next;
 
 	// CONSTRUCTOR
@@ -60,7 +66,7 @@ public final class GAP {
 	}
 
 	public int getLength() {
-		return this.end - this.begin + 1;
+		return this.end - this.getBegin() + 1;
 	}
 
 	public int getEnd() {
@@ -81,7 +87,7 @@ public final class GAP {
 	public void extend() throws SALSAException {
 		this.end++;
 
-		if (end > sequencesLength - 1) {
+		if (this.end > this.sequencesLength - 1) {
 			throw new SALSAException(
 					"Error: GAP exceed the end of the sequence");
 		}
@@ -94,8 +100,7 @@ public final class GAP {
 	 * @return
 	 */
 	public boolean terminalGAP() {
-		// TODO Report code from c
-		return false;
+		return (this.getBegin() == 0 || this.end == this.sequencesLength - 1);
 	}
 
 	/**
@@ -107,29 +112,45 @@ public final class GAP {
 	 * @return
 	 * */
 	public boolean nearPreviousGAP() {
-		// TODO Report code from c
-		return false;
+		return (this.previous != null && this.getBegin() == (this.previous
+				.getEnd() + 1));
 	}
 
 	public boolean nearNextGAP() {
-		// TODO Report code from c
-		return false;
+		return (this.next != null && this.next.getBegin() == (this.end + 1));
 	}
 
 	public boolean nearAnotherGAP() {
-		// TODO Report code from c
-		return false;
+		return nearPreviousGAP() || nearNextGAP();
 	}
 
 	/**
 	 * Next two methods move the GAP of one position.
+	 * 
+	 * @throws SALSAException
 	 */
-	public void moveLeft() {
-		// TODO Report code from c
+	public void moveLeft() throws SALSAException {
+		this.begin--;
+		this.end--;
+
+		if (this.getBegin() < 0) {
+			throw new SALSAException("Error: border exceeded by a GAP.");
+		}
+		if (this.previous != null && this.getBegin() < (this.previous.end + 1)) {
+			throw new SALSAException("Error: overlapping of two GAPs");
+		}
 	}
 
-	public void moveRight() {
-		// TODO Report code from c
+	public void moveRight() throws SALSAException {
+		this.begin++;
+		this.end++;
+
+		if (this.end > (this.sequencesLength - 1)) {
+			throw new SALSAException("Error: border exceeded by a GAP.");
+		}
+		if (this.next != null && this.end > (this.next.begin - 1)) {
+			throw new SALSAException("Error: overlapping of two GAPs");
+		}
 	}
 
 	/**
@@ -138,9 +159,26 @@ public final class GAP {
 	 *
 	 * The unified gap is stored inside g. Therefore, the GAP g is modified, not
 	 * the current one. Current GAP should be deleted by the caller of unify().
+	 * 
+	 * @throws SALSAException
 	 */
-	public void unify() {
-		// TODO Report code from c
+	public void unify() throws SALSAException {
+		if (nearPreviousGAP()) {
+			this.previous.end = this.end;
+			this.previous.next = this.next;
+			if (this.next != null) {
+				this.next.previous = this.previous;
+			}
+		} else if (nearNextGAP()) {
+			this.next.begin = this.begin;
+			this.next.previous = this.previous;
+			if (this.previous != null) {
+				this.previous.next = this.next;
+			}
+		} else {
+			throw new SALSAException(
+					"Error while unify two GAPs: there is no GAP close to the current one.");
+		}
 	}
 
 	/**
@@ -152,9 +190,33 @@ public final class GAP {
 	 * one on the left.
 	 * 
 	 * @return
+	 * @throws SALSAException
 	 * */
-	public GAP split(int column, boolean leftNew) {
-		// TODO Report code from c
-		return null;
+	public GAP split(int column, boolean leftNew) throws SALSAException {
+		if (column < begin || column >= end) {
+			throw new SALSAException(
+					"Error while splitting a GAP: the specified point is not inside the GAP.");
+		}
+		GAP gap;
+
+		if (leftNew) {
+			gap = new GAP(this.row, this.begin, this.sequencesLength,
+					this.previous, this, column - this.begin + 1);
+			if (this.previous != null) {
+				this.previous.next = gap;
+			}
+			this.previous = gap;
+			this.begin = column + 1;
+		} else {
+			gap = new GAP(this.row, column + 1, this.sequencesLength, this,
+					this.next, this.end - column);
+			if (this.next != null) {
+				this.next.previous = gap;
+			}
+			this.next = gap;
+			this.end = column;
+		}
+
+		return gap;
 	}
 }

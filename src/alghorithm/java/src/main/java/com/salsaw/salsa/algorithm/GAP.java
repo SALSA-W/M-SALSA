@@ -20,7 +20,9 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
  * Class that defines the GAP. Provides methods to move them, put them together and divide (split);
- * 
+ * <p>
+ * Note: methods and class are final for better performance
+ * </p>
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
@@ -57,23 +59,23 @@ public final class GAP {
 	}
 
 	// GET / SET
-	public int getRow() {
+	public final int getRow() {
 		return this.row;
 	}
 
-	public int getBegin() {
+	public final int getBegin() {
 		return this.begin;
 	}
 
-	public int getLength() {
+	public final int getLength() {
 		return this.end - this.getBegin() + 1;
 	}
 
-	public int getEnd() {
+	public final int getEnd() {
 		return this.end;
 	}
 
-	public void setNext(GAP next) {
+	public final void setNext(GAP next) {
 		this.next = next;
 	}
 
@@ -84,7 +86,7 @@ public final class GAP {
 	 * 
 	 * @throws SALSAException
 	 */
-	public void extend() throws SALSAException {
+	public final void extend() throws SALSAException {
 		this.end++;
 
 		if (this.end > this.sequencesLength - 1) {
@@ -99,7 +101,7 @@ public final class GAP {
 	 * 
 	 * @return
 	 */
-	public boolean terminalGAP() {
+	public final boolean terminalGAP() {
 		return (this.getBegin() == 0 || this.end == this.sequencesLength - 1);
 	}
 
@@ -111,16 +113,16 @@ public final class GAP {
 	 * 
 	 * @return
 	 * */
-	public boolean nearPreviousGAP() {
+	public final boolean nearPreviousGAP() {
 		return (this.previous != null && this.getBegin() == (this.previous
 				.getEnd() + 1));
 	}
 
-	public boolean nearNextGAP() {
+	public final boolean nearNextGAP() {
 		return (this.next != null && this.next.getBegin() == (this.end + 1));
 	}
 
-	public boolean nearAnotherGAP() {
+	public final boolean nearAnotherGAP() {
 		return nearPreviousGAP() || nearNextGAP();
 	}
 
@@ -129,7 +131,7 @@ public final class GAP {
 	 * 
 	 * @throws SALSAException
 	 */
-	public void moveLeft() throws SALSAException {
+	public final void moveLeft() throws SALSAException {
 		this.begin--;
 		this.end--;
 
@@ -141,7 +143,7 @@ public final class GAP {
 		}
 	}
 
-	public void moveRight() throws SALSAException {
+	public final void moveRight() throws SALSAException {
 		this.begin++;
 		this.end++;
 
@@ -162,7 +164,7 @@ public final class GAP {
 	 * 
 	 * @throws SALSAException
 	 */
-	public void unify() throws SALSAException {
+	public final void unify() throws SALSAException {
 		if (nearPreviousGAP()) {
 			this.previous.end = this.end;
 			this.previous.next = this.next;
@@ -192,7 +194,7 @@ public final class GAP {
 	 * @return
 	 * @throws SALSAException
 	 * */
-	public GAP split(int column, boolean leftNew) throws SALSAException {
+	public final GAP split(int column, boolean leftNew) throws SALSAException {
 		if (column < begin || column >= end) {
 			throw new SALSAException(
 					"Error while splitting a GAP: the specified point is not inside the GAP.");

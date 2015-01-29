@@ -18,11 +18,18 @@ package com.salsaw.salsa.algorithm;
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
+ * Next two are used for efficiency reasons: before starting the local search,
+ * each cell of the alignment are converted in an integer. Then, during the local search,
+ * the score is calculated only by accessing the substitution matrix. The converted characters
+ * are indeed the indexes of the substitution matrix. Without this conversion it would be
+ * necessary to calculate every time the score's position in the substitution matrix.
+ * 
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
 public class Alphabet {
-	// FILEDS
+	// FIELDS
 	private final int numberOfCharacters;
 	private final char[] alphabet;	
 	
@@ -50,42 +57,70 @@ public class Alphabet {
 	
 	// METHODS
 	/**
-	 * Next two are used for efficiency reasons: before starting the local search,
+	 * Conversion of character in an integer
+	 * <p>Note: Used for efficiency reasons: before starting the local search,
 	 * each cell of the alignment are converted in an integer. Then, during the local search,
 	 * the score is calculated only by accessing the substitution matrix. The converted characters
 	 * are indeed the indexes of the substitution matrix. Without this conversion it would be
-	 * necessary to calculate every time the score's position in the substitution matrix.
-	 **/
-	//Conversion of character in an integer
-	public int charToInt(char c){
-		// TODO Report code from c
-		return 0;
+	 * necessary to calculate every time the score's position in the substitution matrix.</p>
+	 * 
+	 * @param c
+	 * @return
+	 * @throws SALSAException 
+	 */
+	public final int charToInt(char c) throws SALSAException{		
+		for (int i=0; i<this.numberOfCharacters; i++){
+			if (this.alphabet[i]==c){
+				return i;
+			}
+		}
+
+		if (c=='-'){
+			// INDEL
+			return this.numberOfCharacters;
+		}
+		else{
+			throw new SALSAException("Alphabet doesn't contain character \'"+ c + "\'.");
+		}
 	}
 	/**
 	 * Conversion of an integer in a character (to be used after the end of local search)
+	 * <p>Note: Used for efficiency reasons: before starting the local search,
+	 * each cell of the alignment are converted in an integer. Then, during the local search,
+	 * the score is calculated only by accessing the substitution matrix. The converted characters
+	 * are indeed the indexes of the substitution matrix. Without this conversion it would be
+	 * necessary to calculate every time the score's position in the substitution matrix.</p>
+	 * 
 	 * @param i
 	 * @return
+	 * @throws SALSAException 
 	 */
-	public char intToChar(int i){
-		// TODO Report code from c
-		return 0;
+	public final char intToChar(int i) throws SALSAException{
+		// this.numberOfCharacters as INDEL
+		if (i == this.numberOfCharacters){
+			return '-';
+		}
+		if (i<0 || i>(this.numberOfCharacters-1)){
+			throw new SALSAException("Error while saving the alignment");
+		}
+		
+		return alphabet[i];
 	}
 
 	/**
 	 * Dimension of the alphabet number of characters
 	 * @return
 	 */
-	public int dimension(){
-		// TODO Report code from c
-		return 0;
+	public final int dimension(){
+		return this.numberOfCharacters;
 	}
 	
 	/**
 	 * The representation of the INDEL in the integer form (see above)
+	 * <p>Note: Indel is a molecular biology term for the insertion or the deletion of bases in the DNA of an organism</p>
 	 * @return
 	 */
-	public int INDEL(){
-		// TODO Report code from c
-		return 0;
+	public final int INDEL(){
+		return this.numberOfCharacters;
 	}
 }

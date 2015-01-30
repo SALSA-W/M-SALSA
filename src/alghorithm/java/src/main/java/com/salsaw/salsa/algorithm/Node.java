@@ -20,5 +20,14 @@ package com.salsaw.salsa.algorithm;
  *
  */
 public final class Node {
+	
+	public Node(String n, Node l, Node r, Node p, float d){
+		
+	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

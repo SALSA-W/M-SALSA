@@ -23,7 +23,7 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
  */
 public final class Tree {
 	// FIELDS
-	private final Node root;
+	private Node root;
 	private final Node[] leaves;
 	private final int insertedSequences;
 
@@ -56,7 +56,12 @@ public final class Tree {
 	 * Re-root the tree
 	 */
 	public final void changeRoot() {
-		// TODO Report code from c
+		//Find best root
+		Node bestNode=this.root.calculatePositionOfRoot(this.insertedSequences);
+
+		if (bestNode!=null){
+			this.root=bestNode.addRoot();
+		}
 	}
 
 	/**
@@ -78,7 +83,7 @@ public final class Tree {
 			// Calculate sequence's index in the alignment
 			index = -1;
 			for (int j = 0; j < this.insertedSequences && index == - 1; j++) {
-				if (names[j] == (leaves[i].getName())) {
+				if (names[j] == (this.leaves[i].getName())) {
 					index = j;
 				}
 			}
@@ -89,14 +94,14 @@ public final class Tree {
 			}
 
 			// Calculate the weight of the i-th leaf
-			weights[index] = leafWeight(leaves[i]);
+			weights[index] = leafWeight(this.leaves[i]);
 			weightsSum += weights[index];
 		}
 
 		return weightsSum;
 	}
 
-	public final void printTree() {
+	public final void printTree() {		
 		// TODO Report code from c
 	}
 
@@ -111,8 +116,17 @@ public final class Tree {
 	}
 
 	private final float leafWeight(Node leaf) {
-		// TODO Report code from c
-		return 0;
+		Node current =leaf;
+		float weight= 0.0f;
+		
+		// Cycling until the root has been found (parent = null)
+		while (current != null){
+			weight+=current.getDistance() /current.getDescendentLeaves();
+
+			current = current.getParent();
+		}
+
+		return weight;
 	}
 
 }

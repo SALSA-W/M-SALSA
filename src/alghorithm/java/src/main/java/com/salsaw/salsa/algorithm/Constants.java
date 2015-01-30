@@ -19,40 +19,6 @@ package com.salsaw.salsa.algorithm;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public final class Node {
-	
-	public Node(String n, Node l, Node r, Node p, float d){
-		
-	}
-
-	public final String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final int getDistance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public final int getDescendentLeaves() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public final Node getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final Node calculatePositionOfRoot(int insertedSequences) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final Node addRoot() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+public final class Constants {
+	public static final String NEW_LINE = System.getProperty("line.separator"); 
 }

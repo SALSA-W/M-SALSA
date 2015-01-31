@@ -20,9 +20,58 @@ package com.salsaw.salsa.algorithm;
  *
  */
 public final class Node {
-	
-	public Node(String n, Node l, Node r, Node p, float d){
-		
+
+	// FIELDS
+	private final String name;
+	private final Node left;
+	private Node right;
+	private final Node parent;
+
+	private final float distance;
+	private int descendantLeaves;
+
+	/**
+	 * It represent the sum of distances between this node and its descendant
+	 * leaves
+	 */
+	private float distancesSum;
+	private float difference;
+
+	// METHODS
+	public Node(String name, Node left, Node right, Node parent, float distance) {
+
+		this.name = name;
+		this.left = left;
+		this.right = right;
+		this.parent = parent;
+
+		this.distance = distance;
+
+		// In this way, descendentLeafs is correct
+		setRight(right);
+	}
+
+	private final void setRight(Node right) {
+		this.right = right;
+
+		this.descendantLeaves = 0;
+		this.distancesSum = 0;
+		if (this.right != null) {
+			this.descendantLeaves = this.right.descendantLeaves;
+			this.distancesSum = this.right.distancesSum + this.right.distance
+					* this.right.descendantLeaves;
+		}
+		if (this.left != null) {
+			this.descendantLeaves += this.left.descendantLeaves;
+			this.distancesSum += this.left.distancesSum + this.left.distance
+					* this.left.descendantLeaves;
+		}
+
+		if (this.descendantLeaves == 0) {
+			// The node is a leaf itself
+			this.descendantLeaves = 1; 
+		}
+
 	}
 
 	public final String getName() {
@@ -53,6 +102,28 @@ public final class Node {
 	public final Node addRoot() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	// PRIVATE METHODS
+
+	/**
+	 * Right now, newParent is a son of the current node. The method invert the
+	 * current parent with newParent and do a recursive call.
+	 */
+	private final void invertNode(Node newParent, float newDistance) {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * Calculate the number of descendant leaves of the current node and all the
+	 * descendant nodes. Called on the root of a tree, it updates the internal
+	 * variable descendantLeaves on all the nodes of the tree.
+	 * 
+	 * @return
+	 */
+	private final int calculateDescendantLeaves() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

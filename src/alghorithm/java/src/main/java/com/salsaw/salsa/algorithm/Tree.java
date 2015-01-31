@@ -32,6 +32,8 @@ public final class Tree {
 	 * The parameters are the name of the file containing the tree in the Newick
 	 * notation and the number of sequences
 	 * 
+	 * @see <a href="spec.html#http://en.wikipedia.org/wiki/Newick_format">Newick</a>
+	 * 
 	 * @param fileName
 	 * @param numberOfSequences
 	 */

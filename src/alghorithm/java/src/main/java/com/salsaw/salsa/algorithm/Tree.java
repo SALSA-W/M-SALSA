@@ -56,8 +56,10 @@ public final class Tree {
 
 	/**
 	 * Re-root the tree
+	 * 
+	 * @throws SALSAException 
 	 */
-	public final void changeRoot() {
+	public final void changeRoot() throws SALSAException {
 		//Find best root
 		Node bestNode=this.root.calculatePositionOfRoot(this.insertedSequences);
 

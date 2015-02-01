@@ -160,9 +160,29 @@ public final class Node {
 		return null;
 	}
 
-	public final Node addRoot() {
-		// TODO Auto-generated method stub
-		return null;
+	public final Node addRoot() throws SALSAException {
+		if (this.parent!=null){
+			float newDistance=this.difference/2;
+			float newDistanceParent=this.distance-newDistance;
+
+			Node root= new Node("ROOT",parent, this, null, 0.0f);
+			if (this.parent.left==this){
+				this.parent.left=root;
+			}
+			else{
+				this.parent.right=root;
+			}
+			this.parent=root;
+			this.distance=newDistance;
+
+			root.left.invertNode(root,newDistanceParent);
+			root.calculateDescendantLeaves();
+
+			return root;
+		}
+		else{
+			return this;
+		}
 	}
 
 	// PRIVATE METHODS

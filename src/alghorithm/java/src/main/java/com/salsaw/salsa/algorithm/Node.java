@@ -24,7 +24,7 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 public final class Node {
 
 	// FIELDS
-	private final String name;
+	private String name;
 	private Node left;
 	private Node right;
 	private Node parent;
@@ -39,7 +39,7 @@ public final class Node {
 	private float distancesSum;
 	private float difference;
 
-	// METHODS
+	// CONSTRUCTORS
 	public Node(String name, Node left, Node right, Node parent, float distance) {
 
 		this.name = name;
@@ -53,7 +53,82 @@ public final class Node {
 		setRight(right);
 	}
 
-	private final void setRight(Node right) {
+	// GET/SET
+	public final String getName() {
+		return this.name;
+	}
+
+	public final Node getLeft() {
+		return this.left;
+	}
+
+	public final Node getRight() {
+		return this.right;
+	}
+
+	public final Node getParent() {
+		return this.parent;
+	}
+	
+	public final Node getBrother() throws SALSAException{
+		if (this.parent!=null){
+			if (this.parent.left==this){
+				return this.parent.right;
+			}
+			else if (this.parent.right==this){
+				return this.parent.left;
+			}
+			else{
+				throw new SALSAException("Error: two node brothers have a different parent.");
+			}
+		}
+		return null;
+	}
+	
+
+	public final float getDistance() {
+		return this.distance;
+	}
+
+	public final int getDescendentLeaves() {
+		return this.descendantLeaves;
+	}
+
+	public final void setName(String name) {
+		this.name = name;
+	}
+	
+	public final  void setParent(Node parent){
+		this.parent=parent;
+	}
+
+	public final  void setDistance(float distance){
+		this.distance=distance;
+	}
+
+	public final void setLeft(Node left) {
+		this.left = left;
+
+		this.descendantLeaves = 0;
+		this.distancesSum = 0;
+		if (this.left != null) {
+			this.descendantLeaves = this.left.descendantLeaves;
+			this.distancesSum = this.left.distancesSum + this.left.distance
+					* this.left.descendantLeaves;
+		}
+		if (this.right != null) {
+			this.descendantLeaves += this.right.descendantLeaves;
+			this.distancesSum += this.right.distancesSum + this.right.distance
+					* this.right.descendantLeaves;
+		}
+
+		if (this.descendantLeaves == 0) {
+			// The node is a leaf itself
+			this.descendantLeaves = 1;
+		}
+	}
+
+	public final void setRight(Node right) {
 		this.right = right;
 
 		this.descendantLeaves = 0;
@@ -71,29 +146,13 @@ public final class Node {
 
 		if (this.descendantLeaves == 0) {
 			// The node is a leaf itself
-			this.descendantLeaves = 1; 
+			this.descendantLeaves = 1;
 		}
-
 	}
 
-	public final String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final int getDistance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public final int getDescendentLeaves() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public final Node getParent() {
-		// TODO Auto-generated method stub
-		return null;
+	// METHODS
+	public final boolean leaf() {
+		return (left == null && right == null);
 	}
 
 	public final Node calculatePositionOfRoot(int insertedSequences) {
@@ -107,29 +166,29 @@ public final class Node {
 	}
 
 	// PRIVATE METHODS
-
 	/**
 	 * Right now, newParent is a son of the current node. The method invert the
 	 * current parent with newParent and do a recursive call.
-	 * @throws SALSAException 
+	 * 
+	 * @throws SALSAException
 	 */
-	private final void invertNode(Node newParent, float newDistance) throws SALSAException {
+	private final void invertNode(Node newParent, float newDistance)
+			throws SALSAException {
 		Node oldParent = this.parent;
 		float oldDistance = this.distance;
-		this.parent=newParent;
-		this.distance=newDistance;
+		this.parent = newParent;
+		this.distance = newDistance;
 
-		if (this.left==newParent) {
-			this.left=oldParent;
-		}
-		else if (this.right==newParent) {
-			this.right=oldParent;
-		}
-		else{
-			throw new SALSAException("Error while trying to invert parent with son in the tree.");
+		if (this.left == newParent) {
+			this.left = oldParent;
+		} else if (this.right == newParent) {
+			this.right = oldParent;
+		} else {
+			throw new SALSAException(
+					"Error while trying to invert parent with son in the tree.");
 		}
 
-		if (oldParent != null){
+		if (oldParent != null) {
 			// Recursive call on old parent
 			oldParent.invertNode(this, oldDistance);
 		}
@@ -143,17 +202,17 @@ public final class Node {
 	 * @return
 	 */
 	private final int calculateDescendantLeaves() {
-		this.descendantLeaves=0;
-		if (this.left!=null){
-			this.descendantLeaves=this.left.calculateDescendantLeaves();
+		this.descendantLeaves = 0;
+		if (this.left != null) {
+			this.descendantLeaves = this.left.calculateDescendantLeaves();
 		}
-		if (this.right!=null){
-			this.descendantLeaves+=this.right.calculateDescendantLeaves();
+		if (this.right != null) {
+			this.descendantLeaves += this.right.calculateDescendantLeaves();
 		}
 
-		if (this.descendantLeaves==0) {
-			//The node is a leaf itself
-			this.descendantLeaves=1; 
+		if (this.descendantLeaves == 0) {
+			// The node is a leaf itself
+			this.descendantLeaves = 1;
 		}
 		return this.descendantLeaves;
 	}

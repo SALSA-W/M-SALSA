@@ -69,22 +69,20 @@ public final class Node {
 	public final Node getParent() {
 		return this.parent;
 	}
-	
-	public final Node getBrother() throws SALSAException{
-		if (this.parent!=null){
-			if (this.parent.left==this){
+
+	public final Node getBrother() throws SALSAException {
+		if (this.parent != null) {
+			if (this.parent.left == this) {
 				return this.parent.right;
-			}
-			else if (this.parent.right==this){
+			} else if (this.parent.right == this) {
 				return this.parent.left;
-			}
-			else{
-				throw new SALSAException("Error: two node brothers have a different parent.");
+			} else {
+				throw new SALSAException(
+						"Error: two node brothers have a different parent.");
 			}
 		}
 		return null;
 	}
-	
 
 	public final float getDistance() {
 		return this.distance;
@@ -97,13 +95,13 @@ public final class Node {
 	public final void setName(String name) {
 		this.name = name;
 	}
-	
-	public final  void setParent(Node parent){
-		this.parent=parent;
+
+	public final void setParent(Node parent) {
+		this.parent = parent;
 	}
 
-	public final  void setDistance(float distance){
-		this.distance=distance;
+	public final void setDistance(float distance) {
+		this.distance = distance;
 	}
 
 	public final void setLeft(Node left) {
@@ -155,32 +153,118 @@ public final class Node {
 		return (left == null && right == null);
 	}
 
-	public final Node calculatePositionOfRoot(int insertedSequences) {
-		// TODO Auto-generated method stub
+	/**
+	 * It returns the best candidate for the role of root. The best root is the
+	 * one that minimize the difference between left and right means.
+	 * Left[Right] mean is the mean of distances from left[right] leaves to the
+	 * root. Left leaves are the leaves in the left sub tree, and right leaves
+	 * the others.
+	 *
+	 * Variable totalNumberOfLeafs is the total amount of leaves in all the tree
+	 * and parentLeftSum is the sum of distances between parent's left leaves
+	 * and parent himself.
+	 * 
+	 * @param totalNumberOfLeafs
+	 * @return
+	 * @throws SALSAException
+	 */
+	public final Node calculatePositionOfRoot(int totalNumberOfLeafs)
+			throws SALSAException {
+		return calculatePositionOfRoot(totalNumberOfLeafs, 0.0f);
+	}
+
+	/**
+	 * It returns the best candidate for the role of root. The best root is the
+	 * one that minimize the difference between left and right means.
+	 * Left[Right] mean is the mean of distances from left[right] leaves to the
+	 * root. Left leaves are the leaves in the left sub tree, and right leaves
+	 * the others.
+	 *
+	 * Variable totalNumberOfLeafs is the total amount of leaves in all the tree
+	 * and parentLeftSum is the sum of distances between parent's left leaves
+	 * and parent himself.
+	 * 
+	 * @param totalNumberOfLeafs
+	 * @param parentLeftSum
+	 * @return
+	 * @throws SALSAException
+	 */
+	public final Node calculatePositionOfRoot(int totalNumberOfLeafs,
+			float parentLeftSum) throws SALSAException {
+		Node brother = getBrother();
+		int numberOfLeftLeaves = totalNumberOfLeafs - this.descendantLeaves;
+
+		// Distances of brother's descendant leaves from parent
+		float d = 0;
+		if (brother != null) {
+			d = brother.distancesSum + brother.distance
+					* brother.descendantLeaves;
+		}
+
+		// Distances of all left leaves from parent
+		d += parentLeftSum;
+
+		// Distances of all left leaves from the current node
+		d += this.distance * numberOfLeftLeaves;
+
+		float leftMean = 0.0f;
+		if (numberOfLeftLeaves != 0) {
+			leftMean = d / numberOfLeftLeaves;
+		}
+
+		if (this.left != null) {
+			Node rootLeft = this.left.calculatePositionOfRoot(
+					totalNumberOfLeafs, d);
+			if (rootLeft != null) {
+				return rootLeft;
+			}
+		}
+		if (this.right != null) {
+			Node rootRight = this.right.calculatePositionOfRoot(
+					totalNumberOfLeafs, d);
+			if (rootRight != null) {
+				return rootRight;
+			}
+		}
+
+		float currentDifference = leftMean
+				- (this.distancesSum / this.descendantLeaves);
+		if (currentDifference == 0
+				|| (currentDifference > 0 && currentDifference < 2 * this.distance)) {
+			this.difference = currentDifference;
+			return this;
+		}
+
 		return null;
 	}
 
+	/**
+	 * It generates a new node and changes the tree in order to let him become
+	 * the new root. It has to be invoked on the node returned by
+	 * valculatePositionOfRoot.
+	 * 
+	 * @return
+	 * @throws SALSAException
+	 */
 	public final Node addRoot() throws SALSAException {
-		if (this.parent!=null){
-			float newDistance=this.difference/2;
-			float newDistanceParent=this.distance-newDistance;
+		if (this.parent != null) {
+			float newDistance = this.difference / 2;
+			float newDistanceParent = this.distance - newDistance;
 
-			Node root= new Node("ROOT",parent, this, null, 0.0f);
-			if (this.parent.left==this){
-				this.parent.left=root;
+			Node root = new Node("ROOT", parent, this, null, 0.0f);
+			if (this.parent.left == this) {
+				this.parent.left = root;
+			} else {
+				this.parent.right = root;
 			}
-			else{
-				this.parent.right=root;
-			}
-			this.parent=root;
-			this.distance=newDistance;
+			this.parent = root;
+			this.distance = newDistance;
 
-			root.left.invertNode(root,newDistanceParent);
+			root.left.invertNode(root, newDistanceParent);
 			root.calculateDescendantLeaves();
 
 			return root;
-		}
-		else{
+		} else {
 			return this;
 		}
 	}

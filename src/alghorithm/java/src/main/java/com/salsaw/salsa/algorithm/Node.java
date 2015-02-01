@@ -15,6 +15,8 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
+
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
@@ -23,11 +25,11 @@ public final class Node {
 
 	// FIELDS
 	private final String name;
-	private final Node left;
+	private Node left;
 	private Node right;
-	private final Node parent;
+	private Node parent;
 
-	private final float distance;
+	private float distance;
 	private int descendantLeaves;
 
 	/**
@@ -109,9 +111,28 @@ public final class Node {
 	/**
 	 * Right now, newParent is a son of the current node. The method invert the
 	 * current parent with newParent and do a recursive call.
+	 * @throws SALSAException 
 	 */
-	private final void invertNode(Node newParent, float newDistance) {
-		// TODO Auto-generated method stub
+	private final void invertNode(Node newParent, float newDistance) throws SALSAException {
+		Node oldParent = this.parent;
+		float oldDistance = this.distance;
+		this.parent=newParent;
+		this.distance=newDistance;
+
+		if (this.left==newParent) {
+			this.left=oldParent;
+		}
+		else if (this.right==newParent) {
+			this.right=oldParent;
+		}
+		else{
+			throw new SALSAException("Error while trying to invert parent with son in the tree.");
+		}
+
+		if (oldParent != null){
+			// Recursive call on old parent
+			oldParent.invertNode(this, oldDistance);
+		}
 	}
 
 	/**
@@ -122,8 +143,19 @@ public final class Node {
 	 * @return
 	 */
 	private final int calculateDescendantLeaves() {
-		// TODO Auto-generated method stub
-		return 0;
+		this.descendantLeaves=0;
+		if (this.left!=null){
+			this.descendantLeaves=this.left.calculateDescendantLeaves();
+		}
+		if (this.right!=null){
+			this.descendantLeaves+=this.right.calculateDescendantLeaves();
+		}
+
+		if (this.descendantLeaves==0) {
+			//The node is a leaf itself
+			this.descendantLeaves=1; 
+		}
+		return this.descendantLeaves;
 	}
 
 }

@@ -19,4 +19,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #Build
-[![Build Status](https://travis-ci.org/SALSA-W/SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/SALSA)
+[![Build Status](https://travis-ci.org/SALSA-W/M-SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/M-SALSA)

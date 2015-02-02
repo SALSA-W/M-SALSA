@@ -11,11 +11,21 @@ env:
 
 addons:
   coverity_scan:
+    # GitHub project metadata
     project:
       name: "SALSA-W/M-SALSA"
       description: "Build submitted via Travis CI"
+    
+    # Commands to prepare for build_command
+    # ** likely specific to your build **
     build_command_prepend: "mvn clean"
+
+    # The command that will be added as an argument to "cov-build" to compile your project
     build_command: "mvn -DskipTests=true compile"
+    
+    # Pattern to match selecting branches that will run analysis.
+    # Take care in resource usage, and consider the build frequency allowances per
+    #   https://scan.coverity.com/faq#frequency
     branch_pattern: coverity_scan
 
 script:

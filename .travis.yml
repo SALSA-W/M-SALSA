@@ -4,3 +4,18 @@ jdk:
 script: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 notifications:
   email: false
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "MsagUX0vedc+fJpmwffGTYNpAT/XXXgkZDOInMCYf/dFFjPnhWV+dKT+RUbgSrTubbaZpLA0iUMhR76M6fjOm4sdVNglGLx5fhRw8Jw74EuZND9dkuNQIgRyNJf/Jt6lPocHzBY5jqML2h8dGocAD9bcp0WG/833uyTJ3yHEMak="
+
+addons:
+  coverity_scan:
+    project:
+      name: "SALSA-W/M-SALSA"
+      description: "Build submitted via Travis CI"
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan

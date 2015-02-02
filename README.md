@@ -19,4 +19,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #Build
-[![Build Status](https://drone.io/github.com/SALSA-W/SALSA/status.png)](https://drone.io/github.com/SALSA-W/SALSA/latest)
+[![Build Status](https://travis-ci.org/SALSA-W/SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/SALSA)

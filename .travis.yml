@@ -15,6 +15,8 @@ addons:
     project:
       name: "SALSA-W/M-SALSA"
       description: "Build submitted via Travis CI"
+	  
+    notification_email: m.salsa@scientist.com
     
     # Commands to prepare for build_command
     # ** likely specific to your build **

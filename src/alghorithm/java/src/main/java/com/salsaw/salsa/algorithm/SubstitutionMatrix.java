@@ -15,15 +15,58 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
+
 /**
- * It represent the substitution matrix.
- * The role is to return the value of m(α;β) using method score. 
+ * It represent the substitution matrix. The role is to return the value of
+ * m(α;β) using method score.
  * 
- * <p>Note: inside the matrix is represented by an array</p>
+ * <p>
+ * Note: inside the matrix is represented by an array
+ * </p>
  * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
 public final class SubstitutionMatrix {
+
+	// FIELDS
+	private final int alphabetLength;
+	/**
+	 * GAP extension penalty
+	 */
+	private final float GEP;
+
+	private final Alphabet alphabet;
+
+	private final int[] matrix;
+
+	// CONSTRUCTOR
+
+	// GET/SET
+	public final Alphabet getAlphabet() {
+		return this.alphabet;
+	}
+
+	public SubstitutionMatrix(String filePath, int alphabetLength, float gep)
+			throws SALSAException {
+		this.matrix = new int[alphabetLength * alphabetLength];
+		this.alphabetLength = alphabetLength;
+		this.GEP = gep;
+
+		this.alphabet = new Alphabet("TODO", alphabetLength);
+	}
+
+	/**
+	 * Calculate the score between two characters (converted in integers)
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public final float score(int a, int b) {
+		// TODO - report code from C
+		return 0f;
+	}
 
 }

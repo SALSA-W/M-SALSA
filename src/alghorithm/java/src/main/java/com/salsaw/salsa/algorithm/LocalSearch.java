@@ -16,6 +16,8 @@
 package com.salsaw.salsa.algorithm;
 
 /**
+ * Manage and perform the local search
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */

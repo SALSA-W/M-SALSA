@@ -16,6 +16,11 @@
 package com.salsaw.salsa.algorithm;
 
 /**
+ * It represent the substitution matrix.
+ * The role is to return the value of m(α;β) using method score. 
+ * 
+ * <p>Note: inside the matrix is represented by an array</p>
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */

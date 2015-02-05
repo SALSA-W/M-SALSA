@@ -15,6 +15,10 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
@@ -49,12 +53,23 @@ public final class SubstitutionMatrix {
 	}
 
 	public SubstitutionMatrix(String filePath, int alphabetLength, float gep)
-			throws SALSAException {
+			throws SALSAException, IOException {
 		this.matrix = new int[alphabetLength * alphabetLength];
 		this.alphabetLength = alphabetLength;
-		this.GEP = gep;
-
-		this.alphabet = new Alphabet("TODO", alphabetLength);
+		this.GEP = gep;		
+		
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+			// Read first line with the alphabet
+			String line = bufferedReader.readLine();
+			this.alphabet = new Alphabet(line, alphabetLength);
+			
+			// Read the values for the matrix value (the matrix is alphabet x alphabet)
+			for (int i=0; i<alphabetLength;i++){
+				for (int j=0; j<alphabetLength; j++){
+					matrix[i*alphabetLength+j] = bufferedReader.read();
+				}
+			}
+		}
 	}
 
 	/**
@@ -65,8 +80,18 @@ public final class SubstitutionMatrix {
 	 * @return
 	 */
 	public final float score(int a, int b) {
-		// TODO - report code from C
-		return 0f;
+		if (a == this.alphabet.INDEL()) {
+			if (b == this.alphabet.INDEL()) {
+				return 0;
+			} else {
+				return -GEP;
+			}
+		}
+		if (b == this.alphabet.INDEL()) {
+			return -GEP;
+		}
+
+		return matrix[a * alphabetLength + b];
 	}
 
 }

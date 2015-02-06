@@ -16,8 +16,10 @@
 package com.salsaw.salsa.algorithm;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
@@ -58,18 +60,19 @@ public final class SubstitutionMatrix {
 		this.alphabetLength = alphabetLength;
 		this.GEP = gep;		
 		
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+		try(Scanner scanner = new Scanner(new File(filePath)))
+		{
 			// Read first line with the alphabet
-			String line = bufferedReader.readLine();
+			String line = scanner.nextLine();
 			this.alphabet = new Alphabet(line, alphabetLength);
 			
 			// Read the values for the matrix value (the matrix is alphabet x alphabet)
 			for (int i=0; i<alphabetLength;i++){
 				for (int j=0; j<alphabetLength; j++){
-					matrix[i*alphabetLength+j] = bufferedReader.read();
+					matrix[i*alphabetLength+j] = scanner.nextInt();
 				}
 			}
-		}
+		}		
 	}
 
 	/**

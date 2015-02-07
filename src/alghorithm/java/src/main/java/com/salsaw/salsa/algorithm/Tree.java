@@ -15,6 +15,14 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
@@ -25,7 +33,7 @@ public final class Tree {
 	// FIELDS
 	private Node root;
 	private final Node[] leaves;
-	private final int insertedSequences;
+	private int insertedSequences;
 
 	// METHODS
 	/**
@@ -36,8 +44,11 @@ public final class Tree {
 	 * 
 	 * @param fileName
 	 * @param numberOfSequences
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws SALSAException 
 	 */
-	public Tree(final String fileName, int numberOfSequences) {
+	public Tree(final String fileName, int numberOfSequences) throws FileNotFoundException, IOException, SALSAException {
 
 		this.insertedSequences = 0;
 		// file.open(fileName);
@@ -47,7 +58,14 @@ public final class Tree {
 
 		this.leaves = new Node[numberOfSequences];
 
-		this.root = createNode(null);
+        try (InputStream in = new FileInputStream(fileName);        
+                Reader reader = new InputStreamReader(in);
+                // buffer for efficiency
+        		BufferedReader buffer = new BufferedReader(reader)){
+        	this.root = createNode(buffer, null);
+           }
+		
+		
 
 		// file.close();
 
@@ -109,14 +127,76 @@ public final class Tree {
 		// TODO Report code from c
 	}
 
-	private final String readName() {
+	private final String readName(BufferedReader reader) {
 		// TODO Report code from c
 		return null;
 	}
 
-	private final Node createNode(Node parent) {
+	private final Node createNode(BufferedReader reader, Node parent) throws IOException, SALSAException {
+		
+		Node current = new Node("", null, null, parent, 0);
+		char c;
+		float distance;
+		
+		String line = reader.readLine();
+		
+		c= line.charAt(0);
+		if (c != '('){ 
+			//Leaf
+			
+			// Example of leaf line: 2lef_A:0.40631,					
+			String[] leafSections = line.split(":");
+			
+			current.setName(leafSections[0]);
+			
+			distance = Float.valueOf(
+					leafSections[1].substring(0, leafSections[1].length() - 1));
+
+			//next character should be a ',' or a ')'			
+			leaves[insertedSequences]=current;
+			insertedSequences++;
+		}
+		else
+		{
+			//Internal node
+			current.setLeft(createNode(reader, current));
+			
+			c= (char) reader.read();
+			
+			if (c==','){
+				current.setRight(createNode(reader, current));
+
+				c= (char) reader.read();
+				if (c == ','){
+					//It is the root and there are three sons
+					if (parent != null){
+						throw new SALSAException("More than two sons for an internal node (not root).");
+					}
+					
+					Node newNode = new Node("ARTIFICIAL",current,null,null,0);
+					current.setParent(newNode);
+	
+					newNode.setRight(createNode(reader, newNode));
+					current=newNode;
+				}
+			}
+			
+			c= (char) reader.read();
+			if (c == ':')
+			{
+				// Read the distance
+				String[] distanceString = line.split("[-+]?[0-9]*\\.?[0-9]+");
+				distance = Float.valueOf(distanceString[0]);
+			}
+			else
+			{
+				
+			}
+		}
+		
+		
 		// TODO Report code from c
-		return null;
+		return current;
 	}
 
 	private final float leafWeight(Node leaf) {

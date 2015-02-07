@@ -15,6 +15,8 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import java.util.ArrayList;
+
 /**
  * Manage and perform the local search
  * 
@@ -22,5 +24,57 @@ package com.salsaw.salsa.algorithm;
  *
  */
 public final class LocalSearch {
+	// FILEDS
+	private Alignment align;
+	private ArrayList<GAP> GAPS;
+	private int numberOfGAPS;
+	private int gamma;
+	private int minIterations;
+	private float probabiltyOfSplit;
 
+	private TerminalGAPsStrategy terminal;
+	
+	// CONSTRUCTOR
+	
+	// METHODS
+	
+	/**
+	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The method returns TRUE if there were an improvement.
+	 * Variable left tells the method the direction of the movement. split tells if there were a split and this information
+	 * is used only to choose properly the new position of the GAP. splitAndMove will manage all the rest.
+	 * 
+	 * @param GAPPosition
+	 * @param left
+	 * @return
+	 */
+	private final boolean move(int GAPPosition, boolean left){
+		return move(GAPPosition, left, false);
+	}
+	
+	/**
+	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The method returns TRUE if there were an improvement.
+	 * Variable left tells the method the direction of the movement. split tells if there were a split and this information
+	 * is used only to choose properly the new position of the GAP. splitAndMove will manage all the rest.
+	 * 
+	 * @param GAPPosition
+	 * @param left
+	 * @param split
+	 * @return
+	 */
+	private final boolean move(int GAPPosition, boolean left, boolean split){
+		// TODO - report from c code
+		return false;
+	}
+	
+	/**
+	 * Like move() method, but it split the GAP before moving it
+	 * 
+	 * @param GAPPosition
+	 * @param left
+	 * @return
+	 */
+	private final boolean splitAndMove(int GAPPosition, boolean left){
+		// TODO - report from c code
+		return false;
+	}
 }

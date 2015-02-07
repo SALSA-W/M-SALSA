@@ -18,9 +18,11 @@ package com.salsaw.salsa.algorithm;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PushbackReader;
 import java.io.Reader;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
@@ -58,12 +60,9 @@ public final class Tree {
 
 		this.leaves = new Node[numberOfSequences];
 
-        try (InputStream in = new FileInputStream(fileName);        
-                Reader reader = new InputStreamReader(in);
-                // buffer for efficiency
-        		BufferedReader buffer = new BufferedReader(reader)){
+        try (PushbackReader buffer = new PushbackReader(new FileReader(fileName))){
         	this.root = createNode(buffer, null);
-           }
+        }
 		
 		
 
@@ -131,42 +130,52 @@ public final class Tree {
 		// TODO Report code from c
 		return null;
 	}
-
-	private final Node createNode(BufferedReader reader, Node parent) throws IOException, SALSAException {
+	
+	private char ReadNext(PushbackReader reader) throws IOException
+	{
+		char c = (char) reader.read();	
 		
+		while (c== ' ' || c == '\n'){
+			c = (char) reader.read();	
+		}
+		
+		return c;
+	}
+
+	private final Node createNode(PushbackReader reader, Node parent) throws IOException, SALSAException {		
 		Node current = new Node("", null, null, parent, 0);
 		char c;
-		float distance;
 		
-		String line = reader.readLine();
-		
-		c= line.charAt(0);
+		c= ReadNext(reader);
 		if (c != '('){ 
 			//Leaf
 			
-			// Example of leaf line: 2lef_A:0.40631,					
-			String[] leafSections = line.split(":");
+			// Example of leaf line: 2lef_A:0.40631,			
+			// Read name
+			String name = "";			
+			do {
+				name +=c;
+				c= (char) reader.read();
+			} while (c != ':');
+			current.setName(name);			
 			
-			current.setName(leafSections[0]);
-			
-			distance = Float.valueOf(
-					leafSections[1].substring(0, leafSections[1].length() - 1));
+			ReadDistance(reader, current);	
 
 			//next character should be a ',' or a ')'			
-			leaves[insertedSequences]=current;
-			insertedSequences++;
+			leaves[insertedSequences] = current;
+			insertedSequences++; 
 		}
 		else
 		{
 			//Internal node
 			current.setLeft(createNode(reader, current));
 			
-			c= (char) reader.read();
+			c= ReadNext(reader);
 			
 			if (c==','){
 				current.setRight(createNode(reader, current));
 
-				c= (char) reader.read();
+				c= ReadNext(reader);
 				if (c == ','){
 					//It is the root and there are three sons
 					if (parent != null){
@@ -181,22 +190,35 @@ public final class Tree {
 				}
 			}
 			
-			c= (char) reader.read();
+			c= ReadNext(reader);
 			if (c == ':')
 			{
-				// Read the distance
-				String[] distanceString = line.split("[-+]?[0-9]*\\.?[0-9]+");
-				distance = Float.valueOf(distanceString[0]);
+				ReadDistance(reader, current);
 			}
 			else
 			{
-				
+				//pushes the character back into the buffer
+				reader.unread((int)c); 
 			}
 		}
 		
 		
 		// TODO Report code from c
 		return current;
+	}
+
+	private void ReadDistance(PushbackReader reader, Node current) throws IOException {
+		// Read distance
+		String distanceValue = "";	
+		char c= ReadNext(reader);
+		do {
+			distanceValue +=c;
+			c= ReadNext(reader);
+		} while (c != ',' && c != ')');					
+		current.setDistance(Float.valueOf(distanceValue));
+		
+		//pushes the character back into the buffer
+		reader.unread((int)c);		
 	}
 
 	private final float leafWeight(Node leaf) {

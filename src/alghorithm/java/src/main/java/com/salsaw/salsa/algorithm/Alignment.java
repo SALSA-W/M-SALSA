@@ -23,8 +23,36 @@ import java.util.ArrayList;
  */
 public final class Alignment {
 	// FIELDS
+	private int numberOfSequences;
+	private int length;
+	/**
+	 * The alignment
+	 */
+	private int[] alignMatrix;
+	private SubstitutionMatrix substitution;
+	private Alphabet alphabet;
+	/**
+	 * Sequences name and properties (found in FASTA files)
+	 */
+	private ArrayList<String> properties;
+	private float[] weights;
+	private float weightsSUM;
+	private ArrayList<GAP> GAPS;
+
+	private float[] countersMatrix;
+
+	/**
+	 * GAP opening penalty
+	 */
+	private float GOP;
+
+	private TerminalGAPsStrategy terminal;	
 	
-	// CONSTRUCTOR
+	// CONSTRUCTORS
+	Alignment(String fileName, String treeFileName, SubstitutionMatrix s, float g) {
+		this(fileName, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
+	}
+	
 	Alignment(String fileName, String treeFileName, SubstitutionMatrix s, float g, TerminalGAPsStrategy tgs) {
 	}
 

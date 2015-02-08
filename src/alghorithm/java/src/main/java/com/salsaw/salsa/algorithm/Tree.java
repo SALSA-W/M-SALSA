@@ -16,14 +16,10 @@
 package com.salsaw.salsa.algorithm;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PushbackReader;
-import java.io.Reader;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
@@ -36,8 +32,8 @@ public final class Tree {
 	private Node root;
 	private final Node[] leaves;
 	private int insertedSequences;
-
-	// METHODS
+	
+	// CONSTRUCTOR	
 	/**
 	 * The parameters are the name of the file containing the tree in the Newick
 	 * notation and the number of sequences
@@ -51,26 +47,15 @@ public final class Tree {
 	 * @throws SALSAException 
 	 */
 	public Tree(final String fileName, int numberOfSequences) throws FileNotFoundException, IOException, SALSAException {
-
 		this.insertedSequences = 0;
-		// file.open(fileName);
-
-		// if(!file.is_open())
-		// throw("ERROR: file "+string(fileName)+" can't be open.");
-
 		this.leaves = new Node[numberOfSequences];
 
         try (PushbackReader buffer = new PushbackReader(new FileReader(fileName))){
         	this.root = createNode(buffer, null);
-        }
-		
-		
-
-		// file.close();
-
-		// TODO Report code from c
+        }		
 	}
 
+	// METHODS
 	/**
 	 * Re-root the tree
 	 * 
@@ -202,8 +187,6 @@ public final class Tree {
 			}
 		}
 		
-		
-		// TODO Report code from c
 		return current;
 	}
 
@@ -234,5 +217,4 @@ public final class Tree {
 
 		return weight;
 	}
-
 }

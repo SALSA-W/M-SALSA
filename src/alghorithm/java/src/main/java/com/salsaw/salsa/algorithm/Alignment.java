@@ -46,14 +46,16 @@ public final class Alignment {
 	 */
 	private float GOP;
 
-	private TerminalGAPsStrategy terminal;	
-	
+	private TerminalGAPsStrategy terminal;
+
 	// CONSTRUCTORS
-	Alignment(String fileName, String treeFileName, SubstitutionMatrix s, float g) {
+	Alignment(String fileName, String treeFileName, SubstitutionMatrix s,
+			float g) {
 		this(fileName, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
 	}
-	
-	Alignment(String fileName, String treeFileName, SubstitutionMatrix s, float g, TerminalGAPsStrategy tgs) {
+
+	Alignment(String fileName, String treeFileName, SubstitutionMatrix s,
+			float g, TerminalGAPsStrategy tgs) {
 	}
 
 	// GET / SET
@@ -61,35 +63,37 @@ public final class Alignment {
 		// TODO Report code from c
 		return 0;
 	}
-	
+
 	public final int getLength() {
 		// TODO Report code from c
 		return 0;
 	}
-	
+
 	public final ArrayList<GAP> getGAPS() {
 		// TODO Report code from c
 		return null;
 	}
-	
+
 	// METHODS
 
 	/**
 	 * Calculate the WSP-score (in the classic way, without using the counters)
+	 * 
 	 * @return
 	 */
 	public final float WSP() {
 		// TODO Report code from c
 		return 0;
 	}
-	
+
 	public final TerminalGAPsStrategy getTerminalGAPStrategy() {
 		// TODO Report code from c
 		return null;
 	}
 
 	/**
-	 * They move a GAP of one position and return the improvement in the WSP-Score due to this change
+	 * They move a GAP of one position and return the improvement in the
+	 * WSP-Score due to this change
 	 * 
 	 * @param g
 	 * @return
@@ -98,28 +102,30 @@ public final class Alignment {
 		// TODO Report code from c
 		return 0;
 	}
-	
+
 	public final float moveRight(GAP g) {
 		// TODO Report code from c
 		return 0;
 	}
-	
+
 	/**
-	 * Same as moveLeft and moveRight, but the improvement is not returned (not even calculated).
-	 * Used to do the backtracking and restore the cell as before the movement of the GAP g.
+	 * Same as moveLeft and moveRight, but the improvement is not returned (not
+	 * even calculated). Used to do the backtracking and restore the cell as
+	 * before the movement of the GAP g.
 	 * 
 	 * @param g
 	 */
 	public final void goBackToLeft(GAP g) {
 		// TODO Report code from c
 	}
-	
+
 	public final void goBackToRight(GAP g) {
 		// TODO Report code from c
 	}
 
 	/**
-	 * It returns the penalty of adding a GOP in the specified row (it depends on the weight of the row).
+	 * It returns the penalty of adding a GOP in the specified row (it depends
+	 * on the weight of the row).
 	 * 
 	 * @param row
 	 * @return
@@ -131,5 +137,102 @@ public final class Alignment {
 
 	public final void save(String fileName) {
 		// TODO Report code from c
+	}
+
+	// PRIVATE METHODS
+	/**
+	 * Given the file containing the guide tree, it generates the sequences'
+	 * weights
+	 * 
+	 * @param fileName
+	 */
+	private final void createWeights(String fileName) {
+		// TODO Report code from c
+	}
+
+	/**
+	 * It reads sequences list (as a strings' vector) from a FASTA file
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	private final ArrayList<String> read(String filePath) {
+		// TODO Report code from c
+		return null;
+	}
+
+	/**
+	 * Converts the character alignment in an integer alignment for efficiency
+	 * reasons
+	 * 
+	 * @param seq
+	 */
+	private final void preprocessing(ArrayList<String> seq) {
+		// TODO Report code from c
+	}
+
+	/**
+	 * Used by pre-processing
+	 * 
+	 * @param s
+	 * @return
+	 */
+	private final int[] convert(String s) {
+		// TODO Report code from c
+		return null;
+	}
+
+	private final void createCounters() {
+		// TODO Report code from c
+	}
+
+	/**
+	 * Returns the names of the sequences (extracted from the FASTA file
+	 * removing the '>' character)
+	 * 
+	 * @return
+	 */
+	private final String[] getNames() {
+		// TODO Report code from c
+		return null;
+	}
+
+	/**
+	 * Score of two sequences in the specified rows (used by WSP). It requires
+	 * also the number of GAPS inside the rows
+	 * 
+	 * @param r1
+	 * @param r2
+	 * @param numberOfGAPSr1
+	 * @param numberOfGAPSr2
+	 * @return
+	 */
+	private final float pairwise(int r1, int r2, int numberOfGAPSr1,
+			int numberOfGAPSr2) {
+		// TODO Report code from c
+		return 0;
+	}
+
+	/**
+	 * It modify the character in position (row, column) and returns the
+	 * improvement obtained by changing it.
+	 * 
+	 * @param row
+	 * @param column
+	 * @param newCharacter
+	 * @return
+	 */
+	private final float changeCell(int row, int column, int newCharacter) {
+		return 0;
+	}
+
+	/**
+	 * Same as changeCell, but here the improvement is not calculated
+	 * 
+	 * @param row
+	 * @param column
+	 * @param newCharacter
+	 */
+	private final void restoreCell(int row, int column, int newCharacter) {
 	}
 }

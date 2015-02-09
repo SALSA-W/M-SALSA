@@ -15,6 +15,9 @@
  */
 package com.salsaw.salsa.algorithm;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -155,10 +158,51 @@ public final class Alignment {
 	 * 
 	 * @param filePath
 	 * @return
+	 * @throws IOException 
 	 */
-	private final ArrayList<String> read(String filePath) {
-		// TODO Report code from c
-		return null;
+	private final ArrayList<String> readInputSequences(String filePath) throws IOException {
+		ArrayList<String> sequences = new ArrayList<String>();
+		
+		try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			StringBuffer contentBuffer = new StringBuffer();
+			
+			// https://github.com/joewandy/BioinfoApp/blob/master/src/com/joewandy/bioinfoapp/model/core/io/FastaReader.java
+			
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if (line.isEmpty()) {
+					continue;
+				}
+				char firstChar = line.charAt(0);
+				
+				if (firstChar == '>') {
+					if (contentBuffer.length() != 0) {
+						// save the previous sequence read
+						sequences.add(contentBuffer.toString());
+					}
+					
+					// now can get the new id > ..
+					//String sequenceId = line.substring(1).trim();
+					
+					// start a new content buffer
+					contentBuffer = new StringBuffer();
+					
+				} else if (firstChar == ';') {
+					// comment line, skip it
+				} else {
+					// carry on reading sequence content
+					contentBuffer.append(line.trim());
+				}
+			}
+			
+			if (contentBuffer.length() != 0) {
+				// save the last sequence
+				sequences.add(contentBuffer.toString());
+			}
+		}
+
+		return sequences;
 	}
 
 	/**

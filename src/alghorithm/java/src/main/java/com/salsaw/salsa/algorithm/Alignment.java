@@ -37,7 +37,7 @@ public final class Alignment {
 	/**
 	 * Sequences name and properties (found in FASTA files)
 	 */
-	private ArrayList<String> properties;
+	private String[] properties;
 	private float[] weights;
 	private float weightsSUM;
 	private ArrayList<GAP> GAPS;
@@ -201,6 +201,10 @@ public final class Alignment {
 				sequences.add(contentBuffer.toString());
 			}
 		}
+		
+		this.numberOfSequences = sequences.size();
+		this.properties = sequences.toArray(new String[sequences.size()]);
+		this.length = this.properties[0].length();
 
 		return sequences;
 	}

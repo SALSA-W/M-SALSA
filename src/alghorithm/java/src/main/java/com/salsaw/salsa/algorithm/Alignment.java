@@ -98,8 +98,28 @@ public final class Alignment {
 	 * @return
 	 */
 	public final float WSP() {
-		// TODO Report code from c
-		return 0;
+		float objval = 0.0f;
+		// Int array already initialize at 0
+		int[] numberOfGAPS = new int[numberOfSequences];
+		GAP g;
+
+		for (int i = 0; i < this.GAPS.size(); i++) {
+			g = this.GAPS.get(i);
+
+			if (this.terminal == TerminalGAPsStrategy.BOTH_PENALTIES
+					|| !g.terminalGAP()) {
+				numberOfGAPS[g.getRow()]++;
+			}
+		}
+
+		for (int r1 = 0; r1 < this.numberOfSequences - 1; r1++) {
+			for (int r2 = r1 + 1; r2 < this.numberOfSequences; r2++) {
+				objval += this.weights[r1] * this.weights[r2]
+						* pairwise(r1, r2, numberOfGAPS[r1], numberOfGAPS[r2]);
+			}
+		}
+
+		return objval;
 	}
 
 	public final TerminalGAPsStrategy getTerminalGAPStrategy() {
@@ -285,12 +305,12 @@ public final class Alignment {
 	 * 
 	 * @param s
 	 * @return
-	 * @throws SALSAException 
+	 * @throws SALSAException
 	 */
 	private final int[] convert(String s) throws SALSAException {
-		int[] sequenceOfNumbers= new int[this.length];
+		int[] sequenceOfNumbers = new int[this.length];
 
-		for (int c=0; c<this.length; c++){
+		for (int c = 0; c < this.length; c++) {
 			sequenceOfNumbers[c] = this.alphabet.charToInt(s.charAt(c));
 		}
 
@@ -319,16 +339,25 @@ public final class Alignment {
 	 * Score of two sequences in the specified rows (used by WSP). It requires
 	 * also the number of GAPS inside the rows
 	 * 
-	 * @param r1
-	 * @param r2
+	 * @param row1
+	 * @param row2
 	 * @param numberOfGAPSr1
 	 * @param numberOfGAPSr2
 	 * @return
 	 */
-	private final float pairwise(int r1, int r2, int numberOfGAPSr1,
+	private final float pairwise(int row1, int row2, int numberOfGAPSr1,
 			int numberOfGAPSr2) {
-		// TODO Report code from c
-		return 0;
+		float value = 0;
+		int alpha, beta;
+		for (int column = 0; column < this.length; column++) {
+			alpha = this.alignMatrix[row1 * this.length + column];
+			beta = this.alignMatrix[row2 * this.length + column];
+			value += this.substitution.score(alpha, beta);
+		}
+
+		value -= this.GOP * (numberOfGAPSr1 + numberOfGAPSr2);
+
+		return value;
 	}
 
 	/**
@@ -341,7 +370,27 @@ public final class Alignment {
 	 * @return
 	 */
 	private final float changeCell(int row, int column, int newCharacter) {
-		return 0;
+		// align
+		int oldCharacter = this.alignMatrix[row * this.length + column];
+		// counters
+		this.countersMatrix[oldCharacter * this.length + column] -= weights[row];
+
+		float delta = 0.0f;
+		for (int alpha = 0; alpha <= this.alphabet.dimension(); alpha++) {
+			delta +=
+			// counters
+			this.countersMatrix[alpha * this.length + column]
+					* (this.substitution.score(newCharacter, alpha) - this.substitution
+							.score(oldCharacter, alpha));
+		}
+		delta *= weights[row];
+
+		// counters
+		this.countersMatrix[newCharacter * this.length + column] += weights[row];
+		// align
+		this.alignMatrix[row * this.length + column] = newCharacter;
+
+		return delta;
 	}
 
 	/**
@@ -352,5 +401,14 @@ public final class Alignment {
 	 * @param newCharacter
 	 */
 	private final void restoreCell(int row, int column, int newCharacter) {
+		// align
+		int oldCharacter= this.alignMatrix[row * this.length + column];
+		// counters
+		this.countersMatrix[oldCharacter * this.length + column] -= weights[row];
+		
+		// counters
+		this.countersMatrix[newCharacter * this.length + column] += weights[row];
+		// align
+		this.alignMatrix[row * this.length + column] = newCharacter;
 	}
 }

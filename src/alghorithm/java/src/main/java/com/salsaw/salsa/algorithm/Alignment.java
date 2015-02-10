@@ -16,9 +16,12 @@
 package com.salsaw.salsa.algorithm;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -52,13 +55,23 @@ public final class Alignment {
 	private TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTORS
-	Alignment(String fileName, String treeFileName, SubstitutionMatrix s,
-			float g) {
-		this(fileName, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
+	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
+			float g) throws IOException, SALSAException {
+		this(inputFilePath, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
 	}
 
-	Alignment(String fileName, String treeFileName, SubstitutionMatrix s,
-			float g, TerminalGAPsStrategy tgs) {
+	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
+			float g, TerminalGAPsStrategy tgs) throws IOException,
+			SALSAException {
+
+		this.alphabet = s.getAlphabet();
+		ArrayList<String> sequences = readInputSequences(inputFilePath);
+		this.alignMatrix = new int[this.numberOfSequences * this.length];
+		this.GAPS = new ArrayList<GAP>();
+
+		createWeights(treeFileName);
+		preprocessing(sequences);
+		createCounters();
 	}
 
 	// GET / SET
@@ -148,9 +161,18 @@ public final class Alignment {
 	 * weights
 	 * 
 	 * @param fileName
+	 * @throws SALSAException
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
-	private final void createWeights(String fileName) {
-		// TODO Report code from c
+	private final void createWeights(String fileName) throws SALSAException,
+			FileNotFoundException, IOException {
+		Tree t = new Tree(fileName, this.numberOfSequences);
+
+		t.changeRoot();
+
+		this.weights = new float[this.numberOfSequences];
+		weightsSUM = t.generateWeights(this.properties, this.weights);
 	}
 
 	/**
@@ -158,36 +180,38 @@ public final class Alignment {
 	 * 
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private final ArrayList<String> readInputSequences(String filePath) throws IOException {
+	private final ArrayList<String> readInputSequences(String filePath)
+			throws IOException {
 		ArrayList<String> sequences = new ArrayList<String>();
-		
+		ArrayList<String> sequencesHeaders = new ArrayList<String>();
+
 		try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
 			String line;
 			StringBuffer contentBuffer = new StringBuffer();
-			
+
 			// https://github.com/joewandy/BioinfoApp/blob/master/src/com/joewandy/bioinfoapp/model/core/io/FastaReader.java
-			
+
 			while ((line = in.readLine()) != null) {
 				line = line.trim();
 				if (line.isEmpty()) {
 					continue;
 				}
 				char firstChar = line.charAt(0);
-				
+
 				if (firstChar == '>') {
 					if (contentBuffer.length() != 0) {
 						// save the previous sequence read
 						sequences.add(contentBuffer.toString());
 					}
-					
+
 					// now can get the new id > ..
-					//String sequenceId = line.substring(1).trim();
-					
+					sequencesHeaders.add(line.substring(1).trim());
+
 					// start a new content buffer
 					contentBuffer = new StringBuffer();
-					
+
 				} else if (firstChar == ';') {
 					// comment line, skip it
 				} else {
@@ -195,15 +219,16 @@ public final class Alignment {
 					contentBuffer.append(line.trim());
 				}
 			}
-			
+
 			if (contentBuffer.length() != 0) {
 				// save the last sequence
 				sequences.add(contentBuffer.toString());
 			}
 		}
-		
+
 		this.numberOfSequences = sequences.size();
-		this.properties = sequences.toArray(new String[sequences.size()]);
+		this.properties = sequencesHeaders.toArray(new String[sequencesHeaders
+				.size()]);
 		this.length = this.properties[0].length();
 
 		return sequences;
@@ -214,9 +239,45 @@ public final class Alignment {
 	 * reasons
 	 * 
 	 * @param seq
+	 * @throws SALSAException
 	 */
-	private final void preprocessing(ArrayList<String> seq) {
-		// TODO Report code from c
+	private final void preprocessing(ArrayList<String> seq)
+			throws SALSAException {
+		// If it is NULL, there are no GAPs opened
+		GAP g = null;
+		GAP previous;
+
+		String currentSequence;
+		int[] convertedSequence;
+
+		for (int row = 0; row < this.numberOfSequences; row++) {
+			previous = null;
+			currentSequence = seq.get(row);
+			convertedSequence = convert(currentSequence);
+
+			for (int column = 0; column < this.length; column++) {
+				this.alignMatrix[row * this.length + column] = convertedSequence[column];
+				if (convertedSequence[column] == this.alphabet.INDEL()) {
+					if (g == null) {
+						g = new GAP(row, column, this.length, previous, null);
+						if (previous != null) {
+							previous.setNext(g);
+						}
+					} else
+						g.extend();
+				} else if (g != null) {
+					// A GAP has been found and it is finished
+					this.GAPS.add(g);
+					previous = g;
+					g = null;
+				}
+			}
+			if (g != null) {
+				// A GAP has been found and it is finished
+				this.GAPS.add(g);
+				g = null;
+			}
+		}
 	}
 
 	/**
@@ -231,18 +292,21 @@ public final class Alignment {
 	}
 
 	private final void createCounters() {
-		// TODO Report code from c
-	}
+		this.countersMatrix = new float[(this.alphabet.dimension() + 1)
+				* this.length];
 
-	/**
-	 * Returns the names of the sequences (extracted from the FASTA file
-	 * removing the '>' character)
-	 * 
-	 * @return
-	 */
-	private final String[] getNames() {
-		// TODO Report code from c
-		return null;
+		// Java already initialize at 0f :
+		// http://docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.12.5
+		// Initialize at 0
+		int character;
+		for (int column = 0; column < length; column++) {
+			for (int row = 0; row < numberOfSequences; row++) {
+				// align method
+				character = this.alignMatrix[row * this.length + column];
+				// counters method
+				this.countersMatrix[character * this.length + column] += weights[row];
+			}
+		}
 	}
 
 	/**

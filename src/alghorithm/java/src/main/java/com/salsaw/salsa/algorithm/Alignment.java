@@ -16,8 +16,10 @@
 package com.salsaw.salsa.algorithm;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -76,18 +78,15 @@ public final class Alignment {
 
 	// GET / SET
 	public final int getNumberOfSequences() {
-		// TODO Report code from c
-		return 0;
+		return this.numberOfSequences;
 	}
 
 	public final int getLength() {
-		// TODO Report code from c
-		return 0;
+		return this.length;
 	}
 
 	public final ArrayList<GAP> getGAPS() {
-		// TODO Report code from c
-		return null;
+		return this.GAPS;
 	}
 
 	// METHODS
@@ -167,12 +166,33 @@ public final class Alignment {
 	 * @return
 	 */
 	public final float getGOP(int row) {
-		// TODO Report code from c
-		return 0;
+		return this.GOP * this.weights[row]
+				* (this.weightsSUM - this.weights[row]);
 	}
 
-	public final void save(String fileName) {
-		// TODO Report code from c
+	public final void save(String destinationFileNamePath) throws IOException,
+			SALSAException {
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(
+				destinationFileNamePath))) {
+			
+			// Write FASTA file
+			for (int r = 0; r < numberOfSequences; r++) {
+				// Add header indicator
+				bw.write(">");
+				bw.write(properties[r]);
+				bw.newLine();
+
+				for (int c = 0; c < length; c++) {
+					// align
+					bw.write(alphabet.intToChar(this.alignMatrix[r
+							* this.length + c]));
+				}
+
+				bw.newLine();
+				bw.flush();
+			}
+		}
 	}
 
 	// PRIVATE METHODS
@@ -402,10 +422,10 @@ public final class Alignment {
 	 */
 	private final void restoreCell(int row, int column, int newCharacter) {
 		// align
-		int oldCharacter= this.alignMatrix[row * this.length + column];
+		int oldCharacter = this.alignMatrix[row * this.length + column];
 		// counters
 		this.countersMatrix[oldCharacter * this.length + column] -= weights[row];
-		
+
 		// counters
 		this.countersMatrix[newCharacter * this.length + column] += weights[row];
 		// align

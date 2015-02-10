@@ -285,10 +285,16 @@ public final class Alignment {
 	 * 
 	 * @param s
 	 * @return
+	 * @throws SALSAException 
 	 */
-	private final int[] convert(String s) {
-		// TODO Report code from c
-		return null;
+	private final int[] convert(String s) throws SALSAException {
+		int[] sequenceOfNumbers= new int[this.length];
+
+		for (int c=0; c<this.length; c++){
+			sequenceOfNumbers[c] = this.alphabet.charToInt(s.charAt(c));
+		}
+
+		return sequenceOfNumbers;
 	}
 
 	private final void createCounters() {

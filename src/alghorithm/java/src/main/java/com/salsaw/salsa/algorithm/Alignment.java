@@ -26,6 +26,19 @@ import java.util.ArrayList;
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
+ * 
+ * class that represents the alignment.
+ * <p> Theoretical notes:
+ * <ul>
+ * <li>Provides methods to move the GAP.</li>
+ * <li>It does not keep inside the scores of the individual columns (X<small><sub>k</sub></small>) and the value of the objective function, thus avoiding the calculations to keep these updated variables. In fact, for the purposes of the operation of the algorithm, it is not necessary to know at each iteration the value of the WSP-Score, but only calculate the improvements obtained by moving the GAP (the δ).</li>
+ * <li>Another optimization is the implementation of a preprocessor that converts the characters of the alignment to integers values. There is a bijective correspondence between the characters and the integers generated.
+ * <p>The pre-processing is used only for efficiency purposes: the integers correspond to correct indices in the matrix of class SubstitutionMatrix. In this manner, when asked the score of the pair (α, β), the method of SubstitutionMatrix score should not seek the position in memory, but simply make a direct access to the position [α; β] of matrix.</p>
+ * <p>The save method is the inverse operation of the pre-processing, bringing the characters to their classical representation.</p>
+ * </li>
+ * <ul>
+ * </p>
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */

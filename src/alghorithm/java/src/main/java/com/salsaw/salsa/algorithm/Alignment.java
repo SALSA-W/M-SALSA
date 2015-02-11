@@ -89,6 +89,10 @@ public final class Alignment {
 		return this.GAPS;
 	}
 
+	public final TerminalGAPsStrategy getTerminalGAPStrategy() {
+		return this.terminal;
+	}
+
 	// METHODS
 
 	/**
@@ -121,11 +125,6 @@ public final class Alignment {
 		return objval;
 	}
 
-	public final TerminalGAPsStrategy getTerminalGAPStrategy() {
-		// TODO Report code from c
-		return null;
-	}
-
 	/**
 	 * They move a GAP of one position and return the improvement in the
 	 * WSP-Score due to this change
@@ -149,13 +148,38 @@ public final class Alignment {
 	 * before the movement of the GAP g.
 	 * 
 	 * @param g
+	 * @throws SALSAException
 	 */
-	public final void goBackToLeft(GAP g) {
-		// TODO Report code from c
+	public final void goBackToLeft(GAP g) throws SALSAException {
+		int leftColumn = g.getBegin() - 1;
+		int rightColumn = g.getEnd();
+		int row = g.getRow();
+
+		restoreCell(row, rightColumn, this.alignMatrix[row * this.length
+				+ leftColumn]);
+		restoreCell(row, leftColumn, this.alphabet.INDEL());
+
+		g.moveLeft();
 	}
 
-	public final void goBackToRight(GAP g) {
-		// TODO Report code from c
+	/**
+	 * Same as moveLeft and moveRight, but the improvement is not returned (not
+	 * even calculated). Used to do the backtracking and restore the cell as
+	 * before the movement of the GAP g.
+	 * 
+	 * @param g
+	 * @throws SALSAException
+	 */
+	public final void goBackToRight(GAP g) throws SALSAException {
+		int leftColumn = g.getBegin();
+		int rightColumn = g.getEnd() + 1;
+		int row = g.getRow();
+
+		restoreCell(row, leftColumn, this.alignMatrix[row * this.length
+				+ rightColumn]);
+		restoreCell(row, rightColumn, this.alphabet.INDEL());
+
+		g.moveRight();
 	}
 
 	/**
@@ -175,7 +199,7 @@ public final class Alignment {
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(
 				destinationFileNamePath))) {
-			
+
 			// Write FASTA file
 			for (int r = 0; r < numberOfSequences; r++) {
 				// Add header indicator

@@ -131,15 +131,31 @@ public final class Alignment {
 	 * 
 	 * @param g
 	 * @return
+	 * @throws SALSAException 
 	 */
-	public final float moveLeft(GAP g) {
-		// TODO Report code from c
-		return 0;
-	}
+	public final float moveLeft(GAP g) throws SALSAException {
+		int leftColumn=g.getBegin()-1;
+		int rightColumn=g.getEnd();
+		int row=g.getRow();
 
-	public final float moveRight(GAP g) {
-		// TODO Report code from c
-		return 0;
+		float delta=changeCell(row,rightColumn,this.alignMatrix[row * this.length
+		                       + leftColumn]);
+		delta += changeCell(row,leftColumn,this.alphabet.INDEL());
+
+		g.moveLeft();
+		return delta;
+	}
+	
+	public final float moveRight(GAP g) throws SALSAException {
+		int leftColumn=g.getBegin();
+		int rightColumn=g.getEnd()+1;
+		int row=g.getRow();
+
+		float delta = changeCell(row,leftColumn,this.alignMatrix[row * this.length + rightColumn]);
+		delta += changeCell(row,rightColumn,this.alphabet.INDEL());
+
+		g.moveRight();
+		return delta;
 	}
 
 	/**

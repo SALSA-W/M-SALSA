@@ -25,47 +25,72 @@ import java.util.ArrayList;
  */
 public final class LocalSearch {
 	// FILEDS
-	private Alignment align;
-	private ArrayList<GAP> GAPS;
-	private int numberOfGAPS;
-	private int gamma;
-	private int minIterations;
-	private float probabiltyOfSplit;
+	private final Alignment align;
+	private final ArrayList<GAP> GAPS;
+	private final int numberOfGAPS;
+	private final int gamma;
+	private final int minIterations;
+	private final float probabiltyOfSplit;
 
 	private TerminalGAPsStrategy terminal;
-	
+
 	// CONSTRUCTOR
-	
-	// METHODS
-	
+	public LocalSearch(Alignment alignment, int gamma, int minIterations,
+			float probabiltyOfSplit) {
+		this.align = alignment;
+		this.gamma = gamma;
+		this.minIterations = minIterations;
+		this.probabiltyOfSplit = probabiltyOfSplit;
+		this.GAPS = alignment.getGAPS();
+		this.numberOfGAPS = GAPS.size();
+		this.terminal = align.getTerminalGAPStrategy();
+	}
+
+	// GET / SET
+	public final int getNumberOfGAPs() {
+		return this.gamma;
+	}
+
+	// PUBLIC METHODS
+
+	public final Alignment execute() {
+		// TODO - report from c code
+		return null;
+	}
+
+	// PRIVATE METHODS
 	/**
-	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The method returns TRUE if there were an improvement.
-	 * Variable left tells the method the direction of the movement. split tells if there were a split and this information
-	 * is used only to choose properly the new position of the GAP. splitAndMove will manage all the rest.
+	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The
+	 * method returns TRUE if there were an improvement. Variable left tells the
+	 * method the direction of the movement. split tells if there were a split
+	 * and this information is used only to choose properly the new position of
+	 * the GAP. splitAndMove will manage all the rest.
 	 * 
 	 * @param GAPPosition
 	 * @param left
 	 * @return
 	 */
-	private final boolean move(int GAPPosition, boolean left){
+	private final boolean move(int GAPPosition, boolean left) {
 		return move(GAPPosition, left, false);
 	}
-	
+
 	/**
-	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The method returns TRUE if there were an improvement.
-	 * Variable left tells the method the direction of the movement. split tells if there were a split and this information
-	 * is used only to choose properly the new position of the GAP. splitAndMove will manage all the rest.
+	 * GAPPosition is the index of the GAP to be moved (inside GAPS vector). The
+	 * method returns TRUE if there were an improvement. Variable left tells the
+	 * method the direction of the movement. split tells if there were a split
+	 * and this information is used only to choose properly the new position of
+	 * the GAP. splitAndMove will manage all the rest.
 	 * 
 	 * @param GAPPosition
 	 * @param left
 	 * @param split
 	 * @return
 	 */
-	private final boolean move(int GAPPosition, boolean left, boolean split){
+	private final boolean move(int GAPPosition, boolean left, boolean split) {
 		// TODO - report from c code
 		return false;
 	}
-	
+
 	/**
 	 * Like move() method, but it split the GAP before moving it
 	 * 
@@ -73,7 +98,7 @@ public final class LocalSearch {
 	 * @param left
 	 * @return
 	 */
-	private final boolean splitAndMove(int GAPPosition, boolean left){
+	private final boolean splitAndMove(int GAPPosition, boolean left) {
 		// TODO - report from c code
 		return false;
 	}

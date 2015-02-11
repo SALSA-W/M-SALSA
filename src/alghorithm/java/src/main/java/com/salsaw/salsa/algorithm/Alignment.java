@@ -49,25 +49,25 @@ public final class Alignment {
 	/**
 	 * The alignment
 	 */
-	private int[] alignMatrix;
-	private SubstitutionMatrix substitution;
-	private Alphabet alphabet;
+	private final int[] alignMatrix;
+	private final SubstitutionMatrix substitution;
+	private final Alphabet alphabet;
 	/**
 	 * Sequences name and properties (found in FASTA files)
 	 */
 	private String[] properties;
 	private float[] weights;
 	private float weightsSUM;
-	private ArrayList<GAP> GAPS;
+	private final ArrayList<GAP> GAPS;
 
 	private float[] countersMatrix;
 
 	/**
 	 * GAP opening penalty
 	 */
-	private float GOP;
+	private final float GOP;
 
-	private TerminalGAPsStrategy terminal;
+	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTORS
 	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
@@ -78,7 +78,9 @@ public final class Alignment {
 	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
 			float g, TerminalGAPsStrategy tgs) throws IOException,
 			SALSAException {
-
+		this.substitution = s;
+		this.GOP = g;
+		this.terminal = tgs;
 		this.alphabet = s.getAlphabet();
 		ArrayList<String> sequences = readInputSequences(inputFilePath);
 		this.alignMatrix = new int[this.numberOfSequences * this.length];
@@ -265,7 +267,7 @@ public final class Alignment {
 		t.changeRoot();
 
 		this.weights = new float[this.numberOfSequences];
-		weightsSUM = t.generateWeights(this.properties, this.weights);
+		this.weightsSUM = t.generateWeights(this.properties, this.weights);
 	}
 
 	/**

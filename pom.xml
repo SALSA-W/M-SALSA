@@ -41,5 +41,6 @@
 	
 	<modules>
 		<module>src/alghorithm/java</module>
+		<module>src/cli</module>
 	</modules>
 </project>

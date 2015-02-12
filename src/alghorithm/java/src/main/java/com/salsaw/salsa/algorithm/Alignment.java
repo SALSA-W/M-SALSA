@@ -28,13 +28,30 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 /**
  * 
  * class that represents the alignment.
- * <p> Theoretical notes:
+ * <p>
+ * Theoretical notes:
  * <ul>
  * <li>Provides methods to move the GAP.</li>
- * <li>It does not keep inside the scores of the individual columns (X<small><sub>k</sub></small>) and the value of the objective function, thus avoiding the calculations to keep these updated variables. In fact, for the purposes of the operation of the algorithm, it is not necessary to know at each iteration the value of the WSP-Score, but only calculate the improvements obtained by moving the GAP (the δ).</li>
- * <li>Another optimization is the implementation of a preprocessor that converts the characters of the alignment to integers values. There is a bijective correspondence between the characters and the integers generated.
- * <p>The pre-processing is used only for efficiency purposes: the integers correspond to correct indices in the matrix of class SubstitutionMatrix. In this manner, when asked the score of the pair (α, β), the method of SubstitutionMatrix score should not seek the position in memory, but simply make a direct access to the position [α; β] of matrix.</p>
- * <p>The save method is the inverse operation of the pre-processing, bringing the characters to their classical representation.</p>
+ * <li>It does not keep inside the scores of the individual columns
+ * (X<small><sub>k</sub></small>) and the value of the objective function, thus
+ * avoiding the calculations to keep these updated variables. In fact, for the
+ * purposes of the operation of the algorithm, it is not necessary to know at
+ * each iteration the value of the WSP-Score, but only calculate the
+ * improvements obtained by moving the GAP (the δ).</li>
+ * <li>Another optimization is the implementation of a preprocessor that
+ * converts the characters of the alignment to integers values. There is a
+ * bijective correspondence between the characters and the integers generated.
+ * <p>
+ * The pre-processing is used only for efficiency purposes: the integers
+ * correspond to correct indices in the matrix of class SubstitutionMatrix. In
+ * this manner, when asked the score of the pair (α, β), the method of
+ * SubstitutionMatrix score should not seek the position in memory, but simply
+ * make a direct access to the position [α; β] of matrix.
+ * </p>
+ * <p>
+ * The save method is the inverse operation of the pre-processing, bringing the
+ * characters to their classical representation.
+ * </p>
  * </li>
  * <ul>
  * </p>
@@ -109,7 +126,6 @@ public final class Alignment {
 	}
 
 	// METHODS
-
 	/**
 	 * Calculate the WSP-score (in the classic way, without using the counters)
 	 * 
@@ -146,28 +162,29 @@ public final class Alignment {
 	 * 
 	 * @param g
 	 * @return
-	 * @throws SALSAException 
+	 * @throws SALSAException
 	 */
 	public final float moveLeft(GAP g) throws SALSAException {
-		int leftColumn=g.getBegin()-1;
-		int rightColumn=g.getEnd();
-		int row=g.getRow();
+		int leftColumn = g.getBegin() - 1;
+		int rightColumn = g.getEnd();
+		int row = g.getRow();
 
-		float delta=changeCell(row,rightColumn,this.alignMatrix[row * this.length
-		                       + leftColumn]);
-		delta += changeCell(row,leftColumn,this.alphabet.INDEL());
+		float delta = changeCell(row, rightColumn, this.alignMatrix[row
+				* this.length + leftColumn]);
+		delta += changeCell(row, leftColumn, this.alphabet.INDEL());
 
 		g.moveLeft();
 		return delta;
 	}
-	
-	public final float moveRight(GAP g) throws SALSAException {
-		int leftColumn=g.getBegin();
-		int rightColumn=g.getEnd()+1;
-		int row=g.getRow();
 
-		float delta = changeCell(row,leftColumn,this.alignMatrix[row * this.length + rightColumn]);
-		delta += changeCell(row,rightColumn,this.alphabet.INDEL());
+	public final float moveRight(GAP g) throws SALSAException {
+		int leftColumn = g.getBegin();
+		int rightColumn = g.getEnd() + 1;
+		int row = g.getRow();
+
+		float delta = changeCell(row, leftColumn, this.alignMatrix[row
+				* this.length + rightColumn]);
+		delta += changeCell(row, rightColumn, this.alphabet.INDEL());
 
 		g.moveRight();
 		return delta;

@@ -15,7 +15,6 @@
  */
 package com.salsaw.salsa.algorithm;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,41 +31,45 @@ public final class Tree {
 	private Node root;
 	private final Node[] leaves;
 	private int insertedSequences;
-	
-	// CONSTRUCTOR	
+
+	// CONSTRUCTOR
 	/**
 	 * The parameters are the name of the file containing the tree in the Newick
 	 * notation and the number of sequences
 	 * 
-	 * @see <a href="spec.html#http://en.wikipedia.org/wiki/Newick_format">Newick</a>
+	 * @see <a
+	 *      href="spec.html#http://en.wikipedia.org/wiki/Newick_format">Newick</a>
 	 * 
 	 * @param fileName
 	 * @param numberOfSequences
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws SALSAException 
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws SALSAException
 	 */
-	public Tree(final String fileName, int numberOfSequences) throws FileNotFoundException, IOException, SALSAException {
+	public Tree(final String fileName, int numberOfSequences)
+			throws FileNotFoundException, IOException, SALSAException {
 		this.insertedSequences = 0;
 		this.leaves = new Node[numberOfSequences];
 
-        try (PushbackReader buffer = new PushbackReader(new FileReader(fileName))){
-        	this.root = createNode(buffer, null);
-        }		
+		try (PushbackReader buffer = new PushbackReader(
+				new FileReader(fileName))) {
+			this.root = createNode(buffer, null);
+		}
 	}
 
 	// METHODS
 	/**
 	 * Re-root the tree
 	 * 
-	 * @throws SALSAException 
+	 * @throws SALSAException
 	 */
 	public final void changeRoot() throws SALSAException {
-		//Find best root
-		Node bestNode=this.root.calculatePositionOfRoot(this.insertedSequences);
+		// Find best root
+		Node bestNode = this.root
+				.calculatePositionOfRoot(this.insertedSequences);
 
-		if (bestNode!=null){
-			this.root=bestNode.addRoot();
+		if (bestNode != null) {
+			this.root = bestNode.addRoot();
 		}
 	}
 
@@ -88,7 +91,7 @@ public final class Tree {
 
 			// Calculate sequence's index in the alignment
 			index = -1;
-			for (int j = 0; j < this.insertedSequences && index == - 1; j++) {
+			for (int j = 0; j < this.insertedSequences && index == -1; j++) {
 				if (names[j] == (this.leaves[i].getName())) {
 					index = j;
 				}
@@ -107,110 +110,103 @@ public final class Tree {
 		return weightsSum;
 	}
 
-	public final void printTree() {		
+	public final void printTree() {
 		// TODO Report code from c
 	}
 
-	private final String readName(BufferedReader reader) {
-		// TODO Report code from c
-		return null;
-	}
-	
-	private char ReadNext(PushbackReader reader) throws IOException
-	{
-		char c = (char) reader.read();	
-		
-		while (c== ' ' || c == '\n'){
-			c = (char) reader.read();	
+	private char ReadNext(PushbackReader reader) throws IOException {
+		char c = (char) reader.read();
+
+		while (c == ' ' || c == '\n') {
+			c = (char) reader.read();
 		}
-		
+
 		return c;
 	}
 
-	private final Node createNode(PushbackReader reader, Node parent) throws IOException, SALSAException {		
+	private final Node createNode(PushbackReader reader, Node parent)
+			throws IOException, SALSAException {
 		Node current = new Node("", null, null, parent, 0);
 		char c;
-		
-		c= ReadNext(reader);
-		if (c != '('){ 
-			//Leaf
-			
-			// Example of leaf line: 2lef_A:0.40631,			
-			// Read name
-			String name = "";			
-			do {
-				name +=c;
-				c= (char) reader.read();
-			} while (c != ':');
-			current.setName(name);			
-			
-			ReadDistance(reader, current);	
 
-			//next character should be a ',' or a ')'			
+		c = ReadNext(reader);
+		if (c != '(') {
+			// Leaf
+
+			// Example of leaf line: 2lef_A:0.40631,
+			// Read name
+			String name = "";
+			do {
+				name += c;
+				c = (char) reader.read();
+			} while (c != ':');
+			current.setName(name);
+
+			ReadDistance(reader, current);
+
+			// next character should be a ',' or a ')'
 			leaves[insertedSequences] = current;
-			insertedSequences++; 
-		}
-		else
-		{
-			//Internal node
+			insertedSequences++;
+		} else {
+			// Internal node
 			current.setLeft(createNode(reader, current));
-			
-			c= ReadNext(reader);
-			
-			if (c==','){
+
+			c = ReadNext(reader);
+
+			if (c == ',') {
 				current.setRight(createNode(reader, current));
 
-				c= ReadNext(reader);
-				if (c == ','){
-					//It is the root and there are three sons
-					if (parent != null){
-						throw new SALSAException("More than two sons for an internal node (not root).");
+				c = ReadNext(reader);
+				if (c == ',') {
+					// It is the root and there are three sons
+					if (parent != null) {
+						throw new SALSAException(
+								"More than two sons for an internal node (not root).");
 					}
-					
-					Node newNode = new Node("ARTIFICIAL",current,null,null,0);
+
+					Node newNode = new Node("ARTIFICIAL", current, null, null,
+							0);
 					current.setParent(newNode);
-	
+
 					newNode.setRight(createNode(reader, newNode));
-					current=newNode;
+					current = newNode;
 				}
 			}
-			
-			c= ReadNext(reader);
-			if (c == ':')
-			{
+
+			c = ReadNext(reader);
+			if (c == ':') {
 				ReadDistance(reader, current);
-			}
-			else
-			{
-				//pushes the character back into the buffer
-				reader.unread((int)c); 
+			} else {
+				// pushes the character back into the buffer
+				reader.unread((int) c);
 			}
 		}
-		
+
 		return current;
 	}
 
-	private void ReadDistance(PushbackReader reader, Node current) throws IOException {
+	private void ReadDistance(PushbackReader reader, Node current)
+			throws IOException {
 		// Read distance
-		String distanceValue = "";	
-		char c= ReadNext(reader);
+		String distanceValue = "";
+		char c = ReadNext(reader);
 		do {
-			distanceValue +=c;
-			c= ReadNext(reader);
-		} while (c != ',' && c != ')');					
+			distanceValue += c;
+			c = ReadNext(reader);
+		} while (c != ',' && c != ')');
 		current.setDistance(Float.valueOf(distanceValue));
-		
-		//pushes the character back into the buffer
-		reader.unread((int)c);		
+
+		// pushes the character back into the buffer
+		reader.unread((int) c);
 	}
 
 	private final float leafWeight(Node leaf) {
-		Node current =leaf;
-		float weight= 0.0f;
-		
+		Node current = leaf;
+		float weight = 0.0f;
+
 		// Cycling until the root has been found (parent = null)
-		while (current != null){
-			weight+=current.getDistance() /current.getDescendentLeaves();
+		while (current != null) {
+			weight += current.getDistance() / current.getDescendentLeaves();
 
 			current = current.getParent();
 		}

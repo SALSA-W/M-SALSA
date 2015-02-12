@@ -16,6 +16,9 @@
 package com.salsaw.salsa.algorithm;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
  * Manage and perform the local search
@@ -27,7 +30,7 @@ public final class LocalSearch {
 	// FILEDS
 	private final Alignment align;
 	private final ArrayList<GAP> GAPS;
-	private final int numberOfGAPS;
+	private int numberOfGAPS;
 	private final int gamma;
 	private final int minIterations;
 	private final float probabiltyOfSplit;
@@ -52,10 +55,35 @@ public final class LocalSearch {
 	}
 
 	// PUBLIC METHODS
+	public final Alignment execute() throws SALSAException {
+		int lastImprovement=0;
+		int iteration=0;
+		int positionOfGAP;
+		boolean left;
+		float split;
+		
+		//Initialize seed
+		Random random = new Random(System.currentTimeMillis());
 
-	public final Alignment execute() {
-		// TODO - report from c code
-		return null;
+		while(lastImprovement+minIterations>iteration){
+						
+			positionOfGAP=random.nextInt(this.numberOfGAPS);
+			left=random.nextBoolean();
+			split=random.nextFloat();					
+
+			if (split<this.probabiltyOfSplit){
+				if (splitAndMove(positionOfGAP, left)){
+					lastImprovement=iteration;
+				}
+			}
+			else if (move(positionOfGAP, left)){
+				lastImprovement=iteration;
+			}
+
+			iteration++;
+		}
+
+		return align;
 	}
 
 	// PRIVATE METHODS
@@ -97,9 +125,33 @@ public final class LocalSearch {
 	 * @param GAPPosition
 	 * @param left
 	 * @return
+	 * @throws SALSAException 
 	 */
-	private final boolean splitAndMove(int GAPPosition, boolean left) {
-		// TODO - report from c code
-		return false;
+	private final boolean splitAndMove(int GAPPosition, boolean left) throws SALSAException {
+		GAP g= this.GAPS.get(GAPPosition);
+		int length= g.getLength();
+
+		if (length > 1){
+			
+			Random random = new Random();
+			int positionOfSplit= g.getBegin() + random.nextInt(length-1);
+
+			// newGAP will not be moved
+			GAP newGAP = g.split(positionOfSplit, !left);
+			boolean improvement=move(GAPPosition, left, true);
+			if (improvement){
+				this.GAPS.add(newGAP);
+				this.numberOfGAPS++;
+			}
+			else{
+				newGAP.unify();
+			}
+
+			return improvement;
+		}
+		else{ 
+			//The GAP's length is one, therefore is not possible to split it
+			return move(GAPPosition, left);
+		}
 	}
 }

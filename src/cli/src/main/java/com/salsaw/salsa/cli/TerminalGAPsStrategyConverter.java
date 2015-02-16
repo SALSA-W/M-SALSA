@@ -4,7 +4,7 @@ import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 import com.salsaw.salsa.algorithm.TerminalGAPsStrategy;
 
-public class OutputConverter implements IStringConverter<TerminalGAPsStrategy> {
+public class TerminalGAPsStrategyConverter implements IStringConverter<TerminalGAPsStrategy> {
 	 
     @Override
     public TerminalGAPsStrategy convert(String value) {

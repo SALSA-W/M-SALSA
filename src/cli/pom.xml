@@ -26,7 +26,12 @@
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
 			<version>1.47</version>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>com.salsaw.salsa</groupId>
+			<artifactId>SALSA-algorithm</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 </project>

@@ -30,5 +30,17 @@ public enum TerminalGAPsStrategy {
 	/**
 	 * there is no penalty for opening a terminal GAP, only for extending it
 	 */
-	ONLY_GEP
+	ONLY_GEP;
+	
+    // converter that will be used later
+    public static TerminalGAPsStrategy fromString(String code) {
+ 
+        for(TerminalGAPsStrategy terminalGAPsStrategy : TerminalGAPsStrategy.values()) {
+            if(terminalGAPsStrategy.toString().equalsIgnoreCase(code)) {
+                return terminalGAPsStrategy;
+            }
+        }
+ 
+        return null;
+    }
 }

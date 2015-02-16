@@ -92,7 +92,7 @@ public final class Tree {
 			// Calculate sequence's index in the alignment
 			index = -1;
 			for (int j = 0; j < this.insertedSequences && index == -1; j++) {
-				if (names[j] == (this.leaves[i].getName())) {
+				if (names[j].equals(this.leaves[i].getName())) {
 					index = j;
 				}
 			}

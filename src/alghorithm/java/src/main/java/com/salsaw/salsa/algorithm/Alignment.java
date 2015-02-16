@@ -92,7 +92,7 @@ public final class Alignment {
 		this(inputFilePath, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
 	}
 
-	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
+	public Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
 			float g, TerminalGAPsStrategy tgs) throws IOException,
 			SALSAException {
 		this.substitution = s;

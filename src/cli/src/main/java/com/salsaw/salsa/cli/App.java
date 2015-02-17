@@ -9,45 +9,37 @@ import com.salsaw.salsa.algorithm.SubstitutionMatrix;
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main(String[] args)
-    {
-    	SalsaParameters salsaParameters = new SalsaParameters();
-    	JCommander commands=  new JCommander(salsaParameters);
-    	
-        try {
-        	
-            commands.parse(args);
-            
-			SubstitutionMatrix matrix=new SubstitutionMatrix(
-					salsaParameters.getScoringMatrix(), 23, 
+public class App {
+	public static void main(String[] args) {
+		SalsaParameters salsaParameters = new SalsaParameters();
+		JCommander commands = new JCommander(salsaParameters);
+
+		try {
+
+			commands.parse(args);
+
+			SubstitutionMatrix matrix = new SubstitutionMatrix(
+					salsaParameters.getScoringMatrix(), 23,
 					salsaParameters.getGEP());
-			
-			Alignment a=new Alignment(
-					salsaParameters.getInputFile(), 
-					salsaParameters.getPhylogeneticTreeFile(), 
-					matrix,
+
+			Alignment a = new Alignment(salsaParameters.getInputFile(),
+					salsaParameters.getPhylogeneticTreeFile(), matrix,
 					salsaParameters.getGOP(),
 					salsaParameters.getTerminalGAPsStrategy());
-			
-			LocalSearch l=new LocalSearch(a, 
-					salsaParameters.getGamma(), 
-					salsaParameters.getMinIterations(), 
+
+			LocalSearch l = new LocalSearch(a, salsaParameters.getGamma(),
+					salsaParameters.getMinIterations(),
 					salsaParameters.getProbabilityOfSplit());
 
-			//cout<<"WSP-SCore prima: "<<a->WSP()<<endl;
-			a=l.execute();
-			//cout<<"WSP-SCore dopo: "<<a->WSP()<<endl;
+			// cout<<"WSP-SCore prima: "<<a->WSP()<<endl;
+			a = l.execute();
+			// cout<<"WSP-SCore dopo: "<<a->WSP()<<endl;
 
 			a.save(salsaParameters.getOutputFile());
 
-            System.out.println(commands.getParsedCommand());
-            
-        } catch (Exception e) {
-        	
-            System.out.println(e.getMessage());
-            commands.usage();
-        }       
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			commands.usage();
+		}
+	}
 }

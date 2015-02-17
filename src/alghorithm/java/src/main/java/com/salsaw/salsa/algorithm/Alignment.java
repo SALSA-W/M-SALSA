@@ -249,16 +249,20 @@ public final class Alignment {
 				destinationFileNamePath))) {
 
 			// Write FASTA file
-			for (int r = 0; r < numberOfSequences; r++) {
+			for (int r = 0; r < this.numberOfSequences; r++) {
 				// Add header indicator
 				bw.write(">");
-				bw.write(properties[r]);
+				bw.write(this.properties[r]);
 				bw.newLine();
 
-				for (int c = 0; c < length; c++) {
+				for (int c = 0; c < this.length; c++) {
 					// align
 					bw.write(alphabet.intToChar(this.alignMatrix[r
 							* this.length + c]));
+					if ((c % 80) == 0){
+						// add new line every 80 characters
+						bw.write(Constants.NEW_LINE);
+					}				
 				}
 
 				bw.newLine();
@@ -341,7 +345,7 @@ public final class Alignment {
 		this.numberOfSequences = sequences.size();
 		this.properties = sequencesHeaders.toArray(new String[sequencesHeaders
 				.size()]);
-		this.length = this.properties[0].length();
+		this.length = sequences.get(0).length();
 
 		return sequences;
 	}

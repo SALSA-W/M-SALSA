@@ -34,18 +34,38 @@ public class SalsaParameters {
 	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs.", converter = TerminalGAPsStrategyConverter.class)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
 
+	/**
+	 * GAP Opening Penalty
+	 * 
+	 * @return
+	 */
 	public float getGOP() {
 		return GOP;
 	}
 
+	/**
+	 * GAP Extension Penalty
+	 * 
+	 * @return
+	 */
 	public float getGEP() {
 		return GEP;
 	}
 
+	/**
+	 * Dimension of the range of positions for a GAP during an iteration
+	 * 
+	 * @return
+	 */
 	public int getGamma() {
 		return gamma;
 	}
 
+	/**
+	 * Scoring matrix
+	 * 
+	 * @return
+	 */
 	public String getScoringMatrix() {
 		return scoringMatrix;
 	}
@@ -70,6 +90,11 @@ public class SalsaParameters {
 		return probabilityOfSplit;
 	}
 
+	/**
+	 * Minimum number of iterations
+	 * 
+	 * @return
+	 */
 	public int getMinIterations() {
 		return minIterations;
 	}

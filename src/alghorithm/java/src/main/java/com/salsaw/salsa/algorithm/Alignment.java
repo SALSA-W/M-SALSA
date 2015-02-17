@@ -255,7 +255,10 @@ public final class Alignment {
 				bw.write(this.properties[r]);
 				bw.newLine();
 
-				for (int c = 0; c < this.length; c++) {
+				bw.write(alphabet.intToChar(this.alignMatrix[r
+						* this.length]));
+				
+				for (int c = 1; c < this.length; c++) {
 					// align
 					bw.write(alphabet.intToChar(this.alignMatrix[r
 							* this.length + c]));

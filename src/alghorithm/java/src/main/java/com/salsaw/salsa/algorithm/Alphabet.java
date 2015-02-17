@@ -36,28 +36,30 @@ public class Alphabet {
 	private final char[] alphabet;
 
 	// CONSTRUCTOR
-	public Alphabet(String matrixInputLine, int alphabetLength)
+	public Alphabet(String matrixInputLine)
 			throws SALSAException {
-		this.alphabet = new char[alphabetLength];
-
-		int numberOfCharacters = 0;
-		for (int i = 0; i < matrixInputLine.length(); i++) {
+		matrixInputLine = matrixInputLine.trim();
+		String[] alphabetsSymbols = matrixInputLine.split("  ");
+		int alphabetLength = alphabetsSymbols.length;
+		
+		this.alphabet = new char[alphabetLength];		
+		
+		for (int i = 0; i < alphabetsSymbols.length; i++) {
 
 			// For short string charAt has higher performance
 			// http://stackoverflow.com/a/11876086
-			char symbol = matrixInputLine.charAt(i);
-			if (symbol != ' ') {
-				alphabet[numberOfCharacters] = symbol;
-				numberOfCharacters++;
-			}
+			char symbol = alphabetsSymbols[i].charAt(0);
+			alphabet[i] = symbol;
 		}
 
-		this.numberOfCharacters = numberOfCharacters;
-
-		if (numberOfCharacters != alphabetLength) {
-			throw new SALSAException(
-					"Number of characters in the first line of the substitution matrix doesn't correspond to the specified number of characters.");
-		}
+		this.numberOfCharacters = alphabetLength;
+	}
+	
+	// GET/SET
+	
+	public final int getNumberOfCharacters()
+	{
+		return this.numberOfCharacters;
 	}
 
 	// METHODS

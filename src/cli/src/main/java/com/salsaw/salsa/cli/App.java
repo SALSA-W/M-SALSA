@@ -19,7 +19,7 @@ public class App {
 			commands.parse(args);
 
 			SubstitutionMatrix matrix = new SubstitutionMatrix(
-					salsaParameters.getScoringMatrix(), 23,
+					salsaParameters.getScoringMatrix(),
 					salsaParameters.getGEP());
 
 			Alignment a = new Alignment(salsaParameters.getInputFile(),

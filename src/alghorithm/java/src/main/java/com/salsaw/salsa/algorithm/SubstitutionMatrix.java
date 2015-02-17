@@ -52,22 +52,24 @@ public final class SubstitutionMatrix {
 		return this.alphabet;
 	}
 
-	public SubstitutionMatrix(String filePath, int alphabetLength, float gep)
+	public SubstitutionMatrix(String filePath, float gep)
 			throws SALSAException, IOException {
-		this.matrix = new int[alphabetLength * alphabetLength];
-		this.alphabetLength = alphabetLength;
 		this.GEP = gep;		
 		
 		try(Scanner scanner = new Scanner(new File(filePath)))
 		{
 			// Read first line with the alphabet
 			String line = scanner.nextLine();
-			this.alphabet = new Alphabet(line, alphabetLength);
+			this.alphabet = new Alphabet(line);
+			
+			int alphabetLength = this.alphabet.getNumberOfCharacters();
+			this.matrix = new int[alphabetLength * alphabetLength];
+			this.alphabetLength = alphabetLength;
 			
 			// Read the values for the matrix value (the matrix is alphabet x alphabet)
 			for (int i=0; i<alphabetLength;i++){
 				for (int j=0; j<alphabetLength; j++){
-					matrix[i*alphabetLength+j] = scanner.nextInt();
+					this.matrix[i*alphabetLength+j] = scanner.nextInt();
 				}
 			}
 		}		

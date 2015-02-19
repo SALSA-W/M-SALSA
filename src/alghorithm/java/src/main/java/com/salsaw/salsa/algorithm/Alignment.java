@@ -262,7 +262,7 @@ public final class Alignment {
 					// align
 					bw.write(alphabet.intToChar(this.alignMatrix[r
 							* this.length + c]));
-					if ((c % 80) == 0){
+					if ((c % 79) == 0){
 						// add new line every 80 characters
 						bw.write(Constants.NEW_LINE);
 					}				

@@ -15,6 +15,8 @@
  */
 package com.salsaw.salsa.cli;
 
+import java.util.List;
+
 public class ClustalParameters {
 
 	// CONSTANTS
@@ -23,13 +25,18 @@ public class ClustalParameters {
 
 	// FLAG SETTINGS
 	private static final String NEIGHBOUR_JOINING_TREE = "TREE";
+	
+	/**
+	 * do full multiple alignment
+	 */
+	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";
 
 	// OPTIONS KEYS
 	private static final String OUPUT_KEY = "OUTPUT";
 
 	// FIELDS
 	private boolean calculatePhylogeneticTree;
-	private ClustalOputputFormat oputputFormat = ClustalOputputFormat.FASTA;
+	private ClustalOputputFormat oputputFormat = ClustalOputputFormat.FASTA;	
 
 	// GET/SET
 	public void setCalculatePhylogeneticTree(boolean value) {
@@ -37,34 +44,32 @@ public class ClustalParameters {
 	}
 
 	// METHODS
-	public String generateClustalArguments() {
-		StringBuilder clustalCallBuilder = new StringBuilder();
-
+	public List<String> generateClustalArguments(List<String> commands) {
+		commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
+		
 		// Set output format
-		appendParameter(clustalCallBuilder, OUPUT_KEY, oputputFormat.toString());
-
+		commands.add(createParameterCommand(OUPUT_KEY, oputputFormat.toString()));
+		
 		if (this.calculatePhylogeneticTree == true) {
-			appendBolleanParameter(clustalCallBuilder, NEIGHBOUR_JOINING_TREE);
+			commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
 		}
 
-		return clustalCallBuilder.toString();
+		return commands;
 	}
 
-	private StringBuilder appendBolleanParameter(StringBuilder stringBuilder,
-			String value) {
+	private String createBolleanParameterCommand(String value) {
+		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
 		stringBuilder.append(value);
-		stringBuilder.append(" ");
-		return stringBuilder;
+		return stringBuilder.toString();
 	}
 
-	private StringBuilder appendParameter(StringBuilder stringBuilder,
-			String key, String value) {
+	private String createParameterCommand(String key, String value) {
+		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
 		stringBuilder.append(key);
 		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
 		stringBuilder.append(value);
-		stringBuilder.append(" ");
-		return stringBuilder;
+		return stringBuilder.toString();
 	}
 }

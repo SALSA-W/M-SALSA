@@ -25,7 +25,7 @@ public class SalsaParameters {
 	@Parameter(names = { "-outputFile" }, description = "The FASTA produced after the process", required = true)
 	private String outputFile;
 
-	@Parameter(names = { "-phTreeFile" }, description = "The ph file that contains the phylogenetic tree", required = true)
+	@Parameter(names = { "-phTreeFile" }, description = "The ph file that contains the phylogenetic tree", required = false)
 	private String phylogeneticTreeFile;
 
 	@Parameter(names = { "-GOP" }, description = "GAP Opening Penalty")
@@ -48,6 +48,12 @@ public class SalsaParameters {
 
 	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs.", converter = TerminalGAPsStrategyConverter.class)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
+	
+	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
+	private String clustalPath;
+	
+	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega)")
+	private ClustalType clustalType = ClustalType.CLUSTAL_W;
 
 	/**
 	 * GAP Opening Penalty
@@ -113,5 +119,12 @@ public class SalsaParameters {
 	public int getMinIterations() {
 		return minIterations;
 	}
-
+	
+	public String getClustalPath(){
+		return this.clustalPath;
+	}	
+	
+	public ClustalType getClustalType() {
+		return this.clustalType;
+	}
 }

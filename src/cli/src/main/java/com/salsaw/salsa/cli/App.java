@@ -15,10 +15,20 @@
  */
 package com.salsaw.salsa.cli;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.beust.jcommander.JCommander;
 import com.salsaw.salsa.algorithm.Alignment;
 import com.salsaw.salsa.algorithm.LocalSearch;
 import com.salsaw.salsa.algorithm.SubstitutionMatrix;
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 /**
  * Hello world!
@@ -30,15 +40,21 @@ public class App {
 		JCommander commands = new JCommander(salsaParameters);
 
 		try {
-
-			commands.parse(args);
-
+			commands.parse(args);		
+			
+			String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
+			if (salsaParameters.getClustalPath() != null &&
+				salsaParameters.getPhylogeneticTreeFile() == null)
+			{
+				phylogeneticTreeFilePath = callClustal(salsaParameters);
+			}
+			
 			SubstitutionMatrix matrix = new SubstitutionMatrix(
 					salsaParameters.getScoringMatrix(),
 					salsaParameters.getGEP());
 
 			Alignment a = new Alignment(salsaParameters.getInputFile(),
-					salsaParameters.getPhylogeneticTreeFile(), matrix,
+					phylogeneticTreeFilePath, matrix,
 					salsaParameters.getGOP(),
 					salsaParameters.getTerminalGAPsStrategy());
 
@@ -46,9 +62,7 @@ public class App {
 					salsaParameters.getMinIterations(),
 					salsaParameters.getProbabilityOfSplit());
 
-			// cout<<"WSP-SCore prima: "<<a->WSP()<<endl;
 			a = l.execute();
-			// cout<<"WSP-SCore dopo: "<<a->WSP()<<endl;
 
 			a.save(salsaParameters.getOutputFile());
 
@@ -56,5 +70,61 @@ public class App {
 			e.printStackTrace();
 			commands.usage();
 		}
+	}
+	
+	public static String callClustal(SalsaParameters salsaParameters) throws IOException, InterruptedException, SALSAException{
+		
+		// Create parameters
+		ClustalParameters clustalParameters = new ClustalParameters();
+		clustalParameters.setCalculatePhylogeneticTree(true);
+		
+		// Get program path to execute
+		List<String> clustalProcessCommands = new ArrayList<String>();
+		clustalProcessCommands.add(salsaParameters.getClustalPath());
+		clustalProcessCommands.add(salsaParameters.getInputFile());
+		clustalParameters.generateClustalArguments(clustalProcessCommands);
+		
+		// http://www.rgagnon.com/javadetails/java-0014.html
+		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
+		final Process process = builder.start();
+	    InputStream is = process.getInputStream();
+	    InputStreamReader isr = new InputStreamReader(is);
+	    BufferedReader br = new BufferedReader(isr);
+	    
+	    String phylogeneticTreeFilePath = null;
+	    String alignmentFilePath = null;
+	    String line;
+	    while ((line = br.readLine()) != null) {
+	      System.out.println(line);
+	      
+	      if (line.indexOf("Phylogenetic tree file created:") >= 0){
+	    	  // Read the path of Phylogenetic tree file created from output
+	    	  // http://stackoverflow.com/a/4006273
+	    	  Pattern p = Pattern.compile("\\[(.*?)\\]");
+	    	  Matcher m = p.matcher(line);
+	    	  if (m.find() == false){
+	    		  throw new SALSAException("Unable to read the path of phylognetic tree file");	    		  
+	    	  }
+	    	  phylogeneticTreeFilePath = m.group(1);
+	      }
+	      
+	      if (line.indexOf("Fasta-Alignment file created") >= 0){
+	    	  Pattern p = Pattern.compile("\\[(.*?)\\]");
+	    	  Matcher m = p.matcher(line);
+	    	  if (m.find() == false){
+	    		  throw new SALSAException("Unable to read the path of alignment file");	    		  
+	    	  }
+	    	  alignmentFilePath = m.group(1);
+	      }
+	    }
+	    
+	    process.waitFor();
+	    
+	    if (process.exitValue() != 0)
+	    {
+	    	throw new SALSAException("Failed clustal call");
+	    }	    
+		
+	    return phylogeneticTreeFilePath;
 	}
 }

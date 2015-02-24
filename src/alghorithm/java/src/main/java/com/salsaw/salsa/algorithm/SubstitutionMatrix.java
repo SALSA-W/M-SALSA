@@ -15,8 +15,8 @@
  */
 package com.salsaw.salsa.algorithm;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
@@ -52,11 +52,11 @@ public final class SubstitutionMatrix {
 		return this.alphabet;
 	}
 
-	public SubstitutionMatrix(String filePath, float gep)
+	public SubstitutionMatrix(InputStream scoringMatrixStream, float gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;		
 		
-		try(Scanner scanner = new Scanner(new File(filePath)))
+		try(Scanner scanner = new Scanner(scoringMatrixStream))
 		{
 			// Read first line with the alphabet
 			String line = scanner.nextLine();

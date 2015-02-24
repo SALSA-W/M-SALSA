@@ -16,6 +16,7 @@
 package com.salsaw.salsa.cli;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -52,11 +53,24 @@ public class App {
 				alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 				phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
 			}
-
-			SubstitutionMatrix matrix = new SubstitutionMatrix(
-					salsaParameters.getScoringMatrix(),
-					salsaParameters.getGEP());
-
+			
+			SubstitutionMatrix matrix;
+			String scoringMatrixName = salsaParameters.getScoringMatrix();
+			
+			if (scoringMatrixName == "BLOSUM50" ||
+				scoringMatrixName == "BLOSUM62") {
+				// Load well-known matrix from embedded resources
+				try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
+					matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
+				}
+			}
+			else {
+				// Load user matrix from file
+				try(InputStream stream = new FileInputStream(scoringMatrixName)) {
+					matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
+				}
+			}
+			
 			Alignment alignment = new Alignment(alignmentFilePath,
 					phylogeneticTreeFilePath, matrix, salsaParameters.getGOP(),
 					salsaParameters.getTerminalGAPsStrategy());

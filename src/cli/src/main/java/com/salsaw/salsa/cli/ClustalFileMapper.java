@@ -18,6 +18,7 @@ package com.salsaw.salsa.cli;
 public class ClustalFileMapper {
 	// FIELDS
 	private final String inputFilePath;
+	private String alignmentFilePath;
 	private String guideTreeFilePath;
 	private String guidePhylogeneticTreeFile;
 	
@@ -39,12 +40,20 @@ public class ClustalFileMapper {
 		return this.guidePhylogeneticTreeFile;
 	}
 	
+	public String getAlignmentFilePath(){
+		return this.alignmentFilePath;
+	}
+	
 	public void setGuideTreeFilePath(String guideTreeFilePath){
 		this.guideTreeFilePath = guideTreeFilePath;
 	}
 
 	public void setGuidePhylogeneticTreeFile(String guidePhylogeneticTreeFile){
 		this.guidePhylogeneticTreeFile = guidePhylogeneticTreeFile;
+	}
+	
+	public void setAlignmentFilePath(String alignmentFilePath){
+		this.alignmentFilePath = alignmentFilePath;
 	}
 	
 	// METHODS

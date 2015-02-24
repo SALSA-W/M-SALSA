@@ -43,17 +43,21 @@ public class App {
 			commands.parse(args);		
 			
 			String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
+			String alignmentFilePath = salsaParameters.getInputFile();
 			if (salsaParameters.getClustalPath() != null &&
 				salsaParameters.getPhylogeneticTreeFile() == null)
 			{
-				phylogeneticTreeFilePath = callClustal(salsaParameters);
+				ClustalFileMapper clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
+				callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
+				alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
+				phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
 			}
-			
+					
 			SubstitutionMatrix matrix = new SubstitutionMatrix(
 					salsaParameters.getScoringMatrix(),
 					salsaParameters.getGEP());
 
-			Alignment a = new Alignment(salsaParameters.getInputFile(),
+			Alignment a = new Alignment(alignmentFilePath,
 					phylogeneticTreeFilePath, matrix,
 					salsaParameters.getGOP(),
 					salsaParameters.getTerminalGAPsStrategy());
@@ -72,7 +76,7 @@ public class App {
 		}
 	}
 	
-	public static String callClustal(SalsaParameters salsaParameters) throws IOException, InterruptedException, SALSAException{
+	public static void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) throws IOException, InterruptedException, SALSAException{
 		
 		// Create parameters
 		ClustalParameters clustalParameters = new ClustalParameters();
@@ -80,8 +84,8 @@ public class App {
 		
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(salsaParameters.getClustalPath());
-		clustalProcessCommands.add(salsaParameters.getInputFile());
+		clustalProcessCommands.add(clustalPath);
+		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
 		clustalParameters.generateClustalArguments(clustalProcessCommands);
 		
 		// http://www.rgagnon.com/javadetails/java-0014.html
@@ -105,7 +109,7 @@ public class App {
 	    	  if (m.find() == false){
 	    		  throw new SALSAException("Unable to read the path of phylognetic tree file");	    		  
 	    	  }
-	    	  phylogeneticTreeFilePath = m.group(1);
+	    	  clustalFileMapper.setGuidePhylogeneticTreeFile(phylogeneticTreeFilePath);	    	   
 	      }
 	      
 	      if (line.indexOf("Fasta-Alignment file created") >= 0){
@@ -114,17 +118,15 @@ public class App {
 	    	  if (m.find() == false){
 	    		  throw new SALSAException("Unable to read the path of alignment file");	    		  
 	    	  }
-	    	  alignmentFilePath = m.group(1);
+	    	  
+	    	  clustalFileMapper.setAlignmentFilePath(alignmentFilePath);
 	      }
 	    }
 	    
 	    process.waitFor();
 	    
-	    if (process.exitValue() != 0)
-	    {
+	    if (process.exitValue() != 0){
 	    	throw new SALSAException("Failed clustal call");
-	    }	    
-		
-	    return phylogeneticTreeFilePath;
+	    }	
 	}
 }

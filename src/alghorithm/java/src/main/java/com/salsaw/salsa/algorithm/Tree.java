@@ -117,7 +117,9 @@ public final class Tree {
 	private char ReadNext(PushbackReader reader) throws IOException {
 		char c = (char) reader.read();
 
-		while (c == ' ' || c == '\n') {
+		while ( c == ' ' ||
+				// Skip new line characters
+				c == '\n' || c == '\r') {
 			c = (char) reader.read();
 		}
 
@@ -136,7 +138,7 @@ public final class Tree {
 			// Example of leaf line: 2lef_A:0.40631,
 			// Read name
 			String name = "";
-			do {
+			do {							
 				name += c;
 				c = (char) reader.read();
 			} while (c != ':');

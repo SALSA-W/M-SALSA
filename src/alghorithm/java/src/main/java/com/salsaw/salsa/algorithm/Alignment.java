@@ -92,9 +92,9 @@ public final class Alignment {
 		this(inputFilePath, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
 	}
 
-	public Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
-			float g, TerminalGAPsStrategy tgs) throws IOException,
-			SALSAException {
+	public Alignment(String inputFilePath, String treeFileName,
+			SubstitutionMatrix s, float g, TerminalGAPsStrategy tgs)
+			throws IOException, SALSAException {
 		this.substitution = s;
 		this.GOP = g;
 		this.terminal = tgs;
@@ -255,17 +255,13 @@ public final class Alignment {
 				bw.write(this.properties[r]);
 				bw.newLine();
 
-				bw.write(alphabet.intToChar(this.alignMatrix[r
-						* this.length]));
-				
-				for (int c = 1; c < this.length; c++) {
+				for (int c = 0; c < this.length; c++) {
 					// align
-					bw.write(alphabet.intToChar(this.alignMatrix[r
-							* this.length + c]));
-					if ((c % 79) == 0){
-						// add new line every 80 characters
-						bw.write(Constants.NEW_LINE);
-					}				
+					bw.write(alphabet.intToChar(this.alignMatrix[r * this.length + c]));
+					if (((c + 1) % 60) == 0) {
+						// add new line every 60 characters
+						bw.newLine();
+					}
 				}
 
 				bw.newLine();

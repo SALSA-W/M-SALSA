@@ -20,7 +20,7 @@ public class ClustalFileMapper {
 	private final String inputFilePath;
 	private String alignmentFilePath;
 	private String guideTreeFilePath;
-	private String guidePhylogeneticTreeFile;
+	private String phylogeneticTreeFile;
 	
 	// CONSTRUCTOR
 	public ClustalFileMapper(String inputFilePath){
@@ -37,7 +37,7 @@ public class ClustalFileMapper {
 	}
 	
 	public String getGuidePhylogeneticTreeFile(){
-		return this.guidePhylogeneticTreeFile;
+		return this.phylogeneticTreeFile;
 	}
 	
 	public String getAlignmentFilePath(){
@@ -48,8 +48,8 @@ public class ClustalFileMapper {
 		this.guideTreeFilePath = guideTreeFilePath;
 	}
 
-	public void setGuidePhylogeneticTreeFile(String guidePhylogeneticTreeFile){
-		this.guidePhylogeneticTreeFile = guidePhylogeneticTreeFile;
+	public void setPhylogeneticTreeFile(String phylogeneticTreeFile){
+		this.phylogeneticTreeFile = phylogeneticTreeFile;
 	}
 	
 	public void setAlignmentFilePath(String alignmentFilePath){
@@ -59,10 +59,10 @@ public class ClustalFileMapper {
 	// METHODS
 	public String getTreeFilePath(){
 		// Return guide tree if phylogenetic tree isn't set
-		if (this.guidePhylogeneticTreeFile == null)
+		if (this.phylogeneticTreeFile == null)
 		{
 			return this.guideTreeFilePath;
 		}
-		return this.guidePhylogeneticTreeFile;
+		return this.phylogeneticTreeFile;
 	}	
 }

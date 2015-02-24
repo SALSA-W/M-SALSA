@@ -94,9 +94,7 @@ public class App {
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
-
-		String phylogeneticTreeFilePath = null;
-		String alignmentFilePath = null;
+			
 		String line;
 
 		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
@@ -111,15 +109,23 @@ public class App {
 				if (matcher.find() == false) {
 					throw new SALSAException("Unable to read the path of phylognetic tree file");
 				}
-				clustalFileMapper.setGuidePhylogeneticTreeFile(phylogeneticTreeFilePath);
+				clustalFileMapper.setPhylogeneticTreeFile(matcher.group(1));
 			}
+			
+		    if (line.indexOf("Guide tree file created:") >= 0){
+		    	Matcher matcher = pattern.matcher(line);
+				if (matcher.find() == false) {
+					throw new SALSAException("Unable to read the path of guide tree file");
+				}
+				clustalFileMapper.setGuideTreeFilePath(matcher.group(1));
+		    }
 
 			if (line.indexOf("Fasta-Alignment file created") >= 0) {
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find() == false) {
 					throw new SALSAException("Unable to read the path of alignment file");
 				}
-				clustalFileMapper.setAlignmentFilePath(alignmentFilePath);
+				clustalFileMapper.setAlignmentFilePath(matcher.group(1));
 			}
 		}
 

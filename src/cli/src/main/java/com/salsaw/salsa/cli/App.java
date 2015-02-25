@@ -30,6 +30,8 @@ import com.salsaw.salsa.algorithm.Alignment;
 import com.salsaw.salsa.algorithm.LocalSearch;
 import com.salsaw.salsa.algorithm.SubstitutionMatrix;
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
+import com.salsaw.salsa.clustal.ClustalFileMapper;
+import com.salsaw.salsa.clustal.ClustalWParameters;
 
 /**
  * Hello world!
@@ -93,14 +95,14 @@ public class App {
 			InterruptedException, SALSAException {
 
 		// Create parameters
-		ClustalParameters clustalParameters = new ClustalParameters();
-		clustalParameters.setCalculatePhylogeneticTree(true);
+		ClustalWParameters clustalWParameters = new ClustalWParameters();
+		clustalWParameters.setCalculatePhylogeneticTree(true);
 
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
 		clustalProcessCommands.add(clustalPath);
 		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
-		clustalParameters.generateClustalArguments(clustalProcessCommands);
+		clustalWParameters.generateClustalArguments(clustalProcessCommands);
 
 		// http://www.rgagnon.com/javadetails/java-0014.html
 		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);

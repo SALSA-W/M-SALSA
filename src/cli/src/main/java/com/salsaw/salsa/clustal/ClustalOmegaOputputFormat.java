@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.salsa.cli;
+package com.salsaw.salsa.clustal;
 
-public enum ClustalOputputFormat {
+public enum ClustalOmegaOputputFormat {
 	/**
 	 * The default Clustal output format
 	 */
-	CLUSTAL("CLUSTAL"),
-	GCG("GCG"),
-	GDE("GDE"),
-	PHYLIP("PHYLIP"),
-	PIR("PIR"),
-	NEXUS("NEXUS"),
-	FASTA("FASTA"),
+	FASTA("fasta"),
+	CLUSTAL("clustal"),
+	MSF("msf"),
+	PHYLIP("PHYLIP"),	
+	SELEX("selex"),
+	STOCKHOLM("stockholm"),	
+	VIENNA("vienna"),	
     ;
 
     private final String text;
 
-    private ClustalOputputFormat(final String text) {
+    private ClustalOmegaOputputFormat(final String text) {
         this.text = text;
     }
 

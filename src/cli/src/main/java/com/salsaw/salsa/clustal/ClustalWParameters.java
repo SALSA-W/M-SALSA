@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.salsa.cli;
+package com.salsaw.salsa.clustal;
 
 import java.util.List;
 
-public class ClustalParameters {
-
+public class ClustalWParameters extends ClustalParameters {
 	// CONSTANTS
-	private static final String ARGUMENTS_START_SYMBOL = "-";
-	private static final String ARGUMENTS_ASSING_SYMBOL = "=";
 
 	// FLAG SETTINGS
-	private static final String NEIGHBOUR_JOINING_TREE = "TREE";
-	
+	private static final String NEIGHBOUR_JOINING_TREE = "TREE";	
 	/**
 	 * do full multiple alignment
 	 */
@@ -36,7 +32,6 @@ public class ClustalParameters {
 
 	// FIELDS
 	private boolean calculatePhylogeneticTree;
-	private ClustalOputputFormat oputputFormat = ClustalOputputFormat.FASTA;	
 
 	// GET/SET
 	public void setCalculatePhylogeneticTree(boolean value) {
@@ -44,32 +39,17 @@ public class ClustalParameters {
 	}
 
 	// METHODS
-	public List<String> generateClustalArguments(List<String> commands) {
-		commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
-		
+	@Override
+	public List<String> generateClustalArguments(List<String> commands) {			
 		// Set output format
-		commands.add(createParameterCommand(OUPUT_KEY, oputputFormat.toString()));
-		
+		commands.add(createParameterCommand(OUPUT_KEY, super.getOputputFormat().toString()));
+				
 		if (this.calculatePhylogeneticTree == true) {
 			commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
+		} else{
+			commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
 		}
 
 		return commands;
-	}
-
-	private String createBolleanParameterCommand(String value) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ARGUMENTS_START_SYMBOL);
-		stringBuilder.append(value);
-		return stringBuilder.toString();
-	}
-
-	private String createParameterCommand(String key, String value) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ARGUMENTS_START_SYMBOL);
-		stringBuilder.append(key);
-		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
-		stringBuilder.append(value);
-		return stringBuilder.toString();
 	}
 }

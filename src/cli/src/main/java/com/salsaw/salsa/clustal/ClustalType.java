@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.salsa.cli;
+package com.salsaw.salsa.clustal;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -26,7 +26,8 @@ public enum ClustalType {
 	CLUTAL_O;
 	
 	// CONSTANTS
-	private static final String CLUSTAL_W_PROCESS_NAME = "clustalw2.exe";
+	private static final String CLUSTAL_W_PROCESS_NAME = "clustalw2";
+	private static final String CLUSTAL_O_PROCESS_NAME = "clustalo";
 	
 	// GET / SET
 	public static final File getClustalProcessFile(ClustalType clustalType)
@@ -35,6 +36,10 @@ public enum ClustalType {
 		switch (clustalType) {
 		case CLUSTAL_W:
 			processName = CLUSTAL_W_PROCESS_NAME;
+			break;
+			
+		case CLUTAL_O:
+			processName = CLUSTAL_O_PROCESS_NAME;
 			break;
 
 		default:

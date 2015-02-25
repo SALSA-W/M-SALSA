@@ -17,6 +17,7 @@ package com.salsaw.salsa.cli;
 
 import com.beust.jcommander.Parameter;
 import com.salsaw.salsa.algorithm.TerminalGAPsStrategy;
+import com.salsaw.salsa.clustal.ClustalType;
 
 public class SalsaParameters {
 	@Parameter(names = { "-inputFile" }, description = "The FASTA file to process", required = true)

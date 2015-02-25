@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.salsa.cli;
+package com.salsaw.salsa.clustal;
 
 public enum ClustalErrorCode {
 	/**

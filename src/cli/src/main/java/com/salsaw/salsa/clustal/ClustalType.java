@@ -23,7 +23,7 @@ import com.salsaw.salsa.utils.OSChecker;
 
 public enum ClustalType {
 	CLUSTAL_W,
-	CLUTAL_O;
+	CLUSTAL_O;
 	
 	// CONSTANTS
 	private static final String CLUSTAL_W_PROCESS_NAME = "clustalw2";
@@ -38,7 +38,7 @@ public enum ClustalType {
 			processName = CLUSTAL_W_PROCESS_NAME;
 			break;
 			
-		case CLUTAL_O:
+		case CLUSTAL_O:
 			processName = CLUSTAL_O_PROCESS_NAME;
 			break;
 

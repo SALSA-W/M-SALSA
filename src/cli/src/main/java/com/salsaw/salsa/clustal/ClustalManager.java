@@ -41,7 +41,7 @@ public abstract class ClustalManager {
 	// METHODS
 	protected abstract List<String> generateClustalArguments(List<String> commands);
 	
-	protected abstract void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) 
+	public abstract void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) 
 			throws IOException,	InterruptedException, SALSAException;
 
 	protected String createBolleanParameterCommand(String value) {
@@ -58,5 +58,21 @@ public abstract class ClustalManager {
 		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
 		stringBuilder.append(value);
 		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Factory method
+	 * @throws SALSAException 
+	 */
+	public static ClustalManager CreateClustalManager(ClustalType clustalType) throws SALSAException{		
+		switch (clustalType) {
+		case CLUSTAL_W:
+			return new ClustalWManager();
+			
+		case CLUSTAL_O:
+			return new ClustalWManager();
+		}
+		
+		throw new SALSAException("Unable to create a clustal manager of type " + clustalType.toString());		
 	}
 }

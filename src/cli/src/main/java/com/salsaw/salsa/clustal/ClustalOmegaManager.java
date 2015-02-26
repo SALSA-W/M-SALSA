@@ -26,8 +26,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
@@ -69,7 +67,7 @@ public class ClustalOmegaManager extends ClustalManager {
 	}
 
 	@Override
-	protected void callClustal(String clustalPath,
+	public void callClustal(String clustalPath,
 			ClustalFileMapper clustalFileMapper) throws IOException,
 			InterruptedException, SALSAException {
 		// Get program path to execute

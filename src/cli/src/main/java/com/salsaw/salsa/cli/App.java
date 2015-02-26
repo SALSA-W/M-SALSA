@@ -15,15 +15,9 @@
  */
 package com.salsaw.salsa.cli;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.beust.jcommander.JCommander;
 import com.salsaw.salsa.algorithm.Alignment;
@@ -31,7 +25,7 @@ import com.salsaw.salsa.algorithm.LocalSearch;
 import com.salsaw.salsa.algorithm.SubstitutionMatrix;
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 import com.salsaw.salsa.clustal.ClustalFileMapper;
-import com.salsaw.salsa.clustal.ClustalWManager;
+import com.salsaw.salsa.clustal.ClustalManager;
 
 /**
  * Hello world!
@@ -48,10 +42,11 @@ public class App {
 			String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
 			String alignmentFilePath = salsaParameters.getInputFile();
 			if (salsaParameters.getClustalPath() != null &&
-				salsaParameters.getPhylogeneticTreeFile() == null) {
+				salsaParameters.getPhylogeneticTreeFile() == null) {						
 				ClustalFileMapper clustalFileMapper = new ClustalFileMapper(
 						salsaParameters.getInputFile());
-				callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
+				ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
+				clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
 				alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 				phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
 			}

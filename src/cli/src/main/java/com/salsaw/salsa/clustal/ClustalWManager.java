@@ -63,7 +63,7 @@ public class ClustalWManager extends ClustalManager {
 	}
 
 	@Override
-	protected void callClustal(String clustalPath,
+	public void callClustal(String clustalPath,
 			ClustalFileMapper clustalFileMapper) throws IOException,
 			InterruptedException, SALSAException {
 		

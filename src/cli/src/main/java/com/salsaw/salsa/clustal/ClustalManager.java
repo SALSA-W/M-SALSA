@@ -15,9 +15,12 @@
  */
 package com.salsaw.salsa.clustal;
 
+import java.io.IOException;
 import java.util.List;
 
-public abstract class ClustalParameters {
+import com.salsaw.salsa.algorithm.exceptions.SALSAException;
+
+public abstract class ClustalManager {
 
 	// CONSTANTS
 	private static final String ARGUMENTS_START_SYMBOL = "-";
@@ -36,7 +39,10 @@ public abstract class ClustalParameters {
 	}
 
 	// METHODS
-	public abstract List<String> generateClustalArguments(List<String> commands);
+	protected abstract List<String> generateClustalArguments(List<String> commands);
+	
+	protected abstract void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) 
+			throws IOException,	InterruptedException, SALSAException;
 
 	protected String createBolleanParameterCommand(String value) {
 		StringBuilder stringBuilder = new StringBuilder();

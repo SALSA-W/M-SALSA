@@ -31,7 +31,7 @@ import com.salsaw.salsa.algorithm.LocalSearch;
 import com.salsaw.salsa.algorithm.SubstitutionMatrix;
 import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 import com.salsaw.salsa.clustal.ClustalFileMapper;
-import com.salsaw.salsa.clustal.ClustalWParameters;
+import com.salsaw.salsa.clustal.ClustalWManager;
 
 /**
  * Hello world!
@@ -93,62 +93,5 @@ public class App {
 	public static void callClustal(String clustalPath,
 			ClustalFileMapper clustalFileMapper) throws IOException,
 			InterruptedException, SALSAException {
-
-		// Create parameters
-		ClustalWParameters clustalWParameters = new ClustalWParameters();
-		clustalWParameters.setCalculatePhylogeneticTree(true);
-
-		// Get program path to execute
-		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(clustalPath);
-		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
-		clustalWParameters.generateClustalArguments(clustalProcessCommands);
-
-		// http://www.rgagnon.com/javadetails/java-0014.html
-		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
-		final Process process = builder.start();
-		InputStream is = process.getInputStream();
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-			
-		String line;
-
-		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-
-			if (line.indexOf("Phylogenetic tree file created:") >= 0) {
-				// Read the path of Phylogenetic tree file created from output
-				// http://stackoverflow.com/a/4006273
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.find() == false) {
-					throw new SALSAException("Unable to read the path of phylognetic tree file");
-				}
-				clustalFileMapper.setPhylogeneticTreeFile(matcher.group(1));
-			}
-			
-		    if (line.indexOf("Guide tree file created:") >= 0){
-		    	Matcher matcher = pattern.matcher(line);
-				if (matcher.find() == false) {
-					throw new SALSAException("Unable to read the path of guide tree file");
-				}
-				clustalFileMapper.setGuideTreeFilePath(matcher.group(1));
-		    }
-
-			if (line.indexOf("Fasta-Alignment file created") >= 0) {
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.find() == false) {
-					throw new SALSAException("Unable to read the path of alignment file");
-				}
-				clustalFileMapper.setAlignmentFilePath(matcher.group(1));
-			}
-		}
-
-		process.waitFor();
-
-		if (process.exitValue() != 0) {
-			throw new SALSAException("Failed clustal call");
-		}
 	}
 }

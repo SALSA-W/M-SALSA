@@ -29,14 +29,14 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 public class ClustalWManager extends ClustalManager {
 	// CONSTANTS
 
-	// FLAG SETTINGS
+	// flag settings
 	private static final String NEIGHBOUR_JOINING_TREE = "TREE";	
 	/**
 	 * do full multiple alignment
 	 */
 	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";
 
-	// OPTIONS KEYS
+	// keys of options
 	private static final String OUPUT_KEY = "OUTPUT";
 
 	// FIELDS
@@ -49,9 +49,17 @@ public class ClustalWManager extends ClustalManager {
 
 	// METHODS
 	@Override
+	protected String createBolleanParameterCommand(String value) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(value);
+		return stringBuilder.toString();
+	}
+	
+	@Override
 	public List<String> generateClustalArguments(List<String> commands) {			
 		// Set output format
-		commands.add(createParameterCommand(OUPUT_KEY, super.getOputputFormat().toString()));
+		commands.add(createParameterEqualsCommand(OUPUT_KEY, super.getOputputFormat().toString()));
 				
 		if (this.calculatePhylogeneticTree == true) {
 			commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
@@ -117,7 +125,7 @@ public class ClustalWManager extends ClustalManager {
 		process.waitFor();
 
 		if (process.exitValue() != 0) {
-			throw new SALSAException("Failed clustal call");
+			throw new SALSAException("Failed clustalW2 call");
 		}		
 	}
 }

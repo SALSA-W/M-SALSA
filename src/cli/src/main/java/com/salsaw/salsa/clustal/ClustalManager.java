@@ -23,8 +23,8 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 public abstract class ClustalManager {
 
 	// CONSTANTS
-	private static final String ARGUMENTS_START_SYMBOL = "-";
-	private static final String ARGUMENTS_ASSING_SYMBOL = "=";
+	protected static final String ARGUMENTS_START_SYMBOL = "-";
+	protected static final String ARGUMENTS_ASSING_SYMBOL = "=";
 
 	// FIELDS
 	private ClustalWOputputFormat oputputFormat = ClustalWOputputFormat.FASTA;	
@@ -44,14 +44,9 @@ public abstract class ClustalManager {
 	public abstract void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) 
 			throws IOException,	InterruptedException, SALSAException;
 
-	protected String createBolleanParameterCommand(String value) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ARGUMENTS_START_SYMBOL);
-		stringBuilder.append(value);
-		return stringBuilder.toString();
-	}
+	protected abstract String createBolleanParameterCommand(String value);
 
-	protected String createParameterCommand(String key, String value) {
+	protected String createParameterEqualsCommand(String key, String value) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
 		stringBuilder.append(key);
@@ -59,6 +54,15 @@ public abstract class ClustalManager {
 		stringBuilder.append(value);
 		return stringBuilder.toString();
 	}
+	
+	protected String createParameterSpaceCommand(String key, String value) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(key);
+		stringBuilder.append(" ");
+		stringBuilder.append(value);
+		return stringBuilder.toString();
+	}	
 	
 	/**
 	 * Factory method

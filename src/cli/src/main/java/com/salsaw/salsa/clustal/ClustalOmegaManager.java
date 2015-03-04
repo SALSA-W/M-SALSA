@@ -31,13 +31,22 @@ import com.salsaw.salsa.algorithm.exceptions.SALSAException;
 
 public class ClustalOmegaManager extends ClustalManager {
 	// CONSTANTS
+	
+	// keys of options
 	private static final String INPUT_FILE = "i";	
 	private static final String OUTPUT_FILE = "o";
+
 	/**
 	 * MSA output file format (default: fasta)
 	 */
 	private static final String OUTPUT_FORMAT = "outfmt";
 	private static final String GUIDE_TREE_OUTPUT_FILE = "guidetree-out";
+	
+	// flag settings
+	/**
+	 * over-writing of already existing files
+	 */
+	private static final String OVERWITE_OUTPUT_FILE = "force";
 	
 	// FILEDS
 	private ClustalFileMapper clustalFileMapper;
@@ -48,20 +57,32 @@ public class ClustalOmegaManager extends ClustalManager {
 		this.clustalFileMapper = clustalFileMapper;
 	}
 	
-	// METHODS	
+	// METHODS
+	@Override
+	protected String createBolleanParameterCommand(String value) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(value);
+		return stringBuilder.toString();
+	}
+	
 	@Override
 	public List<String> generateClustalArguments(List<String> commands) {		
 		if (clustalFileMapper == null){
 			throw new IllegalArgumentException("clustalFileMapper");
 		}
 		
-		commands.add(createParameterCommand(INPUT_FILE, this.clustalFileMapper.getInputFilePath()));
-		commands.add(createParameterCommand(OUTPUT_FILE, this.clustalFileMapper.getAlignmentFilePath()));
-		commands.add(createParameterCommand(GUIDE_TREE_OUTPUT_FILE, this.clustalFileMapper.getGuideTreeFilePath()));
+		commands.add(createParameterSpaceCommand(INPUT_FILE, this.clustalFileMapper.getInputFilePath()));
+		commands.add(createParameterSpaceCommand(OUTPUT_FILE, this.clustalFileMapper.getAlignmentFilePath()));
+		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, this.clustalFileMapper.getGuideTreeFilePath()));
 		
 		if (this.clustalOmegaOputputFormat != ClustalOmegaOputputFormat.FASTA){
-			commands.add(createParameterCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
+			commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
 		}
+		
+		commands.add(createBolleanParameterCommand(OVERWITE_OUTPUT_FILE));
+			
 			
 		return commands;
 	}
@@ -103,8 +124,7 @@ public class ClustalOmegaManager extends ClustalManager {
 		process.waitFor();
 
 		if (process.exitValue() != 0) {
-			throw new SALSAException("Failed clustal call");
+			throw new SALSAException("Failed clustal omega call");
 		}		
 	}
-
 }

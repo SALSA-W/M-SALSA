@@ -23,7 +23,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/SALSA-algorithm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/msalsa-algorithm"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

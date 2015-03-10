@@ -2,19 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
-		<groupId>com.salsaw.salsa</groupId>
-		<artifactId>SALSA</artifactId>
+		<groupId>com.salsaw.msalsa</groupId>
+		<artifactId>msalsa</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>cli</artifactId>
+	<artifactId>msalsa-cli</artifactId>
 	<packaging>jar</packaging>
 
-	<name>cli</name>
-
+	<name>msalsa-cli</name>
 
 	<dependencies>
 		<dependency>
@@ -28,11 +27,10 @@
 			<version>1.47</version>
 		</dependency>
 		<dependency>
-			<groupId>com.salsaw.salsa</groupId>
-			<artifactId>SALSA-algorithm</artifactId>
+			<groupId>com.salsaw.msalsa</groupId>
+			<artifactId>msalsa-algorithm</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -54,7 +52,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>com.salsaw.salsa.cli.App</mainClass>
+							<mainClass>com.salsaw.msalsa.cli.App</mainClass>
 						</manifest>
 					</archive>
 

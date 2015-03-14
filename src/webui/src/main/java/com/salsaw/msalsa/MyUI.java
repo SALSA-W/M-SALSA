@@ -22,19 +22,15 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        setContent(layout);
-
-        Button button = new Button("Click Me");
-        button.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                layout.addComponent(new Label("Thank you for clicking"));
-            }
-        });
-        layout.addComponent(button);
-
+    	
+    	// Create the model and the Vaadin view implementation    	
+        final HomePageView homePageView = new HomePageView();
+        
+        // The presenter binds the model and view together
+        new HomePagePresenter(homePageView);
+        
+     // The view implementation is a Vaadin component
+        setContent(homePageView);
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

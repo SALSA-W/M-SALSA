@@ -22,6 +22,7 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+    	// MVP form https://vaadin.com/book/vaadin7/-/page/advanced.architecture.html
     	
     	// Create the model and the Vaadin view implementation    	
         final HomePageView homePageView = new HomePageView();
@@ -29,7 +30,7 @@ public class MyUI extends UI {
         // The presenter binds the model and view together
         new HomePagePresenter(homePageView);
         
-     // The view implementation is a Vaadin component
+        // The view implementation is a Vaadin component
         setContent(homePageView);
     }
 

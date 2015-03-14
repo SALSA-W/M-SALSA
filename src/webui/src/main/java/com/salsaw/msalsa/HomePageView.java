@@ -39,8 +39,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
-		// TODO add user code here
-		
+		// TODO add user code here		
 		
 		// Implement both receiver that saves upload in a file and
 		// listener for successful upload
@@ -53,7 +52,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		        FileOutputStream fos = null; // Stream to write to
 		        try {
 		            // Open the file for writing.
-		            file = new File("C:/" + filename);
+		            file = new File(filename);
 		            fos = new FileOutputStream(file);
 		        } catch (final java.io.FileNotFoundException e) {
 		            new Notification("Could not open file<br/>",
@@ -68,8 +67,9 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		    public void uploadSucceeded(SucceededEvent event) {
 		        // TODO - start with align
 		    	
-		    	for (IHomePageListener listener: listeners)
+		    	for (IHomePageListener listener: listeners){
 		            listener.buttonClick(file);
+		    	}
 		    }
 		};
 		

@@ -6,6 +6,10 @@ public class HomePagePresenter implements IHomePageListener{
 	private final HomePageView view;
 
 	public HomePagePresenter(HomePageView  view) {
+		if (view == null){
+			throw new IllegalArgumentException("view");
+		}		
+		
 		this.view  = view;
 	         
 		view.addListener(this);
@@ -15,5 +19,8 @@ public class HomePagePresenter implements IHomePageListener{
 	public void buttonClick(File file) {
 		// TODO Auto-generated method stub
 		
+		if (file.exists()){
+			file.delete();
+        } 
 	}
 }

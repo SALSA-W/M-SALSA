@@ -15,11 +15,18 @@
  */
 package com.salsaw.msalsa.cli;
 
+import java.io.Serializable;
+
 import com.beust.jcommander.Parameter;
 import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
 import com.salsaw.msalsa.clustal.ClustalType;
 
-public class SalsaParameters {
+public class SalsaParameters implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Parameter(names = { "-inputFile" }, description = "The FASTA file to process", required = true)
 	private String inputFile;
 
@@ -56,6 +63,7 @@ public class SalsaParameters {
 	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega)")
 	private ClustalType clustalType = ClustalType.CLUSTAL_W;
 
+	// GET
 	/**
 	 * GAP Opening Penalty
 	 * 
@@ -127,5 +135,54 @@ public class SalsaParameters {
 	
 	public ClustalType getClustalType() {
 		return this.clustalType;
+	}
+	
+	// SET
+	public void setGOP(float gop) {
+		this.GOP = gop;
+	}
+
+	public void setGEP(float gep) {
+		this.GEP = gep;
+	}
+
+	public void setGamma(int gamma) {
+		this.gamma = gamma;
+	}
+
+	public void setScoringMatrix(String scoringMatrix) {
+		this.scoringMatrix = scoringMatrix;
+	}
+
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
+	}
+
+	public void setOutputFile(String outputFile) {
+		this.outputFile = outputFile;
+	}
+
+	public void setPhylogeneticTreeFile(String phylogeneticTreeFile) {
+		this.phylogeneticTreeFile = phylogeneticTreeFile;
+	}
+
+	public void setTerminalGAPsStrategy(TerminalGAPsStrategy terminalGAPsStrategy) {
+		this.terminalGAPsStrategy = terminalGAPsStrategy;
+	}
+
+	public void setProbabilityOfSplit(float probabilityOfSplit) {
+		this.probabilityOfSplit = probabilityOfSplit;
+	}
+
+	public void setMinIterations(int minIterations) {
+		this.minIterations = minIterations;
+	}
+	
+	public void setClustalPath(String clustalPath){
+		this.clustalPath = clustalPath;
+	}	
+	
+	public void setClustalType(ClustalType clustalType) {
+		this.clustalType = clustalType;
 	}
 }

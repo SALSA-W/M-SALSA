@@ -46,7 +46,7 @@ public class SalsaParameters implements Serializable {
 	private int gamma = 30;
 
 	@Parameter(names = "-scoringMatrix", description = "scoring matrix")
-	private String scoringMatrix = "BLOSUM62";
+	private ScoringMatrix scoringMatrix = ScoringMatrix.BLOSUM62;
 
 	@Parameter(names = "-minIt", description = "minimum number of iterations")
 	private int minIterations = 500;
@@ -96,7 +96,7 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 * @return
 	 */
-	public String getScoringMatrix() {
+	public ScoringMatrix getScoringMatrix() {
 		return scoringMatrix;
 	}
 
@@ -150,7 +150,7 @@ public class SalsaParameters implements Serializable {
 		this.gamma = gamma;
 	}
 
-	public void setScoringMatrix(String scoringMatrix) {
+	public void setScoringMatrix(ScoringMatrix scoringMatrix) {
 		this.scoringMatrix = scoringMatrix;
 	}
 

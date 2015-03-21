@@ -32,11 +32,10 @@ public enum TerminalGAPsStrategy {
 	 */
 	ONLY_GEP;
 	
-    // converter that will be used later
-    public static TerminalGAPsStrategy fromString(String code) {
+    public static TerminalGAPsStrategy fromString(String strategy) {
  
         for(TerminalGAPsStrategy terminalGAPsStrategy : TerminalGAPsStrategy.values()) {
-            if(terminalGAPsStrategy.toString().equalsIgnoreCase(code)) {
+            if(terminalGAPsStrategy.toString().equalsIgnoreCase(strategy)) {
                 return terminalGAPsStrategy;
             }
         }

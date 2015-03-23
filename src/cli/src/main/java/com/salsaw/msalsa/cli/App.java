@@ -55,7 +55,7 @@ public class App {
 			String scoringMatrixName = salsaParameters.getScoringMatrix().toString();
 			
 			if (salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50 ||
-					salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50) {
+				salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62) {
 				// Load well-known matrix from embedded resources
 				try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
 					matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());

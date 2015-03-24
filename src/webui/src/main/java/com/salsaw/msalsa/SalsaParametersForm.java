@@ -41,7 +41,7 @@ public class SalsaParametersForm extends CustomComponent {
     @PropertyId("terminalGAPsStrategy")
     ComboBox terminalGAPsStrategyField = new ComboBox("Terminal GAPs Strategy");  
     
-	public SalsaParametersForm(SalsaParameters salsaParameters) {		
+	public SalsaParametersForm(BeanItem<SalsaParameters> salsaParametersBeanItem) {		
         FormLayout formLayout = new FormLayout();
         scoringMatrixField.setNullSelectionAllowed(false);
         for(ScoringMatrix scoringMatrix : ScoringMatrix.values()) {
@@ -61,14 +61,13 @@ public class SalsaParametersForm extends CustomComponent {
         	terminalGAPsStrategyField.addItem(terminalGAPsStrategy);
         }
         
-        BeanItem<SalsaParameters> item = new BeanItem<SalsaParameters> (salsaParameters);
-        FieldGroup binder = new FieldGroup(item);
+        // Data binding based on attributes
+        FieldGroup binder = new FieldGroup(salsaParametersBeanItem);
         binder.bindMemberFields(this);
 		
         formLayout.setSizeUndefined();
         
 		Button button = new Button("Commit modifications");
-
 		button.addClickListener(new Button.ClickListener() {
 		    /**
 			 * 

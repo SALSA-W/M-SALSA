@@ -29,10 +29,7 @@ public class HomePagePresenter implements IHomePageListener{
 		
 		this.view  = view;
 	         
-		view.addListener(this);
-		
-		// Load server configuration
-		ConfigurationManager.getInstance().getServerConfiguration();
+		view.addListener(this);	
 	}
 
 	@Override

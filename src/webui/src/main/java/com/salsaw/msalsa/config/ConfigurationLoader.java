@@ -27,15 +27,16 @@ import com.salsaw.msalsa.cli.App;
  */
 public class ConfigurationLoader {
 	// CONSTANTS
+	private static final String CONFIGURATION_RESOURCE_FILE_PATH = "/config/config.properties";
+	
 	private static final String KEY_CLUSTALW_PATH =  "clustalw.path";
 	private static final String KEY_CLUSTALO_PATH =  "clustalo.path";
 	private static final String KEY_TEMP_PATH =  "temporary.folder.path";
 	
-	public ServerConfiguration ReadConfiguration(){
+	public ServerConfiguration ReadConfiguration(){		
 		Properties prop = new Properties();
-
 		
-		try(InputStream input = App.class.getResourceAsStream("/config/config.properties")){
+		try(InputStream input = App.class.getResourceAsStream(CONFIGURATION_RESOURCE_FILE_PATH)){
 	 
 			// load a properties file
 			prop.load(input);
@@ -52,5 +53,4 @@ public class ConfigurationLoader {
 		
 		return null;
 	}
-
 }

@@ -22,11 +22,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 /**
  *
@@ -36,7 +32,7 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI {
 
     @Override
-    protected void init(VaadinRequest vaadinRequest) {
+    protected void init(VaadinRequest vaadinRequest) {    	    	   
     	// MVP form https://vaadin.com/book/vaadin7/-/page/advanced.architecture.html
     	
     	// Create the model and the Vaadin view implementation    	

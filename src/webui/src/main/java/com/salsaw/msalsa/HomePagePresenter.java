@@ -17,17 +17,22 @@ package com.salsaw.msalsa;
 
 import java.io.File;
 
+import com.salsaw.msalsa.config.ConfigurationManager;
+
 public class HomePagePresenter implements IHomePageListener{	
 	private final HomePageView view;
 
 	public HomePagePresenter(HomePageView  view) {
 		if (view == null){
 			throw new IllegalArgumentException("view");
-		}		
+		}	
 		
 		this.view  = view;
 	         
 		view.addListener(this);
+		
+		// Load server configuration
+		ConfigurationManager.getInstance().getServerConfiguration();
 	}
 
 	@Override

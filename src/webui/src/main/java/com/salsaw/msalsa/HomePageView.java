@@ -23,6 +23,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.App;
 import com.salsaw.msalsa.cli.SalsaParameters;
@@ -132,10 +134,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		    public void uploadSucceeded(SucceededEvent event) {
 		        // TODO - start with align - test code to refactor
 		    	
-		    	for (IHomePageListener listener: listeners){
-		            listener.buttonClick(file);
-		    	}
-		    	
+		    	// Get path to correct Clustal process
 		    	switch (salsaParameters.getClustalType()) {
 				case CLUSTAL_W:
 					salsaParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
@@ -146,7 +145,13 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 					break;
 				}
 		    	
+		    	// Create M-SALSA output file name
 		    	salsaParameters.setInputFile(file.getAbsolutePath());
+		    	String inputFileName = FilenameUtils.getBaseName(file.getAbsolutePath());		    	
+		    	salsaParameters.setOutputFile(
+		    			Paths.get(
+		    			ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
+		    			inputFileName + "-msalsa-aln.fasta").toString());
 		    	
 		    	try {
 					App.callClustal(salsaParameters);
@@ -158,7 +163,11 @@ public class HomePageView extends CustomComponent implements IHomePageView {
                             e.getMessage(),
                             Notification.Type.ERROR_MESSAGE)
 							.show(Page.getCurrent());
-				}   	
+				} 
+		    	
+		    	for (IHomePageListener listener: listeners){
+		            listener.buttonClick(file);
+		    	}
 
 		    }
 		};
@@ -204,7 +213,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		
 		// uploadInput
 		uploadInput = new Upload();
-		uploadInput.setCaption("Upload align input");
+		uploadInput.setCaption("Upload and process align input");
 		uploadInput.setImmediate(false);
 		uploadInput.setWidth("-1px");
 		uploadInput.setHeight("-1px");

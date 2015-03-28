@@ -39,54 +39,53 @@ public class App {
 		try {
 			commands.parse(args);
 
-			String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
-			String alignmentFilePath = salsaParameters.getInputFile();
-			if (salsaParameters.getClustalPath() != null &&
-				salsaParameters.getPhylogeneticTreeFile() == null) {						
-				ClustalFileMapper clustalFileMapper = new ClustalFileMapper(
-						salsaParameters.getInputFile());
-				ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
-				clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
-				alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
-				phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
-			}
-			
-			SubstitutionMatrix matrix;
-			String scoringMatrixName = salsaParameters.getScoringMatrix().toString();
-			
-			if (salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50 ||
-				salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62) {
-				// Load well-known matrix from embedded resources
-				try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
-					matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
-				}
-			}
-			else {
-				// Load user matrix from file
-				try(InputStream stream = new FileInputStream(scoringMatrixName)) {
-					matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
-				}
-			}
-			
-			Alignment alignment = new Alignment(alignmentFilePath,
-					phylogeneticTreeFilePath, matrix, salsaParameters.getGOP(),
-					salsaParameters.getTerminalGAPsStrategy());
-
-			LocalSearch localSearch = new LocalSearch(alignment, salsaParameters.getGamma(),
-					salsaParameters.getMinIterations(),
-					salsaParameters.getProbabilityOfSplit());
-
-			alignment = localSearch.execute();
-			alignment.save(salsaParameters.getOutputFile());
-
+			callClustal(salsaParameters);
 		} catch (Exception e) {
 			e.printStackTrace();
 			commands.usage();
 		}
 	}
 
-	public static void callClustal(String clustalPath,
-			ClustalFileMapper clustalFileMapper) throws IOException,
-			InterruptedException, SALSAException {
+	public static void callClustal(SalsaParameters salsaParameters) throws SALSAException, IOException, InterruptedException {
+		
+		String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
+		String alignmentFilePath = salsaParameters.getInputFile();
+		if (salsaParameters.getClustalPath() != null &&
+			salsaParameters.getPhylogeneticTreeFile() == null) {						
+			ClustalFileMapper clustalFileMapper = new ClustalFileMapper(
+					salsaParameters.getInputFile());
+			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
+			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
+			alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
+			phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
+		}
+		
+		SubstitutionMatrix matrix;
+		String scoringMatrixName = salsaParameters.getScoringMatrix().toString();
+		
+		if (salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50 ||
+			salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62) {
+			// Load well-known matrix from embedded resources
+			try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
+				matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
+			}
+		}
+		else {
+			// Load user matrix from file
+			try(InputStream stream = new FileInputStream(scoringMatrixName)) {
+				matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
+			}
+		}
+		
+		Alignment alignment = new Alignment(alignmentFilePath,
+				phylogeneticTreeFilePath, matrix, salsaParameters.getGOP(),
+				salsaParameters.getTerminalGAPsStrategy());
+
+		LocalSearch localSearch = new LocalSearch(alignment, salsaParameters.getGamma(),
+				salsaParameters.getMinIterations(),
+				salsaParameters.getProbabilityOfSplit());
+
+		alignment = localSearch.execute();
+		alignment.save(salsaParameters.getOutputFile());
 	}
 }

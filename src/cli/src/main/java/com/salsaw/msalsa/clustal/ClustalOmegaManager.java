@@ -33,8 +33,8 @@ public class ClustalOmegaManager extends ClustalManager {
 	// CONSTANTS
 	
 	// keys of options
-	private static final String INPUT_FILE = "i";	
-	private static final String OUTPUT_FILE = "o";
+	private static final String INPUT_FILE = "infile";	
+	private static final String OUTPUT_FILE = "outfile";
 
 	/**
 	 * MSA output file format (default: fasta)
@@ -88,8 +88,8 @@ public class ClustalOmegaManager extends ClustalManager {
 			throw new IllegalArgumentException("clustalFileMapper");
 		}
 		
-		commands.add(createParameterSpaceCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
-		commands.add(createParameterSpaceCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
+		commands.add(createParameterEqualsCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
+		commands.add(createParameterEqualsCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
 		
 		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));			

@@ -46,23 +46,7 @@ public abstract class ClustalManager {
 
 	protected abstract String createBolleanParameterCommand(String value);
 
-	protected String createParameterEqualsCommand(String key, String value) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ARGUMENTS_START_SYMBOL);
-		stringBuilder.append(key);
-		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
-		stringBuilder.append(value);
-		return stringBuilder.toString();
-	}
-	
-	protected String createParameterSpaceCommand(String key, String value) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ARGUMENTS_START_SYMBOL);
-		stringBuilder.append(key);
-		stringBuilder.append(" ");
-		stringBuilder.append(value);
-		return stringBuilder.toString();
-	}	
+	protected abstract String createParameterEqualsCommand(String key, String value);
 	
 	/**
 	 * Factory method

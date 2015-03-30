@@ -48,6 +48,17 @@ public class ClustalWManager extends ClustalManager {
 	}
 
 	// METHODS
+	
+	@Override
+	protected String createParameterEqualsCommand(String key, String value) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(key);
+		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
+		stringBuilder.append(value);
+		return stringBuilder.toString();
+	}	
+	
 	@Override
 	protected String createBolleanParameterCommand(String value) {
 		StringBuilder stringBuilder = new StringBuilder();

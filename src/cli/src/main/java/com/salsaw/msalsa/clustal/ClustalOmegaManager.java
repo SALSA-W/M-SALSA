@@ -44,6 +44,10 @@ public class ClustalOmegaManager extends ClustalManager {
 	
 	// flag settings
 	/**
+	 * Verbose output (increases if given multiple times)
+	 */
+	private static final String VERBOSE = "verbose";
+	/**
 	 * over-writing of already existing files
 	 */
 	private static final String OVERWITE_OUTPUT_FILE = "force";
@@ -68,21 +72,30 @@ public class ClustalOmegaManager extends ClustalManager {
 	}
 	
 	@Override
+	protected String createParameterEqualsCommand(String key, String value) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(ARGUMENTS_START_SYMBOL);
+		stringBuilder.append(key);
+		stringBuilder.append(ARGUMENTS_ASSING_SYMBOL);
+		stringBuilder.append(value);
+		return stringBuilder.toString();
+	}
+	
+	@Override
 	public List<String> generateClustalArguments(List<String> commands) {		
 		if (clustalFileMapper == null){
 			throw new IllegalArgumentException("clustalFileMapper");
 		}
 		
-		commands.add(createParameterSpaceCommand(INPUT_FILE, this.clustalFileMapper.getInputFilePath()));
-		commands.add(createParameterSpaceCommand(OUTPUT_FILE, this.clustalFileMapper.getAlignmentFilePath()));
-		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, this.clustalFileMapper.getGuideTreeFilePath()));
+		commands.add(createParameterSpaceCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
+		commands.add(createParameterSpaceCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
 		
-		if (this.clustalOmegaOputputFormat != ClustalOmegaOputputFormat.FASTA){
-			commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
-		}
+		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
+		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));			
 		
+		commands.add(createBolleanParameterCommand(VERBOSE));
 		commands.add(createBolleanParameterCommand(OVERWITE_OUTPUT_FILE));
-			
 			
 		return commands;
 	}
@@ -103,8 +116,7 @@ public class ClustalOmegaManager extends ClustalManager {
 		
 		// Set inside file mapper
 		clustalFileMapper.setAlignmentFilePath(alignmentFilePath.toString());
-		clustalFileMapper.setGuideTreeFilePath(guideTreeFilePath.toString());		
-		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());		
+		clustalFileMapper.setGuideTreeFilePath(guideTreeFilePath.toString());			
 		setClustalFileMapper(clustalFileMapper);
 		
 		// Create clustal omega data
@@ -112,6 +124,7 @@ public class ClustalOmegaManager extends ClustalManager {
 
 		// http://www.rgagnon.com/javadetails/java-0014.html
 		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
+		System.out.println(builder.command());
 		final Process process = builder.start();
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);

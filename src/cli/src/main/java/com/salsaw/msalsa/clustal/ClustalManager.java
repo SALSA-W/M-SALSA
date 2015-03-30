@@ -74,7 +74,7 @@ public abstract class ClustalManager {
 			return new ClustalWManager();
 			
 		case CLUSTAL_O:
-			return new ClustalWManager();
+			return new ClustalOmegaManager();
 		}
 		
 		throw new SALSAException("Unable to create a clustal manager of type " + clustalType.toString());		

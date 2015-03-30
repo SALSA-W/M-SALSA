@@ -83,6 +83,7 @@ public class ClustalWManager extends ClustalManager {
 
 		// http://www.rgagnon.com/javadetails/java-0014.html
 		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
+		builder.redirectErrorStream(true);
 		System.out.println(builder.command());
 		final Process process = builder.start();
 		InputStream is = process.getInputStream();

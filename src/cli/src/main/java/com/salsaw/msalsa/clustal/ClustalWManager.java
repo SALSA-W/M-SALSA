@@ -28,24 +28,25 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 public class ClustalWManager extends ClustalManager {
 	// CONSTANTS
-
 	// flag settings
-	private static final String NEIGHBOUR_JOINING_TREE = "TREE";	
+	private static final String NEIGHBOUR_JOINING_TREE = "TREE";
+	/**
+	 * use Kimura's correction
+	 */
+	private static final String KIMURA_CORRECTION = "KIMURA";
 	/**
 	 * do full multiple alignment
 	 */
-	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";
+	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";	
 
 	// keys of options
 	private static final String OUPUT_KEY = "OUTPUT";
-
-	// FIELDS
-	private boolean calculatePhylogeneticTree;
-
-	// GET/SET
-	public void setCalculatePhylogeneticTree(boolean value) {
-		this.calculatePhylogeneticTree = value;
-	}
+	
+	private static final String INPUT_FILE = "INFILE";
+	
+	private static final String TREE_OUTPUT_FORMAT = "OUTPUTTREE";
+	
+	private static final String TREE_CLUSTERING = "CLUSTERING";
 
 	// METHODS
 	
@@ -71,14 +72,20 @@ public class ClustalWManager extends ClustalManager {
 	public List<String> generateClustalArguments(List<String> commands) {			
 		// Set output format
 		commands.add(createParameterEqualsCommand(OUPUT_KEY, super.getOputputFormat().toString()));
-				
-		if (this.calculatePhylogeneticTree == true) {
-			commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
-		} else{
-			commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
-		}
-
+		commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
+		
 		return commands;
+	}
+	
+	public void generateTree(ClustalFileMapper clustalFileMapper, List<String> commands)
+	{
+		// Create tree starting from alignment produced
+		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
+		commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
+		
+		// Use default parameters
+		commands.add(createParameterEqualsCommand(TREE_CLUSTERING, ClustalWClusteringMethod.NEIGHBOR_JOINING.toString()));
+		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.PHYLIP.toString()));
 	}
 
 	@Override

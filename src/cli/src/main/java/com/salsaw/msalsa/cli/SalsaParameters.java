@@ -62,6 +62,9 @@ public class SalsaParameters implements Serializable {
 	
 	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega)")
 	private ClustalType clustalType = ClustalType.CLUSTAL_W;
+	
+	@Parameter(names = "-generatePhTree", description = "define if the phylogenetic neighbour-joining tree file must be generated")
+	private boolean generatePhylogeneticTree = false;
 
 	// GET
 	/**
@@ -137,6 +140,10 @@ public class SalsaParameters implements Serializable {
 		return this.clustalType;
 	}
 	
+	public boolean getGeneratePhylogeneticTree() {
+		return this.generatePhylogeneticTree;
+	}
+	
 	// SET
 	public void setGOP(float gop) {
 		this.GOP = gop;
@@ -184,5 +191,9 @@ public class SalsaParameters implements Serializable {
 	
 	public void setClustalType(ClustalType clustalType) {
 		this.clustalType = clustalType;
+	}
+	
+	public void setGeneratePhylogeneticTree(boolean generatePhylogeneticTree) {
+		this.generatePhylogeneticTree = generatePhylogeneticTree;
 	}
 }

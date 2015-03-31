@@ -10,6 +10,7 @@ import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
@@ -43,7 +44,10 @@ public class SalsaParametersForm extends CustomComponent {
     TextField probabilityOfSplitField = new TextField("Probability Of Split");
     
     @PropertyId("terminalGAPsStrategy")
-    ComboBox terminalGAPsStrategyField = new ComboBox("Terminal GAPs Strategy");  
+    ComboBox terminalGAPsStrategyField = new ComboBox("Terminal GAPs Strategy");
+    
+    @PropertyId("generatePhylogeneticTree")
+    CheckBox generatePhylogeneticTree = new CheckBox("Generate Phylogenetic Tree");
     
 	public SalsaParametersForm(BeanItem<SalsaParameters> salsaParametersBeanItem) {		
         FormLayout formLayout = new FormLayout();
@@ -54,6 +58,8 @@ public class SalsaParametersForm extends CustomComponent {
         	clustalTypeField.addItem(clustalType);
         }
         formLayout.addComponent(clustalTypeField);
+        
+        formLayout.addComponent(generatePhylogeneticTree); 
         
         scoringMatrixField.setNullSelectionAllowed(false);
         scoringMatrixField.setImmediate(true);

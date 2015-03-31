@@ -144,6 +144,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 					salsaParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
 					break;
 				}
+		    	salsaParameters.setClustalWPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
 		    	
 		    	// Create M-SALSA output file name
 		    	salsaParameters.setInputFile(file.getAbsolutePath());
@@ -152,6 +153,7 @@ public class HomePageView extends CustomComponent implements IHomePageView {
 		    			Paths.get(
 		    			ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
 		    			inputFileName + "-msalsa-aln.fasta").toString());
+		    	
 		    	
 		    	try {
 					App.callClustal(salsaParameters);

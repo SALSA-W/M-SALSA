@@ -48,7 +48,18 @@ public class App {
 	}
 
 	public static void callClustal(SalsaParameters salsaParameters) throws SALSAException, IOException, InterruptedException {
+		// VALIDATION
+		if (salsaParameters.getClustalPath() == null &&
+			salsaParameters.getPhylogeneticTreeFile() == null){
+			throw new SALSAException("Required input missing: - clustal path for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
+		}		
 		
+		if (salsaParameters.getGeneratePhylogeneticTree() == true &&
+			salsaParameters.getClustalWPath() == null){
+				throw new SALSAException("To calculate the phylogenetic tree the ClustalW path is required");
+		}
+		
+		// PROCESS
 		String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
 		String alignmentFilePath = salsaParameters.getInputFile();
 		
@@ -98,11 +109,13 @@ public class App {
 
 		alignment = localSearch.execute();
 		alignment.save(salsaParameters.getOutputFile());
+			
 		
 		if (salsaParameters.getGeneratePhylogeneticTree() == true){
 			// Generate phylogenetic tree using ClustalW from SALSA aligment
+			clustalFileMapper.setAlignmentFilePath(salsaParameters.getOutputFile());
 			ClustalWManager clustalWManager = new ClustalWManager();
-			clustalWManager.generateTree(salsaParameters.getClustalPath(), clustalFileMapper);
+			clustalWManager.generateTree(salsaParameters.getClustalWPath(), clustalFileMapper);
 		}
 			
 	}

@@ -65,6 +65,9 @@ public class SalsaParameters implements Serializable {
 	
 	@Parameter(names = "-generatePhTree", description = "define if the phylogenetic neighbour-joining tree file must be generated")
 	private boolean generatePhylogeneticTree = false;
+	
+	@Parameter(names = "-clustalWPath", description = "define path where clustalW program is intalled. Required for generate tree file")
+	private String clustalWPath;
 
 	// GET
 	/**
@@ -134,7 +137,11 @@ public class SalsaParameters implements Serializable {
 	
 	public String getClustalPath(){
 		return this.clustalPath;
-	}	
+	}
+	
+	public String getClustalWPath(){
+		return this.clustalWPath;
+	}
 	
 	public ClustalType getClustalType() {
 		return this.clustalType;
@@ -187,7 +194,11 @@ public class SalsaParameters implements Serializable {
 	
 	public void setClustalPath(String clustalPath){
 		this.clustalPath = clustalPath;
-	}	
+	}
+	
+	public void setClustalWPath(String clustalWPath){
+		this.clustalWPath = clustalWPath;
+	}		
 	
 	public void setClustalType(ClustalType clustalType) {
 		this.clustalType = clustalType;

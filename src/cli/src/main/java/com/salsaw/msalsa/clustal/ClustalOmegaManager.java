@@ -63,7 +63,7 @@ public class ClustalOmegaManager extends ClustalManager {
 	
 	// METHODS
 	@Override
-	protected String createBolleanParameterCommand(String value) {
+	protected String createBooleanParameterCommand(String value) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
@@ -94,8 +94,8 @@ public class ClustalOmegaManager extends ClustalManager {
 		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));			
 		
-		commands.add(createBolleanParameterCommand(VERBOSE));
-		commands.add(createBolleanParameterCommand(OVERWITE_OUTPUT_FILE));
+		commands.add(createBooleanParameterCommand(VERBOSE));
+		commands.add(createBooleanParameterCommand(OVERWITE_OUTPUT_FILE));
 			
 		return commands;
 	}

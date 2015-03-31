@@ -26,6 +26,7 @@ import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.clustal.ClustalFileMapper;
 import com.salsaw.msalsa.clustal.ClustalManager;
+import com.salsaw.msalsa.clustal.ClustalWManager;
 
 /**
  * Hello world!
@@ -50,14 +51,24 @@ public class App {
 		
 		String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
 		String alignmentFilePath = salsaParameters.getInputFile();
+		
+		ClustalFileMapper clustalFileMapper = null;
+		
 		if (salsaParameters.getClustalPath() != null &&
-			salsaParameters.getPhylogeneticTreeFile() == null) {						
-			ClustalFileMapper clustalFileMapper = new ClustalFileMapper(
-					salsaParameters.getInputFile());
+			salsaParameters.getPhylogeneticTreeFile() == null) {			
+			// Use Clustal to generetate initial aligment
+			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
 			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
 			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
 			alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 			phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
+		}
+		else
+		{
+			// Start from existing alignments file
+			clustalFileMapper = new ClustalFileMapper(null);
+			clustalFileMapper.setAlignmentFilePath(alignmentFilePath);
+			clustalFileMapper.setPhylogeneticTreeFile(phylogeneticTreeFilePath);
 		}
 		
 		SubstitutionMatrix matrix;
@@ -87,5 +98,12 @@ public class App {
 
 		alignment = localSearch.execute();
 		alignment.save(salsaParameters.getOutputFile());
+		
+		if (salsaParameters.getGeneratePhylogeneticTree() == true){
+			// Generate phylogenetic tree using ClustalW from SALSA aligment
+			ClustalWManager clustalWManager = new ClustalWManager();
+			clustalWManager.generateTree(salsaParameters.getClustalPath(), clustalFileMapper);
+		}
+			
 	}
 }

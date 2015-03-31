@@ -44,7 +44,7 @@ public abstract class ClustalManager {
 	public abstract void callClustal(String clustalPath, ClustalFileMapper clustalFileMapper) 
 			throws IOException,	InterruptedException, SALSAException;
 
-	protected abstract String createBolleanParameterCommand(String value);
+	protected abstract String createBooleanParameterCommand(String value);
 
 	protected abstract String createParameterEqualsCommand(String key, String value);
 	

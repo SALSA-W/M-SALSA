@@ -61,7 +61,7 @@ public class ClustalWManager extends ClustalManager {
 	}	
 	
 	@Override
-	protected String createBolleanParameterCommand(String value) {
+	protected String createBooleanParameterCommand(String value) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(ARGUMENTS_START_SYMBOL);
 		stringBuilder.append(value);
@@ -72,21 +72,10 @@ public class ClustalWManager extends ClustalManager {
 	public List<String> generateClustalArguments(List<String> commands) {			
 		// Set output format
 		commands.add(createParameterEqualsCommand(OUPUT_KEY, super.getOputputFormat().toString()));
-		commands.add(createBolleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
+		commands.add(createBooleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
 		
 		return commands;
-	}
-	
-	public void generateTree(ClustalFileMapper clustalFileMapper, List<String> commands)
-	{
-		// Create tree starting from alignment produced
-		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
-		commands.add(createBolleanParameterCommand(NEIGHBOUR_JOINING_TREE));
-		
-		// Use default parameters
-		commands.add(createParameterEqualsCommand(TREE_CLUSTERING, ClustalWClusteringMethod.NEIGHBOR_JOINING.toString()));
-		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.PHYLIP.toString()));
-	}
+	}	
 
 	@Override
 	public void callClustal(String clustalPath,
@@ -99,6 +88,32 @@ public class ClustalWManager extends ClustalManager {
 		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
 		generateClustalArguments(clustalProcessCommands);
 
+		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
+	}	
+	
+	private void generateTreeArguments(ClustalFileMapper clustalFileMapper, List<String> commands)
+	{
+		// Create tree starting from alignment produced
+		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
+		commands.add(createBooleanParameterCommand(NEIGHBOUR_JOINING_TREE));
+		
+		// Use default parameters
+		commands.add(createParameterEqualsCommand(TREE_CLUSTERING, ClustalWClusteringMethod.NEIGHBOR_JOINING.toString()));
+		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.PHYLIP.toString()));
+	}
+	
+	public void generateTree(String clustalPath,
+			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{
+		// Get program path to execute
+		List<String> clustalProcessCommands = new ArrayList<String>();
+		clustalProcessCommands.add(clustalPath);
+		generateTreeArguments(clustalFileMapper, clustalProcessCommands);
+
+		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
+	}
+
+	private void callClustalWProcess(List<String> clustalProcessCommands,
+			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{
 		// http://www.rgagnon.com/javadetails/java-0014.html
 		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
 		builder.redirectErrorStream(true);

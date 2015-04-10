@@ -15,6 +15,13 @@
  */
 package com.salsaw.msalsa;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import com.salsaw.msalsa.clustal.ClustalFileMapper;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -33,16 +40,30 @@ public class PhylogeneticTreeView extends CustomComponent implements View {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public PhylogeneticTreeView() {			
+	public PhylogeneticTreeView(ClustalFileMapper clustalFileMapper) throws IOException {			
 		initializeUiComponents();
-		
+						
 		// Add JavaScript component to generate phylogentic tree
-		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG("((1j46_A:0.34060,2lef_A:0.40639):0.05637,1k99_A:0.37389,1aab_:0.44092);");
+		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG(getPhylogeneticTreeFileContent(clustalFileMapper));
 		mainLayout.addComponent(jsPhyloSVG);
 		
 		setCompositionRoot(mainLayout);
 	}
 	
+	private String getPhylogeneticTreeFileContent(
+			ClustalFileMapper clustalFileMapper) throws IOException {
+		
+		List<String> lines = Files.readAllLines(
+				Paths.get(clustalFileMapper.getPhylogeneticTreeFile()),
+				StandardCharsets.UTF_8);		
+		StringBuilder newickTreeBuilder = new StringBuilder();		
+		for (String line : lines) {
+			newickTreeBuilder.append(line.trim());
+        }
+		
+		return newickTreeBuilder.toString();
+	}
+
 	private GridLayout initializeUiComponents(){
 		mainLayout = new GridLayout();
 		mainLayout.setImmediate(false);

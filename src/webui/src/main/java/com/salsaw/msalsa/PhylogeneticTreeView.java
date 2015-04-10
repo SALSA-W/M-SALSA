@@ -18,6 +18,7 @@ package com.salsaw.msalsa;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -28,22 +29,35 @@ public class PhylogeneticTreeView extends CustomComponent implements View {
 	
 	private GridLayout mainLayout;
 	
+	private Label svgHTMLPhylogenticTree;
+	
 	private static final long serialVersionUID = 1L;
 	
-	public PhylogeneticTreeView() {
-
-		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG();
+	public PhylogeneticTreeView() {			
+		initializeUiComponents();
 		
+		// Add JavaScript component to generate phylogentic tree
+		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG("((1j46_A:0.34060,2lef_A:0.40639):0.05637,1k99_A:0.37389,1aab_:0.44092);");
+		mainLayout.addComponent(jsPhyloSVG);
+		
+		setCompositionRoot(mainLayout);
+	}
+	
+	private GridLayout initializeUiComponents(){
 		mainLayout = new GridLayout();
 		mainLayout.setImmediate(false);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
+				
+		// Add and center with HTML div
+		svgHTMLPhylogenticTree = new Label("<div id='svgCanvas'></div>", ContentMode.HTML);
+		svgHTMLPhylogenticTree.setWidth("-1px");
+		svgHTMLPhylogenticTree.setHeight("-1px");
+		mainLayout.addComponent(svgHTMLPhylogenticTree);
+		mainLayout.setComponentAlignment(svgHTMLPhylogenticTree,Alignment.MIDDLE_CENTER);
 		
-		mainLayout.addComponent(new Label("<div id='svgCanvas'></div>", ContentMode.HTML));
-		mainLayout.addComponent(jsPhyloSVG);
-		
-		setCompositionRoot(mainLayout);
+		return mainLayout;
 	}
 
 	@Override

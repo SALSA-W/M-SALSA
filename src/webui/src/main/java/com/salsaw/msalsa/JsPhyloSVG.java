@@ -35,9 +35,7 @@ public class JsPhyloSVG extends AbstractJavaScriptComponent {
 
 	private static final long serialVersionUID = 1L;
 
-	public JsPhyloSVG() {
-    	
-		String newickTree = "((1j46_A:0.34060,2lef_A:0.40639):0.05637,1k99_A:0.37389,1aab_:0.44092);";
+	public JsPhyloSVG(String newickTree) {
 		this.getState().setNewickTree(newickTree);
     }
     

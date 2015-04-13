@@ -98,11 +98,10 @@ public class SalsaParametersForm extends CustomComponent {
 		
         formLayout.setSizeUndefined();
         
+        /*
 		Button button = new Button("Commit modifications");
 		button.addClickListener(new Button.ClickListener() {
-		    /**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event) {
@@ -116,6 +115,7 @@ public class SalsaParametersForm extends CustomComponent {
 		});
 				
 		formLayout.addComponent(button);
+		*/
         
 		setCompositionRoot(formLayout);
 	}

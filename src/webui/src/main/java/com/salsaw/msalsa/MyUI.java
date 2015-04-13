@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
@@ -30,19 +31,28 @@ import com.vaadin.ui.UI;
 @Theme("mytheme")
 @Widgetset("com.salsaw.msalsa.MyAppWidgetset")
 public class MyUI extends UI {
+	
+	Navigator navigator;
+    protected static final String PROCESSED = "processed";
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {    	    	   
     	// MVP form https://vaadin.com/book/vaadin7/-/page/advanced.architecture.html
     	
+    	// Create a navigator to control the views
+        navigator = new Navigator(this, this);
+    	
     	// Create the model and the Vaadin view implementation    	
-        final HomePageView homePageView = new HomePageView();
+        final HomePageView homePageView = new HomePageView(navigator);
         
         // The presenter binds the model and view together
         new HomePagePresenter(homePageView);
+                
+        getPage().setTitle("M-SALSA");       
         
-        // The view implementation is a Vaadin component
-        setContent(homePageView);
+        
+        navigator.addView("", homePageView);
+        navigator.navigateTo("");
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

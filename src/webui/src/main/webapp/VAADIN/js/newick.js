@@ -5,6 +5,6 @@ com_salsaw_msalsa_JsPhyloSVG = function() {
 	phyloCanvas = new Smits.PhyloCanvas(
 		{ newick: state.newickTree },
 		'svgCanvas', 
-		500, 500
+		300, 300
 	);
 }

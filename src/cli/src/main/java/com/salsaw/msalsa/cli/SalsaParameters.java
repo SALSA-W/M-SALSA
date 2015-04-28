@@ -46,7 +46,7 @@ public class SalsaParameters implements Serializable {
 	private int gamma = 30;
 
 	@Parameter(names = "-scoringMatrix", description = "scoring matrix")
-	private ScoringMatrix scoringMatrix = ScoringMatrix.BLOSUM62;
+	private ScoringMatrix scoringMatrix = ScoringMatrix.Gonnet;
 
 	@Parameter(names = "-minIt", description = "minimum number of iterations")
 	private int minIterations = 500;

@@ -77,7 +77,8 @@ public class SalsaAlgorithmExecutor {
 		String scoringMatrixName = salsaParameters.getScoringMatrix().toString();
 		
 		if (salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50 ||
-			salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62) {
+			salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62 ||
+			salsaParameters.getScoringMatrix() == ScoringMatrix.Gonnet) {
 			// Load well-known matrix from embedded resources
 			try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
 				matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());

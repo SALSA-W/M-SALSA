@@ -58,8 +58,15 @@ public final class SubstitutionMatrix {
 		
 		try(Scanner scanner = new Scanner(scoringMatrixStream))
 		{
-			// Read first line with the alphabet
 			String line = scanner.nextLine();
+			
+			// Skip all headers comment lines
+			while(line.startsWith("#") == true)
+			{
+				line = scanner.nextLine();
+			}
+			
+			// Read first line with the alphabet
 			this.alphabet = new Alphabet(line);
 			
 			int alphabetLength = this.alphabet.getNumberOfCharacters();

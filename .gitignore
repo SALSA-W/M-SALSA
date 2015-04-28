@@ -1,13 +1,22 @@
-*.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-*.jar
-*.war
+# Ignored Files
+*.bak
+*.cache
+*.class
 *.ear
+*.jar
+*.swp
+*.tmp
+*.war
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# virtual machine crash logs
+# see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/src/alghorithm/java/target/
+
+# Ignored Folders
+.settings/
+.target
+target/

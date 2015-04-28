@@ -16,7 +16,10 @@
 package com.salsaw.msalsa;
 
 import java.io.File;
+import java.io.IOException;
+
+import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 public interface IHomePageListener {
-	void buttonClick(File file);
+	void buttonClick(File file) throws SALSAException, IOException, InterruptedException;
 }

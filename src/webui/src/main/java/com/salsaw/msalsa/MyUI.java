@@ -17,6 +17,7 @@ package com.salsaw.msalsa;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.salsaw.msalsa.cli.SalsaParameters;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
@@ -32,6 +33,11 @@ import com.vaadin.ui.UI;
 @Widgetset("com.salsaw.msalsa.MyAppWidgetset")
 public class MyUI extends UI {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	Navigator navigator;
     protected static final String PROCESSED = "processed";
 
@@ -41,16 +47,19 @@ public class MyUI extends UI {
     	
     	// Create a navigator to control the views
         navigator = new Navigator(this, this);
+        
+        // Create the model entity
+		SalsaParameters salsaParameters = new SalsaParameters();
+		salsaParameters.setGeneratePhylogeneticTree(true);
     	
     	// Create the model and the Vaadin view implementation    	
-        final HomePageView homePageView = new HomePageView(navigator);
+        final HomePageView homePageView = new HomePageView(salsaParameters);
         
         // The presenter binds the model and view together
-        new HomePagePresenter(homePageView);
+        new HomePagePresenter(homePageView, navigator, salsaParameters);
                 
-        getPage().setTitle("M-SALSA");       
-        
-        
+        getPage().setTitle("M-SALSA");      
+                
         navigator.addView("", homePageView);
         navigator.navigateTo("");
     }

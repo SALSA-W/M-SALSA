@@ -16,12 +16,36 @@
 package com.salsaw.msalsa.cli;
 
 /**
+ * See {@link https://www.ddbj.nig.ac.jp/search/help/clustalwhelp-e.html} for documentation
+ * For resource see {@link https://github.com/noporpoise/seq-align/tree/master/scoring}
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
 public enum ScoringMatrix {
+	// Proteins
+	/**
+	 * These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series.
+	 */
+	Gonnet,	
+	/**
+	 * These matrices appear to be the best available for carrying out data base similarity (homology searches).
+	 */
 	BLOSUM50,
-	BLOSUM62;
+	/**
+	 * These matrices appear to be the best available for carrying out data base similarity (homology searches).
+	 */
+	BLOSUM62,
+	// DNA
+ 	/**
+ 	 * This is the default scoring matrix used by BESTFIT for the comparison of nucleic acid sequences. X's and N's are treated as matches to any IUB ambiguity symbol. All matches score 1.9; all mismatches for IUB symbols score 0.
+ 	 */
+	IUB,
+	/**
+	 * Matches score 1.0 and mismatches score 0. All matches for IUB symbols also score 0. 
+	 */
+	ClustalW,
+	;
 	
     // converter that will be used later
     public static ScoringMatrix fromString(String matrixName) {

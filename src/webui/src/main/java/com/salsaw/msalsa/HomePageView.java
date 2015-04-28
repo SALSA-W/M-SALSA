@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
-import com.salsaw.msalsa.cli.App;
+import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.clustal.ClustalFileMapper;
 import com.salsaw.msalsa.config.ConfigurationManager;
@@ -43,7 +43,6 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
@@ -169,7 +168,7 @@ public class HomePageView extends CustomComponent implements IHomePageView, View
 		    	
 		    	
 		    	try {		    		
-					App.callClustal(salsaParameters);
+		    		SalsaAlgorithmExecutor.callClustal(salsaParameters);
 					
 					// Store path where files has been generated
 			    	ClustalFileMapper clustalFileMapper = new ClustalFileMapper(file.getAbsolutePath());

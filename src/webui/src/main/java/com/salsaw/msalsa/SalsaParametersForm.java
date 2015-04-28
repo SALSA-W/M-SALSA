@@ -5,11 +5,8 @@ import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.cli.ScoringMatrix;
 import com.salsaw.msalsa.clustal.ClustalType;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
@@ -96,29 +93,9 @@ public class SalsaParametersForm extends CustomComponent {
         binder.bindMemberFields(this);
         binder.setBuffered(false);
 		
-        formLayout.setSizeUndefined();
-        
-        /*
-		Button button = new Button("Commit modifications");
-		button.addClickListener(new Button.ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			public void buttonClick(ClickEvent event) {
-		    	try {
-					binder.commit();
-				} catch (CommitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }
-		});
-				
-		formLayout.addComponent(button);
-		*/
+        formLayout.setSizeUndefined();      
         
 		setCompositionRoot(formLayout);
 	}
-
 }
 

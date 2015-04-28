@@ -4,98 +4,67 @@ import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
 import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.cli.ScoringMatrix;
 import com.salsaw.msalsa.clustal.ClustalType;
+import com.vaadin.annotations.DesignRoot;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.declarative.Design;
 
-public class SalsaParametersForm extends CustomComponent {	
-    /**
-	 * 
-	 */
+@DesignRoot
+public class SalsaParametersForm extends FormLayout {	
+
 	private static final long serialVersionUID = 1L;
 	
 	@PropertyId("clustalType")
-    ComboBox clustalTypeField = new ComboBox("Clustal");
+    ComboBox clustalTypeField;
 
 	@PropertyId("GOP")
-    TextField GOPField = new TextField("GOP");
+    TextField GOPField;
     
     @PropertyId("GEP")
-    TextField GEPField = new TextField("GEP");
+    TextField GEPField;
     
     @PropertyId("gamma")
-    TextField gammaField = new TextField("Gamma");
+    TextField gammaField;
     
     @PropertyId("scoringMatrix")
-    ComboBox scoringMatrixField = new ComboBox("Scoring Matrix");
+    ComboBox scoringMatrixField;
     
     @PropertyId("minIterations")
-    TextField minIterationsField = new TextField("Min Matrix");
+    TextField minIterationsField;
     
     @PropertyId("probabilityOfSplit")
-    TextField probabilityOfSplitField = new TextField("Probability Of Split");
+    TextField probabilityOfSplitField;
     
     @PropertyId("terminalGAPsStrategy")
-    ComboBox terminalGAPsStrategyField = new ComboBox("Terminal GAPs Strategy");
+    ComboBox terminalGAPsStrategyField;
     
     @PropertyId("generatePhylogeneticTree")
-    CheckBox generatePhylogeneticTree = new CheckBox("Generate Phylogenetic Tree");
+    CheckBox generatePhylogeneticTree;
     
 	public SalsaParametersForm(BeanItem<SalsaParameters> salsaParametersBeanItem) {		
-        FormLayout formLayout = new FormLayout();
+        Design.read(this);
         
-        clustalTypeField.setNullSelectionAllowed(false);
-        clustalTypeField.setImmediate(true);
         for(ClustalType clustalType : ClustalType.values()) {
         	clustalTypeField.addItem(clustalType);
         }
-        formLayout.addComponent(clustalTypeField);
         
-        formLayout.addComponent(generatePhylogeneticTree); 
-        
-        scoringMatrixField.setNullSelectionAllowed(false);
-        scoringMatrixField.setImmediate(true);
         for(ScoringMatrix scoringMatrix : ScoringMatrix.values()) {
         	scoringMatrixField.addItem(scoringMatrix);
         }
-        formLayout.addComponent(scoringMatrixField);
         
-        minIterationsField.setImmediate(true);        
-        formLayout.addComponent(minIterationsField);
-        
-        GOPField.setImmediate(true);
-        formLayout.addComponent(GOPField);
-        
-        GEPField.setImmediate(true);
-        formLayout.addComponent(GEPField);
-        
-        probabilityOfSplitField.setImmediate(true);
-        formLayout.addComponent(probabilityOfSplitField);
-        
-        gammaField.setImmediate(true);
-        formLayout.addComponent(gammaField);        
-       
-        
-        terminalGAPsStrategyField.setNullSelectionAllowed(false);
-        terminalGAPsStrategyField.setImmediate(true);
         for(TerminalGAPsStrategy terminalGAPsStrategy : TerminalGAPsStrategy.values()) {
         	terminalGAPsStrategyField.addItem(terminalGAPsStrategy);
         }
-        formLayout.addComponent(terminalGAPsStrategyField);
         
         // Data binding based on attributes
         FieldGroup binder = new FieldGroup(salsaParametersBeanItem);
         binder.bindMemberFields(this);
         binder.setBuffered(false);
-		
-        formLayout.setSizeUndefined();      
-        
-		setCompositionRoot(formLayout);
 	}
 }
 

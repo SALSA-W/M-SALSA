@@ -35,6 +35,9 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
+import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
 import com.vaadin.ui.TextArea;
 
 /**
@@ -72,12 +75,9 @@ public class PhylogeneticTreeView extends CustomComponent implements View {
 		fdTree.extend(downloadTreeButton);
 		buttonsLayout.addComponent(downloadTreeButton);
 		
-		// Add and center with HTML div
-		svgHTMLPhylogenticTree = new Label("<div id='svgCanvas'></div>", ContentMode.HTML);
-		svgHTMLPhylogenticTree.setWidth("-1px");
-		svgHTMLPhylogenticTree.setHeight("-1px");		
-		mainLayout.addComponent(svgHTMLPhylogenticTree);
-		mainLayout.setComponentAlignment(svgHTMLPhylogenticTree, Alignment.MIDDLE_CENTER);
+		TabSheet tabsheet = new TabSheet();
+		mainLayout.addComponent(tabsheet);
+		mainLayout.setComponentAlignment(tabsheet, Alignment.MIDDLE_CENTER);
 		
 		// Add tab with aligment content
 		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(clustalFileMapper.getAlignmentFilePath())));
@@ -86,13 +86,34 @@ public class PhylogeneticTreeView extends CustomComponent implements View {
 		aligmentFileTextArea.setValue(aligmentFileContent);
 		aligmentFileTextArea.setWidth("100%");
 		aligmentFileTextArea.setHeight("100%");
-		mainLayout.addComponent(aligmentFileTextArea);
-		mainLayout.setComponentAlignment(aligmentFileTextArea, Alignment.MIDDLE_CENTER);
+		tabsheet.addTab(aligmentFileTextArea, "Alignments");		
 		
+		// Add and center with HTML div
+		svgHTMLPhylogenticTree = new Label("<div id='svgCanvas'></div>", ContentMode.HTML);
+		svgHTMLPhylogenticTree.setWidth("-1px");
+		svgHTMLPhylogenticTree.setHeight("-1px");		
+		tabsheet.addTab(svgHTMLPhylogenticTree, "Phylogenetic Tree");	
 		
 		// Add JavaScript component to generate phylogentic tree
-		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG(getPhylogeneticTreeFileContent(clustalFileMapper));
+		String newickTree = getPhylogeneticTreeFileContent(clustalFileMapper);
+		JsPhyloSVG jsPhyloSVG = new JsPhyloSVG(newickTree);
 		mainLayout.addComponent(jsPhyloSVG);
+		
+		tabsheet.addSelectedTabChangeListener(new SelectedTabChangeListener(){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void selectedTabChange(SelectedTabChangeEvent event) {
+				if (event.getTabSheet().getSelectedTab() == svgHTMLPhylogenticTree)
+				{
+					// Force the call of JavaScript when Phylogenetic Tree tab is selected
+					jsPhyloSVG.markAsDirty();
+				}				
+			}});
 		
 		setCompositionRoot(mainLayout);
 	}

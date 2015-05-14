@@ -33,8 +33,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
+
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  */
@@ -51,21 +53,24 @@ public class PhylogeneticTreeView extends CustomComponent implements View {
 	public PhylogeneticTreeView(ClustalFileMapper clustalFileMapper) throws IOException {			
 		initializeUiComponents();
 		
+		HorizontalLayout  buttonsLayout = new HorizontalLayout ();
+		buttonsLayout.setSpacing(true);
+		mainLayout.addComponent(buttonsLayout);
+		mainLayout.setComponentAlignment(buttonsLayout,  Alignment.MIDDLE_CENTER);
+		
 		// Download alignment file
 		Button aligmentButton = new Button("Download alignment");
 		Resource resAlignment = new FileResource(new File(clustalFileMapper.getAlignmentFilePath()));
 		FileDownloader fdAln = new FileDownloader(resAlignment);
 		fdAln.extend(aligmentButton);
-		mainLayout.addComponent(aligmentButton);
-		mainLayout.setComponentAlignment(aligmentButton,  Alignment.MIDDLE_CENTER);
+		buttonsLayout.addComponent(aligmentButton);
 		
 		// Download tree file
 		Button downloadTreeButton = new Button("Download phylogentic tree");
 		Resource resTree = new FileResource(new File(clustalFileMapper.getTreeFilePath()));
 		FileDownloader fdTree = new FileDownloader(resTree);
 		fdTree.extend(downloadTreeButton);
-		mainLayout.addComponent(downloadTreeButton);
-		mainLayout.setComponentAlignment(downloadTreeButton,  Alignment.MIDDLE_CENTER);
+		buttonsLayout.addComponent(downloadTreeButton);
 		
 		// Add and center with HTML div
 		svgHTMLPhylogenticTree = new Label("<div id='svgCanvas'></div>", ContentMode.HTML);

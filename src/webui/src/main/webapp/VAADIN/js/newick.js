@@ -1,10 +1,11 @@
-com_salsaw_msalsa_JsPhyloSVG = function() {	
-		
-	var state = this.getState();
-	
-	phyloCanvas = new Smits.PhyloCanvas(
-		{ newick: state.newickTree },
+com_salsaw_msalsa_JsPhyloSVG = function() {
+
+	this.onStateChange = function() {
+		phyloCanvas = new Smits.PhyloCanvas({
+			newick : this.getState().newickTree
+		}, 
 		'svgCanvas', 
-		300, 300
-	);
+		300, 
+		300);
+	}
 }

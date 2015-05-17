@@ -33,6 +33,9 @@ import com.salsaw.msalsa.clustal.ClustalWManager;
  */
 public class SalsaAlgorithmExecutor {
 	
+	public static final String SALSA_ALIGMENT_SUFFIX = "-msalsa-aln.fasta";
+	public static final String SALSA_TREE_SUFFIX = "-msalsa-aln.ph";	
+	
 	private static void validateParameters(SalsaParameters salsaParameters) throws SALSAException
 	{
 		// VALIDATION

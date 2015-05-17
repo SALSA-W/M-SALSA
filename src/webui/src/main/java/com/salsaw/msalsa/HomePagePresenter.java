@@ -18,13 +18,14 @@ package com.salsaw.msalsa;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.cli.SalsaParameters;
-import com.salsaw.msalsa.clustal.ClustalFileMapper;
+
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.vaadin.navigator.Navigator;
 
@@ -36,8 +37,10 @@ public class HomePagePresenter implements IHomePageListener{
 	private final HomePageView view;
 	private final Navigator navigator;
 	private final SalsaParameters salsaParameters;
+	private final UUID idProccedRequest;	
 
-	public HomePagePresenter(HomePageView view, Navigator navigator, SalsaParameters salsaParameters) {
+	// CONSTRUCTOR
+	public HomePagePresenter(HomePageView view, Navigator navigator, SalsaParameters salsaParameters, UUID idProccedRequest) {
 		if (view == null){
 			throw new IllegalArgumentException("view");
 		}
@@ -47,12 +50,21 @@ public class HomePagePresenter implements IHomePageListener{
 		if (salsaParameters == null){
 			throw new IllegalArgumentException("salsaParameters");
 		}
+		if (idProccedRequest == null){
+			throw new IllegalArgumentException("idProccedRequest");
+		}		
 		
 		this.view = view;
 		this.navigator = navigator;
 		this.salsaParameters = salsaParameters;
+		this.idProccedRequest = idProccedRequest;
 	         
-		view.addListener(this);	
+		this.view.addListener(this);	
+	}
+	
+	// GET / SET
+	public UUID getIdProccedRequest(){
+		return this.idProccedRequest;
 	}
 
 	@Override
@@ -75,22 +87,11 @@ public class HomePagePresenter implements IHomePageListener{
     	salsaParameters.setOutputFile(
     			Paths.get(
     			ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
-    			inputFileName + "-msalsa-aln.fasta").toString());
+    			getIdProccedRequest().toString(),
+    			inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
     	  		    		
 		SalsaAlgorithmExecutor.callClustal(salsaParameters);
 		
-		// Store path where files has been generated
-    	ClustalFileMapper clustalFileMapper = new ClustalFileMapper(file.getAbsolutePath());
-    	clustalFileMapper.setAlignmentFilePath(salsaParameters.getOutputFile());
-    	clustalFileMapper.setPhylogeneticTreeFile(
-    			Paths.get(
-    			ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
-    			inputFileName + "-msalsa-aln.ph").toString());
-    	
-		// Show view with results
-		final PhylogeneticTreeView testTreeView = new PhylogeneticTreeView(
-				clustalFileMapper);
-		navigator.addView(PROCESSED, testTreeView);
-		navigator.navigateTo(PROCESSED);
-	}
+		navigator.navigateTo(PROCESSED + "/" + getIdProccedRequest().toString()); 
+	}	
 }

@@ -15,6 +15,9 @@
  */
 package com.salsaw.msalsa;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.salsaw.msalsa.cli.SalsaParameters;
@@ -38,32 +41,92 @@ public class MyUI extends UI {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	Navigator navigator;
+	//Navigator navigator;
     protected static final String PROCESSED = "processed";
 
     @Override
-    protected void init(VaadinRequest vaadinRequest) {    	    	   
-    	// MVP form https://vaadin.com/book/vaadin7/-/page/advanced.architecture.html
-    	
-    	// Create a navigator to control the views
-        navigator = new Navigator(this, this);
-        
-        // Create the model entity
-		SalsaParameters salsaParameters = new SalsaParameters();
-		salsaParameters.setGeneratePhylogeneticTree(true);
-    	
-    	// Create the model and the Vaadin view implementation    	
-        final HomePageView homePageView = new HomePageView(salsaParameters);
-        
-        // The presenter binds the model and view together
-        new HomePagePresenter(homePageView, navigator, salsaParameters);
-                
-        getPage().setTitle("M-SALSA");      
-                
-        navigator.addView("", homePageView);
-        navigator.navigateTo("");
-    }
+	protected void init(VaadinRequest vaadinRequest) {
+		// MVP form
+		// https://vaadin.com/book/vaadin7/-/page/advanced.architecture.html
 
+		// Create a navigator to control the views
+		setNavigator(new Navigator(this, this));
+
+		getPage().setTitle("M-SALSA");
+
+		String firstFragment;
+		if (getPage().getUriFragment() == null) {
+			firstFragment = "";
+		} else {
+			if (getPage().getUriFragment().startsWith("!")) {
+				firstFragment = getPage().getUriFragment().substring(1);
+			} else {
+				firstFragment = getPage().getUriFragment();
+			}
+
+			// Ignore parameters
+			if (firstFragment.indexOf("/") != -1) {
+				firstFragment = firstFragment.substring(0,
+						firstFragment.indexOf("/"));
+			}
+		}
+
+		enter(firstFragment);
+	}
+    
+    void enter(String firstFragment) {
+    	registerPage(firstFragment);
+        switch (firstFragment) {
+        case "":
+        	//getNavigator().navigateTo("");            
+        	break;
+        	
+		case PROCESSED:
+			//getNavigator().navigateTo(PROCESSED);
+			break;
+
+		default:
+			// TODO - page 404			
+			break;
+		}        
+    }
+    
+	private void registerPage(String pageFragment) {
+		switch (pageFragment) {
+		case "":
+			// Create the model entity
+			SalsaParameters salsaParameters = new SalsaParameters();
+			salsaParameters.setGeneratePhylogeneticTree(true);
+			UUID idProccedRequest = UUID.randomUUID();
+
+			// Create the model and the Vaadin view implementation
+			final HomePageView homePageView = new HomePageView(salsaParameters,
+					idProccedRequest);
+
+			// The presenter binds the model and view together
+			new HomePagePresenter(homePageView, getNavigator(), salsaParameters,
+					idProccedRequest);
+			getNavigator().addView("", homePageView);
+
+			// Recursive call
+			registerPage(PROCESSED);
+			break;
+
+		case PROCESSED:
+
+			// Create and register the page for show the output
+			PhylogeneticTreeView testTreeView;
+			try {
+				testTreeView = new PhylogeneticTreeView();
+				getNavigator().addView(PROCESSED, testTreeView);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+    
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {

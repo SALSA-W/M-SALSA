@@ -27,6 +27,8 @@ public class JsPhyloSVGState extends JavaScriptComponentState {
 	
 	private static final long serialVersionUID = 1L;
 	
+	public static final String DIV_ID = "svgCanvas";
+	
 	private String newickTree;
 	
 	public JsPhyloSVGState() {
@@ -39,4 +41,8 @@ public class JsPhyloSVGState extends JavaScriptComponentState {
     public void setNewickTree(String newickTree) {
         this.newickTree = newickTree;
     }
+    
+    public String getDivId() {
+        return DIV_ID;
+    }    
 }

@@ -25,11 +25,18 @@ import com.vaadin.shared.ui.JavaScriptComponentState;
  */
 public class JsPhyloSVGState extends JavaScriptComponentState {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;	
 	public static final String DIV_ID = "svgCanvas";
 	
 	public final String divId = DIV_ID;
+	/**
+	 * The height in pixel based on the number of charters in the tree
+	 */
+	public int svgHeight;
+	/**
+	 * The width in pixel based on the number of charters in the tree
+	 */	
+	public int svgWidth;
 	
 	private String newickTree;
 	
@@ -42,5 +49,9 @@ public class JsPhyloSVGState extends JavaScriptComponentState {
 
     public void setNewickTree(String newickTree) {
         this.newickTree = newickTree;
+        
+        // Calculate height and width
+        this.svgHeight = (int) (0.9173 * this.newickTree.length() + 494.82);
+        this.svgWidth = (int) (1.8565 * this.newickTree.length() + 152.22);
     } 
 }

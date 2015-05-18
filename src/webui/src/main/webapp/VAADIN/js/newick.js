@@ -5,7 +5,7 @@ com_salsaw_msalsa_JsPhyloSVG = function() {
 			newick : this.getState().newickTree
 		}, 
 		this.getState().divId, 
-		700, 
-		700);
+		this.getState().svgHeight, 
+		this.getState().svgWidth);
 	}
 }

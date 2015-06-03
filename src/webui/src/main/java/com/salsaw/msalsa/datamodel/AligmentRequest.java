@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa;
+package com.salsaw.msalsa.datamodel;
 
-import com.vaadin.annotations.JavaScript;
-import com.vaadin.ui.AbstractJavaScriptComponent;
+import java.util.UUID;
+
+import com.salsaw.msalsa.cli.SalsaParameters;
 
 /**
- * {@link https://vaadin.com/blog/-/blogs/vaadin-7-loves-javascript-components} 
- * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
+ *
  */
-@JavaScript({
-    /*
-     * jsPhyloSVG
-     */
-    "vaadin://js/jsphylosvg-min.js",
-    "vaadin://js/raphael-min.js",
-    "vaadin://js/newick.js",
-})
-public class JsPhyloSVG extends AbstractJavaScriptComponent {
+public class AligmentRequest {
+	
+	// FIELDS
+	private final SalsaParameters salsaParameters;
+	private final UUID idProccedRequest;
+	
+	// CONSTRUCTOR
+	public AligmentRequest()
+	{
+		this.salsaParameters = new SalsaParameters();
+		this.getSalsaParameters().setGeneratePhylogeneticTree(true);
+		// Generate new GUID
+		this.idProccedRequest = UUID.randomUUID();
+	}
 
-	private static final long serialVersionUID = 1L;
+	// GET / SET
+	public UUID getIdProccedRequest() {
+		return idProccedRequest;
+	}
 
-	public JsPhyloSVG(String newickTree) {
-		this.getState().setNewickTree(newickTree);
-    }
-    
-    @Override
-    public JsPhyloSVGState getState() {
-    	return (JsPhyloSVGState) super.getState();
-    }
+	public SalsaParameters getSalsaParameters() {
+		return salsaParameters;
+	}
 }

@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import com.salsaw.msalsa.services.RequestStatusChecker;
 
 /**
- * Servlet implementation class AligmentRequestServlet
+ * Servlet implementation class AlignmentStatusServlet
  */
-@WebServlet("/aligment-status")
-public class AligmentStatusServlet extends HttpServlet {
+@WebServlet("/alignment-status")
+public class AlignmentStatusServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String ID_PARAMETER = "id";
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AligmentStatusServlet() {
+    public AlignmentStatusServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

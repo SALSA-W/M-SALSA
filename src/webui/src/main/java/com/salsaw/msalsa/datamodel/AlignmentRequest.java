@@ -23,24 +23,24 @@ import com.salsaw.msalsa.cli.SalsaParameters;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class AligmentRequest {
+public class AlignmentRequest {
 	
 	// FIELDS
 	private final SalsaParameters salsaParameters;
-	private final UUID idProccedRequest;
+	private final UUID id;
 	
 	// CONSTRUCTOR
-	public AligmentRequest()
+	public AlignmentRequest()
 	{
 		this.salsaParameters = new SalsaParameters();
 		this.getSalsaParameters().setGeneratePhylogeneticTree(true);
 		// Generate new GUID
-		this.idProccedRequest = UUID.randomUUID();
+		this.id = UUID.randomUUID();
 	}
 
 	// GET / SET
-	public UUID getIdProccedRequest() {
-		return idProccedRequest;
+	public UUID getId() {
+		return id;
 	}
 
 	public SalsaParameters getSalsaParameters() {

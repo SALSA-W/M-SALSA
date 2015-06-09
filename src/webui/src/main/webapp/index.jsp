@@ -25,7 +25,7 @@
 	
 	<h1 class="text-center">M-SALSA</h1>
 	
-	<jsp:useBean id="aligmentRequest" class="com.salsaw.msalsa.datamodel.AligmentRequest" scope="request">
+	<jsp:useBean id="aligmentRequest" class="com.salsaw.msalsa.datamodel.AlignmentRequest" scope="request">
 	</jsp:useBean>
 	 
 	<c:set var="scoringMatrixes" value="<%=ScoringMatrix.values()%>"/>

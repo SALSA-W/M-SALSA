@@ -49,7 +49,7 @@ public class ProcessCheckerServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html		
-		String idRequest = AligmentStatusServlet.readAndValidateProcessId(request, response);
+		String idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 		if (idRequest == null){
 			// The input data are invalid
 			return;

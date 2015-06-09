@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.salsaw.msalsa.datamodel.AligmentRequest;
+import com.salsaw.msalsa.datamodel.AlignmentRequest;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -45,7 +45,7 @@ public class MainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Initialize the alignment request status and add to request
-		AligmentRequest aligmentRequest = new AligmentRequest();		
+		AlignmentRequest aligmentRequest = new AlignmentRequest();		
 		request.setAttribute("aligmentRequest", aligmentRequest);
 		
 		// Redirect the request to index

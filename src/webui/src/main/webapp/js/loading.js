@@ -25,6 +25,7 @@ $(document).ready(function() {
 	
 });
 
+// http://stackoverflow.com/a/21903119
 function getUrlParameter(sParam)
 {
     var sPageURL = window.location.search.substring(1);

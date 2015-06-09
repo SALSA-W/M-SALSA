@@ -32,7 +32,7 @@ import com.salsaw.msalsa.datamodel.AligmentRequest;
  */
 @WebServlet(
 		name="test",
-		urlPatterns = {"/"})
+		urlPatterns = {"/index"})
 public class MainController extends HttpServlet {
 
 	/**

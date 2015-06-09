@@ -3,10 +3,11 @@
  */
 
 $(document).ready(function() {
+	var processCheckerUrl = 'ProcessChecker?' + getUrlParameter('id');
 	
 	(function poll() {
 		$.ajax({
-			url : 'ProcessChecker?' + getUrlParameter('id'),
+			url : processCheckerUrl,
 			type: "GET",
 			success : function(responseText) {				
 				// TODO - redirect to correct page

@@ -48,21 +48,14 @@ public class ProcessCheckerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html
-		
-		// Read the request id
-		String idRequest = request.getParameter("id");
-		
+		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html		
+		String idRequest = AligmentStatusServlet.readAndValidateProcessId(request, response);
 		if (idRequest == null){
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			// The input data are invalid
+			return;
 		}
-		
-		if (RequestStatusChecker.RequestExists(idRequest) == false){
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-		
-		boolean requestCompleted = RequestStatusChecker.IsRequestCompleted(idRequest);		
-		if (requestCompleted == false){
+			
+		if (RequestStatusChecker.IsRequestCompleted(idRequest) == false){
 			response.setStatus(HttpServletResponse.SC_ACCEPTED);
 		}else{
 			response.setStatus(HttpServletResponse.SC_OK);

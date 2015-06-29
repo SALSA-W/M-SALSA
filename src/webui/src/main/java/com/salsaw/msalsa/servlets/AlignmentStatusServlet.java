@@ -1,6 +1,7 @@
 package com.salsaw.msalsa.servlets;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -43,9 +44,11 @@ public class AlignmentStatusServlet extends HttpServlet {
 				request.getRequestDispatcher("/loading.jsp");
 			requestDispatcher.forward(request, response);
 		}else{
+			
+			String aligmentResultServlet = "/AligmentResultServlet?" + ID_PARAMETER + URLEncoder.encode(idRequest, "UTF-8");
 			// Redirect the request to result servlet
 			RequestDispatcher requestDispatcher =
-				request.getRequestDispatcher("/AligmentResultServlet");
+				request.getRequestDispatcher(aligmentResultServlet);
 			requestDispatcher.forward(request, response);
 		}
 	}

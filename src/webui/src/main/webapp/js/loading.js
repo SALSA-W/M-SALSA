@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function() {
-	var processCheckerUrl = 'AlignmentChecker?' + getUrlParameter('id');
+	var processCheckerUrl = 'AlignmentChecker?id=' + getUrlParameter('id');
 	
 	(function poll() {
 		$.ajax({
@@ -11,7 +11,7 @@ $(document).ready(function() {
 			type: "GET",
 			success : function(responseText) {				
 				// TODO - redirect to correct page				
-				var redirectUrl = 'AligmentResultServlet?' + getUrlParameter('id');
+				var redirectUrl = 'AligmentResultServlet?id=' + getUrlParameter('id');
 				window.location.href = redirectUrl;
 			},
 			error: function(){

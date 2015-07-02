@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -54,6 +55,11 @@ public class AlignmentResultServlet extends HttpServlet {
 		
 		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(this.msalsaAligmentFilePath)));
 		request.setAttribute("aligmentFileContent", aligmentFileContent);
+		
+		// Redirect the request to index
+		RequestDispatcher requestDispatcher =
+			    request.getRequestDispatcher("results.jsp");
+		requestDispatcher.forward(request, response);
 	}
 
 	private void initSalsaData(String idProccedRequest) throws IOException, IllegalStateException{

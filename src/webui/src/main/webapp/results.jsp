@@ -18,7 +18,7 @@
 	
 	<script type="text/javascript">
 		window.onload = function(){
-				var dataObject = { newick: <%= request.getParameter("newickTree") %> };
+				var dataObject = { newick: '<%= request.getAttribute("newickTree") %>' };
 				phylocanvas = new Smits.PhyloCanvas(
 					dataObject,
 					'svgCanvas', 
@@ -27,11 +27,7 @@
 		};
 	</script>
 </head>
-<body>
-
-	<jsp:useBean id="aligmentRequest" class="com.salsaw.msalsa.datamodel.AlignmentRequest" scope="request">
-	</jsp:useBean>
-	
+<body>	
 	<div id="svgCanvas"> </div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

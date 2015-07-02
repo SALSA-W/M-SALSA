@@ -30,12 +30,12 @@ import com.salsaw.msalsa.datamodel.AlignmentRequest;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class AligmentRequestExecutor  implements Runnable {
+public class AlignmentRequestExecutor  implements Runnable {
 	
 	private final AlignmentRequest alignmentRequest;
 	private final Thread thread;
 	
-	public AligmentRequestExecutor(AlignmentRequest alignmentRequest){
+	public AlignmentRequestExecutor(AlignmentRequest alignmentRequest){
 		if (alignmentRequest == null){
 			throw new IllegalArgumentException("salsaParameters");
 		}
@@ -86,7 +86,7 @@ public class AligmentRequestExecutor  implements Runnable {
 			e.printStackTrace();
 		}
 		
-		AligmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
+		AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
 	}
 
 }

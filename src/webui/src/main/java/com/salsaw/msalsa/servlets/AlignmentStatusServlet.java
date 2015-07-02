@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.salsaw.msalsa.services.AligmentRequestManager;
+import com.salsaw.msalsa.services.AlignmentRequestManager;
 
 /**
  * Servlet implementation class AlignmentStatusServlet
@@ -38,7 +38,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			return;
 		}
 		
-		if (AligmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false){
+		if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false){
 			// Redirect the request to loading
 			RequestDispatcher requestDispatcher =
 				request.getRequestDispatcher("/loading.jsp");
@@ -64,7 +64,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			return null;
 		}
 		
-		if (AligmentRequestManager.getInstance().RequestExists(idRequest) == false){
+		if (AlignmentRequestManager.getInstance().RequestExists(idRequest) == false){
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		}

@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +22,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
-import com.salsaw.msalsa.services.AligmentRequestManager;
+import com.salsaw.msalsa.services.AlignmentRequestManager;
 
 /**
  * Servlet implementation class AlignmentRequestServlet
  */
 @WebServlet("/AlignmentRequestServlet")
+@MultipartConfig
 public class AlignmentRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -66,13 +68,12 @@ public class AlignmentRequestServlet extends HttpServlet {
 				}
 	    		
 	            // Open the file for writing.
-	            Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);				
-				Files.copy(inputAlignmentFileContet, inputFilePath);
-				
+	            Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);	            	            
+				Files.copy(inputAlignmentFileContet, inputFilePath);				
 				salsaParameters.setInputFile(inputFilePath.toString());
 			}						
 						
-			AligmentRequestManager.getInstance().startManageRequest(newRequest);
+			AlignmentRequestManager.getInstance().startManageRequest(newRequest);
 			
 			// Redirect the request to index
 			RequestDispatcher requestDispatcher =

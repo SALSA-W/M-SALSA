@@ -30,7 +30,7 @@
 	 
 	<c:set var="scoringMatrixes" value="<%=ScoringMatrix.values()%>"/>
 	
-	 <form class="form-horizontal" role="form" action="AlignmentRequestServlet" method="post">
+	 <form class="form-horizontal" role="form" action="AlignmentRequestServlet" method="post" enctype="multipart/form-data">
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="email">Email:</label>
 		    <div class="col-sm-10">
@@ -41,7 +41,7 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="inputFile">Input file:</label>
 		    <div class="col-sm-10">
-		      <input type="file"  id="inputFile" placeholder="The file to align" />
+		      <input type="file" name="inputFile" id="inputFile" placeholder="The file to align" />
 		    </div>
 		  </div>
 		  

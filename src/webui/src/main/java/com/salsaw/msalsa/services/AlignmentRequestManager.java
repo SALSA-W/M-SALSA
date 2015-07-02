@@ -25,14 +25,14 @@ import com.salsaw.msalsa.datamodel.AlignmentRequest;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public final class AligmentRequestManager {
-	private static final AligmentRequestManager instance= new AligmentRequestManager();
+public final class AlignmentRequestManager {
+	private static final AlignmentRequestManager instance= new AlignmentRequestManager();
 	
-	private final Map<UUID, AligmentRequestExecutor> activeRequests = new ConcurrentHashMap<UUID, AligmentRequestExecutor>();	
+	private final Map<UUID, AlignmentRequestExecutor> activeRequests = new ConcurrentHashMap<UUID, AlignmentRequestExecutor>();	
 	
-	private AligmentRequestManager(){}
+	private AlignmentRequestManager(){}
 	
-	public static AligmentRequestManager getInstance(){
+	public static AlignmentRequestManager getInstance(){
 		return instance;
 	}
 	
@@ -42,7 +42,7 @@ public final class AligmentRequestManager {
 		}
 		
 		// Start the request process
-		AligmentRequestExecutor aligmentRequestExecutor = new AligmentRequestExecutor(alignmentRequest);		
+		AlignmentRequestExecutor aligmentRequestExecutor = new AlignmentRequestExecutor(alignmentRequest);		
 		this.activeRequests.put(alignmentRequest.getId(), aligmentRequestExecutor);
 
 		aligmentRequestExecutor.startAsyncAlignment();

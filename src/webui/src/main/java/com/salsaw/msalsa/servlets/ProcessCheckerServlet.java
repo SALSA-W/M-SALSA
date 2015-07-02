@@ -30,7 +30,7 @@ import com.salsaw.msalsa.services.AlignmentRequestManager;
  * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  */
-@WebServlet(description = "Check if the aligment proccess has been completed", urlPatterns = { "/ProcessChecker" })
+@WebServlet(description = "Check if the aligment proccess has been completed", urlPatterns = { "/AlignmentChecker" })
 public class ProcessCheckerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

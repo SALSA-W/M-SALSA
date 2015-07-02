@@ -75,10 +75,8 @@ public class AlignmentRequestServlet extends HttpServlet {
 						
 			AlignmentRequestManager.getInstance().startManageRequest(newRequest);
 			
-			// Redirect the request to index
-			RequestDispatcher requestDispatcher =
-				    request.getRequestDispatcher("/loading.jsp");
-			requestDispatcher.forward(request, response);
+			// Redirect the request to index			
+			response.sendRedirect("loading.jsp?id=" + newRequest.getId());
 			
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block

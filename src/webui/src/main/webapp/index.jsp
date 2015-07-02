@@ -34,7 +34,7 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="email">Email:</label>
 		    <div class="col-sm-10">
-		      <input type="email" class="form-control" id="email" placeholder="Enter email">
+		      <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
 		    </div>
 		  </div>
 		  
@@ -48,7 +48,7 @@
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="GOP">GOP:</label>
 		    <div class="col-sm-10">
-		      <input type="number" step="any" class="form-control" id="GOP" value="${fn:escapeXml(salsaParameters.GOP)}" placeholder="Enter password" />
+		      <input type="number" step="any" class="form-control" name="GOP" id="GOP" value="${fn:escapeXml(salsaParameters.GOP)}" placeholder="Enter password" />
 		    </div>
 		  </div>
 		  <div class="form-group">
@@ -108,10 +108,10 @@
 		        <label>
 		        <c:choose>
 		            <c:when test="${salsaParameters.generatePhylogeneticTree==true}">
-		            	<input type="checkbox" id="generatePhylogeneticTree" checked/>
+		            	<input type="checkbox" name="generatePhylogeneticTree" id="generatePhylogeneticTree" checked/>
 		            </c:when>
 		            <c:otherwise>
-		            	<input type="checkbox" id="generatePhylogeneticTree" unchecked/>
+		            	<input type="checkbox" name="generatePhylogeneticTree" id="generatePhylogeneticTree" unchecked/>
 		            </c:otherwise>
 		        </c:choose>
 		        Generate Phylogenetic Tree</label>

@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function() {
-	var processCheckerUrl = 'ProcessChecker?' + getUrlParameter('id');
+	var processCheckerUrl = 'AlignmentChecker?' + getUrlParameter('id');
 	
 	(function poll() {
 		$.ajax({

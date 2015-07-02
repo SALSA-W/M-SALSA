@@ -15,10 +15,13 @@
  */
 package com.salsaw.msalsa.services;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 
 /**
@@ -52,13 +55,31 @@ public final class AlignmentRequestManager {
 		this.activeRequests.remove(alignmentRequestId);
 	}
 	
-	public final boolean RequestExists(String idRequest) {
-		// TODO Auto-generated method stub
-		return true;
+	public final boolean RequestExists(UUID idRequest) {		
+		if (activeRequests.containsKey(idRequest) == true){
+			return true;
+		}
+		
+		if (getServerAligmentFolder(idRequest).toFile().exists() == true){
+			return true;
+		}			
+		
+		// TODO Implement better checks
+		return false;
 	}
 
-	public final boolean IsRequestCompleted(String idRequest) {
-		// TODO Auto-generated method stub
+	public final boolean IsRequestCompleted(UUID idRequest) {
+		if (activeRequests.containsKey(idRequest) == true){
+			return false;
+		}
+		
+		// TODO Implement better checks: look if expected files are present on server
 		return true;
+	}
+	
+	public final Path getServerAligmentFolder(UUID idRequest){
+		// Load server configuration
+		String tmpFolder = ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath();
+		return Paths.get(tmpFolder, idRequest.toString());
 	}
 }

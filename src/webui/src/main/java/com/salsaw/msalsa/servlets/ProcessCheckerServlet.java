@@ -16,6 +16,7 @@
 package com.salsaw.msalsa.servlets;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,16 +46,14 @@ public class ProcessCheckerServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html		
-		String idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);		
 		if (idRequest == null){
 			// The input data are invalid
 			return;
 		}
-			
+	
 		if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false){
 			response.setStatus(HttpServletResponse.SC_ACCEPTED);
 		}else{

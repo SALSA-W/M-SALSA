@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,13 +41,13 @@ public class AlignmentResultServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 		if (idRequest == null){
 			// The input data are invalid
 			return;
 		}
 		
-		initSalsaData(idRequest);
+		initSalsaData(idRequest.toString());
 		
 		String newickTree = getPhylogeneticTreeFileContent(this.msalsaPhylogeneticTreeFilePath);
 		request.setAttribute("newickTree", newickTree);

@@ -10,8 +10,9 @@ $(document).ready(function() {
 			url : processCheckerUrl,
 			type: "GET",
 			success : function(responseText) {				
-				// TODO - redirect to correct page
-				
+				// TODO - redirect to correct page				
+				var redirectUrl = 'AligmentResultServlet?' + getUrlParameter('id');
+				window.location.href = redirectUrl;
 			},
 			error: function(){
 				// TODO - manage errors

@@ -2,6 +2,7 @@ package com.salsaw.msalsa.servlets;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,7 +33,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idRequest = readAndValidateProcessId(request, response);
+		UUID idRequest = readAndValidateProcessId(request, response);
 		if (idRequest == null){
 			// The input data are invalid
 			return;
@@ -45,7 +46,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			requestDispatcher.forward(request, response);
 		}else{
 			
-			String aligmentResultServlet = "/AligmentResultServlet?" + ID_PARAMETER + URLEncoder.encode(idRequest, "UTF-8");
+			String aligmentResultServlet = "/AligmentResultServlet?" + ID_PARAMETER + URLEncoder.encode(idRequest.toString(), "UTF-8");
 			// Redirect the request to result servlet
 			RequestDispatcher requestDispatcher =
 				request.getRequestDispatcher(aligmentResultServlet);
@@ -53,17 +54,18 @@ public class AlignmentStatusServlet extends HttpServlet {
 		}
 	}
 
-	public static String readAndValidateProcessId(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public static UUID readAndValidateProcessId(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html
 		
 		// Read the request id
-		String idRequest = request.getParameter(ID_PARAMETER);
+		String idRequestString = request.getParameter(ID_PARAMETER);
 		
-		if (idRequest == null){
+		if (idRequestString == null){
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return null;
 		}
 		
+		UUID idRequest = UUID.fromString(idRequestString);	
 		if (AlignmentRequestManager.getInstance().RequestExists(idRequest) == false){
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;

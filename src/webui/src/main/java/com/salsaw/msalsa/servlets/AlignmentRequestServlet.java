@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +19,6 @@ import javax.servlet.http.Part;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.salsaw.msalsa.cli.SalsaParameters;
-import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
 
@@ -58,9 +56,8 @@ public class AlignmentRequestServlet extends HttpServlet {
 			String fileName = filePart.getSubmittedFileName();
 			try(InputStream inputAlignmentFileContet = filePart.getInputStream()){
 			
-				// Load server configuration
-	    		String tmpFolder = ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath();
-	    		File requestProcessFolder = Paths.get(tmpFolder, newRequest.getId().toString()).toFile();
+				File requestProcessFolder= AlignmentRequestManager.getInstance()
+						.getServerAligmentFolder(newRequest.getId()).toFile();
 
 				// if the directory does not exist, create it
 				if (requestProcessFolder.exists() == false) {					  

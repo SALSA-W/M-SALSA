@@ -20,7 +20,7 @@ import com.salsaw.msalsa.config.ConfigurationManager;
  * Servlet implementation class AligmentResultServlet
  */
 @WebServlet("/AligmentResultServlet")
-public class AligmentResultServlet extends HttpServlet {
+public class AlignmentResultServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private String msalsaAligmentFilePath;
@@ -29,7 +29,7 @@ public class AligmentResultServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AligmentResultServlet() {
+    public AlignmentResultServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

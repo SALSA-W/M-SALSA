@@ -25,34 +25,42 @@
 	
 	<h1 class="text-center">M-SALSA</h1>
 	
-	<jsp:useBean id="aligmentRequest" class="com.salsaw.msalsa.datamodel.AlignmentRequest" scope="request">
+	<jsp:useBean id="salsaParameters" class="com.salsaw.msalsa.cli.SalsaParameters" scope="request">
 	</jsp:useBean>
 	 
 	<c:set var="scoringMatrixes" value="<%=ScoringMatrix.values()%>"/>
 	
-	 <form class="form-horizontal" role="form">
+	 <form class="form-horizontal" role="form" action="AlignmentRequestServlet" method="post">
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="email">Email:</label>
 		    <div class="col-sm-10">
 		      <input type="email" class="form-control" id="email" placeholder="Enter email">
 		    </div>
 		  </div>
+		  
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="inputFile">Input file:</label>
+		    <div class="col-sm-10">
+		      <input type="file"  id="inputFile" placeholder="The file to align" />
+		    </div>
+		  </div>
+		  
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="GOP">GOP:</label>
 		    <div class="col-sm-10">
-		      <input type="number" step="any" class="form-control" id="GOP" value="${fn:escapeXml(aligmentRequest.salsaParameters.GOP)}" placeholder="Enter password" />
+		      <input type="number" step="any" class="form-control" id="GOP" value="${fn:escapeXml(salsaParameters.GOP)}" placeholder="Enter password" />
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="GEP">GEP:</label>
 		    <div class="col-sm-10">
-		      <input type="number" step="any" class="form-control" id="GEP" value="${fn:escapeXml(aligmentRequest.salsaParameters.GEP)}" placeholder="Enter password">
+		      <input type="number" step="any" class="form-control" id="GEP" value="${fn:escapeXml(salsaParameters.GEP)}" placeholder="Enter password">
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="gamma">Gamma:</label>
 		    <div class="col-sm-10">
-		      <input type="number" class="form-control" id="gamma" value="${fn:escapeXml(aligmentRequest.salsaParameters.gamma)}" placeholder="Enter password">
+		      <input type="number" class="form-control" id="gamma" value="${fn:escapeXml(salsaParameters.gamma)}" placeholder="Enter password">
 		    </div>
 		  </div>
 		  
@@ -61,7 +69,7 @@
 			  <div class="col-sm-10">
 				<select id="scoringMatrix" class="form-control">
 				    <c:forEach items="${scoringMatrixes}" var="scoringMatrix">
-				        <option value="${scoringMatrix}" ${aligmentRequest.salsaParameters.scoringMatrix == scoringMatrix ? 'selected' : ''}>${scoringMatrix}</option>
+				        <option value="${scoringMatrix}" ${salsaParameters.scoringMatrix == scoringMatrix ? 'selected' : ''}>${scoringMatrix}</option>
 				    </c:forEach>
 				</select>
 				</div>
@@ -70,14 +78,14 @@
 		 <div class="form-group">
 		    <label class="control-label col-sm-2" for="minIterations">Min Iterations:</label>
 		    <div class="col-sm-10">
-		      <input type="number" class="form-control" id="minIterations" value="${fn:escapeXml(aligmentRequest.salsaParameters.minIterations)}" placeholder="Enter password">
+		      <input type="number" class="form-control" id="minIterations" value="${fn:escapeXml(salsaParameters.minIterations)}" placeholder="Enter password">
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label class="control-label col-sm-2" for="probabilityOfSplit">Probability Of Split:</label>
 		    <div class="col-sm-10">
-		      <input type="number" step="0.01" class="form-control" id="probabilityOfSplit" value="${fn:escapeXml(aligmentRequest.salsaParameters.probabilityOfSplit)}" placeholder="Enter password">
+		      <input type="number" step="0.01" class="form-control" id="probabilityOfSplit" value="${fn:escapeXml(salsaParameters.probabilityOfSplit)}" placeholder="Enter password">
 		    </div>
 		  </div>
 		  
@@ -99,7 +107,7 @@
 		      <div class="checkbox">
 		        <label>
 		        <c:choose>
-		            <c:when test="${aligmentRequest.salsaParameters.generatePhylogeneticTree==true}">
+		            <c:when test="${salsaParameters.generatePhylogeneticTree==true}">
 		            	<input type="checkbox" id="generatePhylogeneticTree" checked/>
 		            </c:when>
 		            <c:otherwise>
@@ -113,7 +121,7 @@
 		  
 		  <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
-		      <button type="submit" class="btn btn-default">Submit</button>
+		      <button type="submit" class="btn btn-default" >Submit</button>
 		    </div>
 		  </div>
 		</form>

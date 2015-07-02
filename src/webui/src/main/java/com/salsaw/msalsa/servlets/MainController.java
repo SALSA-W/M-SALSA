@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.salsaw.msalsa.datamodel.AlignmentRequest;
+import com.salsaw.msalsa.cli.SalsaParameters;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -44,9 +44,11 @@ public class MainController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Initialize the alignment request status and add to request
-		AlignmentRequest aligmentRequest = new AlignmentRequest();		
-		request.setAttribute("aligmentRequest", aligmentRequest);
+		// Initialize the alignment request status and add to request		
+		SalsaParameters salsaParameters = new SalsaParameters();
+		salsaParameters.setGeneratePhylogeneticTree(true);
+			
+		request.setAttribute("salsaParameters", salsaParameters);
 		
 		// Redirect the request to index
 		RequestDispatcher requestDispatcher =

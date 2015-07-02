@@ -30,10 +30,12 @@ public class AlignmentRequest {
 	private final UUID id;
 	
 	// CONSTRUCTOR
-	public AlignmentRequest()
+	public AlignmentRequest(SalsaParameters salsaParameters)
 	{
-		this.salsaParameters = new SalsaParameters();
-		this.getSalsaParameters().setGeneratePhylogeneticTree(true);
+		if (salsaParameters == null){
+			throw new IllegalArgumentException("salsaParameters");
+		}
+		this.salsaParameters = salsaParameters; 
 		// Generate new GUID
 		this.id = UUID.randomUUID();
 	}

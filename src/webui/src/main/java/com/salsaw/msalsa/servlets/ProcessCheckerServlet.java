@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.salsaw.msalsa.services.RequestStatusChecker;
+import com.salsaw.msalsa.services.AligmentRequestManager;
 
 /**
  * Servlet implementation class ProcessChecker
@@ -55,7 +55,7 @@ public class ProcessCheckerServlet extends HttpServlet {
 			return;
 		}
 			
-		if (RequestStatusChecker.IsRequestCompleted(idRequest) == false){
+		if (AligmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false){
 			response.setStatus(HttpServletResponse.SC_ACCEPTED);
 		}else{
 			response.setStatus(HttpServletResponse.SC_OK);

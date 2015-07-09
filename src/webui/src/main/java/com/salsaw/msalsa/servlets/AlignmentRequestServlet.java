@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.Converter;
 
 import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
@@ -37,6 +39,28 @@ public class AlignmentRequestServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
+    	// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
+        private final EnumConverter enumConverter = new EnumConverter();
+
+        public Converter lookup(Class clazz) {
+            final Converter converter = super.lookup(clazz);
+            // no specific converter for this class, so it's neither a String, (which has a default converter),
+            // nor any known object that has a custom converter for it. It might be an enum !
+            if (converter == null && clazz.isEnum()) {
+                return enumConverter;
+            } else {
+                return converter;
+            }
+        }
+
+        private class EnumConverter implements Converter {
+            public Object convert(Class type, Object value) {
+                return Enum.valueOf(type, (String) value);
+            }
+        }
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,7 +68,11 @@ public class AlignmentRequestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SalsaParameters salsaParameters = new SalsaParameters();
 		try {
-			BeanUtils.populate (salsaParameters, request.getParameterMap());
+			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
+			EnumAwareConvertUtilsBean enumAwareConvertUtilsBean = new EnumAwareConvertUtilsBean();
+			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);
+			
+			beanUtils.populate (salsaParameters, request.getParameterMap());
 			
 			AlignmentRequest newRequest = new AlignmentRequest(salsaParameters);		
 			

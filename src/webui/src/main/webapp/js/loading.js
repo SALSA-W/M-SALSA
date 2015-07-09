@@ -8,12 +8,14 @@ $(document).ready(function() {
 	(function poll() {
 		$.ajax({
 			url : processCheckerUrl,
-			type: "GET",
-			success : function(responseText) {				
-				// TODO - redirect to correct page				
-				var redirectUrl = 'AligmentResultServlet?id=' + getUrlParameter('id');
-				window.location.href = redirectUrl;
-			},
+			type: "GET",			
+			statusCode: {
+			      200: function (responseText) {
+			    	// TODO - redirect to correct page				
+			    	 var redirectUrl = 'AligmentResultServlet?id=' + getUrlParameter('id');
+			    	 window.location.href = redirectUrl;
+			      },			      
+			   },					
 			error: function(){
 				// TODO - manage errors
 	            alert("Processes doesn't exists");

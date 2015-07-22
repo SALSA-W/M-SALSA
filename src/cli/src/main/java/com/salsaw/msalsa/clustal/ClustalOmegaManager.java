@@ -41,6 +41,7 @@ public class ClustalOmegaManager extends ClustalManager {
 	 */
 	private static final String OUTPUT_FORMAT = "outfmt";
 	private static final String GUIDE_TREE_OUTPUT_FILE = "guidetree-out";
+	private static final String NUMBER_THREADS = "threads";
 	
 	// flag settings
 	/**
@@ -92,7 +93,10 @@ public class ClustalOmegaManager extends ClustalManager {
 		commands.add(createParameterEqualsCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
 		
 		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
-		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));			
+		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
+		
+		// Use all available threads
+		commands.add(createParameterEqualsCommand(NUMBER_THREADS, String.valueOf(Runtime.getRuntime().availableProcessors())));
 		
 		commands.add(createBooleanParameterCommand(VERBOSE));
 		commands.add(createBooleanParameterCommand(OVERWITE_OUTPUT_FILE));

@@ -18,6 +18,13 @@ package com.salsaw.msalsa.cli;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.Alignment;
 import com.salsaw.msalsa.algorithm.LocalSearch;
@@ -62,6 +69,7 @@ public class SalsaAlgorithmExecutor {
 		if (salsaParameters.getClustalPath() != null &&
 			salsaParameters.getPhylogeneticTreeFile() == null) {			
 			// Use Clustal to generetate initial aligment
+			salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));
 			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
 			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
 			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
@@ -113,4 +121,27 @@ public class SalsaAlgorithmExecutor {
 			clustalWManager.generateTree(salsaParameters.getClustalWPath(), clustalFileMapper);
 		}			
 	}
+	
+	/**
+	 * Replace the characters in proteins name that could cause errors 
+	 * 
+	 * @param inputFilePath The input file that required the character replace
+	 * @return The path to file with the replaced characters 
+	 * @throws IOException
+	 */
+	public static final String normalizeInputFile(Path inputFilePath) throws IOException{
+			Charset charset = StandardCharsets.UTF_8;
+	
+			String content = new String(Files.readAllBytes(inputFilePath), charset);
+			content = content.replaceAll(" ", "_");
+			content = content.replaceAll(":", "_");
+			
+			// Create the name of normalized input files
+			String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
+			String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
+			String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
+			Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
+						
+			return Files.write(normalizedInputFilePath, content.getBytes(charset)).toString();
+		}
 }

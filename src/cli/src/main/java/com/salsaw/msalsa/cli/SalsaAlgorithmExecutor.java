@@ -135,13 +135,16 @@ public class SalsaAlgorithmExecutor {
 			String content = new String(Files.readAllBytes(inputFilePath), charset);
 			content = content.replaceAll(" ", "_");
 			content = content.replaceAll(":", "_");
+			content = content.replaceAll("\\.", "_");
 			
 			// Create the name of normalized input files
 			String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
 			String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
 			String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
 			Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
-						
-			return Files.write(normalizedInputFilePath, content.getBytes(charset)).toString();
+				
+			Files.write(normalizedInputFilePath, content.getBytes(charset));
+			
+			return normalizedInputFilePath.toString();
 		}
 }

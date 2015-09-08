@@ -20,8 +20,8 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 
-import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
+import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
 
 /**
@@ -66,13 +66,13 @@ public class AlignmentRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SalsaParameters salsaParameters = new SalsaParameters();
+		SalsaWebParameters salsaParameters = new SalsaWebParameters();
 		try {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
 			EnumAwareConvertUtilsBean enumAwareConvertUtilsBean = new EnumAwareConvertUtilsBean();
 			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);
 			
-			beanUtils.populate (salsaParameters, request.getParameterMap());
+			beanUtils.populate(salsaParameters, request.getParameterMap());		
 			
 			AlignmentRequest newRequest = new AlignmentRequest(salsaParameters);		
 			

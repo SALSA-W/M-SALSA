@@ -26,16 +26,16 @@ import com.salsaw.msalsa.cli.SalsaParameters;
 public class AlignmentRequest {
 	
 	// FIELDS
-	private final SalsaParameters salsaParameters;
+	private final SalsaWebParameters salsaWebParameters;
 	private final UUID id;
 	
 	// CONSTRUCTOR
-	public AlignmentRequest(SalsaParameters salsaParameters)
+	public AlignmentRequest(SalsaWebParameters salsaWebParameters)
 	{
-		if (salsaParameters == null){
-			throw new IllegalArgumentException("salsaParameters");
+		if (salsaWebParameters == null){
+			throw new IllegalArgumentException("salsaWebParameters");
 		}
-		this.salsaParameters = salsaParameters; 
+		this.salsaWebParameters = salsaWebParameters; 
 		// Generate new GUID
 		this.id = UUID.randomUUID();
 	}
@@ -45,7 +45,7 @@ public class AlignmentRequest {
 		return id;
 	}
 
-	public SalsaParameters getSalsaParameters() {
-		return salsaParameters;
+	public SalsaWebParameters getSalsaWebParameters() {
+		return salsaWebParameters;
 	}
 }

@@ -18,13 +18,17 @@ package com.salsaw.msalsa.services;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
-import com.salsaw.msalsa.cli.SalsaParameters;
 import com.salsaw.msalsa.config.ConfigurationManager;
+import com.salsaw.msalsa.config.ServerConfiguration;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
+import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -50,31 +54,31 @@ public class AlignmentRequestExecutor  implements Runnable {
 
 	@Override
 	public void run() {
-		SalsaParameters salsaParameters = this.alignmentRequest.getSalsaParameters();
+		SalsaWebParameters salsaWebParameters = this.alignmentRequest.getSalsaWebParameters();
 		
 		// Get path to correct Clustal process
-    	switch (salsaParameters.getClustalType()) {
+    	switch (salsaWebParameters.getClustalType()) {
 		case CLUSTAL_W:
-			salsaParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
+			salsaWebParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
 			break;
 
 		case CLUSTAL_O:
-			salsaParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
+			salsaWebParameters.setClustalPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
 			break;
 		}
-    	salsaParameters.setClustalWPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
+    	salsaWebParameters.setClustalWPath(ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
     	
     	// Create M-SALSA output file name
-    	String inputFileName = FilenameUtils.getBaseName(salsaParameters.getInputFile());		    	
-    	salsaParameters.setOutputFile(
+    	String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());		    	
+    	salsaWebParameters.setOutputFile(
     			Paths.get(
     			ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
     			this.alignmentRequest.getId().toString(),
     			inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
-    	  		    		
+    	
 		try {
 			// Start alignment
-			SalsaAlgorithmExecutor.callClustal(salsaParameters);
+			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
 		} catch (SALSAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +90,35 @@ public class AlignmentRequestExecutor  implements Runnable {
 			e.printStackTrace();
 		}
 		
+		try {
+			this.sendResultMail(
+					salsaWebParameters.getRecipientEmail(),
+					this.alignmentRequest.getId().toString());
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
 	}
 
+	private void sendResultMail(String recipientEmail, String jobName)
+			throws AddressException, MessagingException {
+		
+		ServerConfiguration serverConfiguration = ConfigurationManager.getInstance().getServerConfiguration();
+		
+		GmailSender sender = new GmailSender();
+		sender.setSender(
+				serverConfiguration.getMailUsername(),
+				serverConfiguration.getMailPassword());
+		
+		sender.addRecipient(recipientEmail);
+		sender.setSubject("Salsa job completed");
+		sender.setBody(String.format("Hi! Your salsa job '%s' is completed.", jobName));
+		//sender.addAttachment("TestFile.txt");
+		sender.send();
+	}
 }

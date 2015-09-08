@@ -92,6 +92,7 @@ public class ClustalOmegaManager extends ClustalManager {
 		commands.add(createParameterEqualsCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
 		commands.add(createParameterEqualsCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
 		
+		// Set where tree file will be write
 		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
 		

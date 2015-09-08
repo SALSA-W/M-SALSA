@@ -19,10 +19,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
@@ -40,7 +44,15 @@ public class ClustalWManager extends ClustalManager {
 	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";	
 
 	// keys of options
-	private static final String OUPUT_KEY = "OUTPUT";
+	/**
+	 * sequence alignment file name
+	 */
+	private static final String OUPUT_FILE  = "OUTFILE";
+	
+	/**
+	 * Set output format
+	 */
+	private static final String OUPUT_FORMAT = "OUTPUT";
 	
 	private static final String INPUT_FILE = "INFILE";
 	
@@ -71,7 +83,7 @@ public class ClustalWManager extends ClustalManager {
 	@Override
 	public List<String> generateClustalArguments(List<String> commands) {			
 		// Set output format
-		commands.add(createParameterEqualsCommand(OUPUT_KEY, super.getOputputFormat().toString()));
+		commands.add(createParameterEqualsCommand(OUPUT_FORMAT, super.getOputputFormat().toString()));
 		commands.add(createBooleanParameterCommand(EXECUTE_MULTIPLE_ALIGNMENT));
 		
 		return commands;
@@ -81,11 +93,18 @@ public class ClustalWManager extends ClustalManager {
 	public void callClustal(String clustalPath,
 			ClustalFileMapper clustalFileMapper) throws IOException,
 			InterruptedException, SALSAException {
+		// Create the name of output files
+		String inputFileName = FilenameUtils.getBaseName(clustalFileMapper.getInputFilePath());
+		String inputFileFolderPath = FilenameUtils.getFullPath(clustalFileMapper.getInputFilePath());
+		Path alignmentFilePath = Paths.get(inputFileFolderPath, inputFileName + "-aln.fasta");
+		clustalFileMapper.setAlignmentFilePath(alignmentFilePath.toString());		
 		
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
 		clustalProcessCommands.add(clustalPath);
 		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
+		// Set output file name			
+		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FILE, '"' + clustalFileMapper.getAlignmentFilePath() + '"' ));
 		generateClustalArguments(clustalProcessCommands);
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
@@ -95,7 +114,7 @@ public class ClustalWManager extends ClustalManager {
 	{
 		// Create tree starting from alignment produced
 		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
-		commands.add(createBooleanParameterCommand(NEIGHBOUR_JOINING_TREE));
+		commands.add(createBooleanParameterCommand(NEIGHBOUR_JOINING_TREE));		
 		
 		// Use default parameters
 		commands.add(createParameterEqualsCommand(TREE_CLUSTERING, ClustalWClusteringMethod.NEIGHBOR_JOINING.toString()));
@@ -103,7 +122,7 @@ public class ClustalWManager extends ClustalManager {
 	}
 	
 	public void generateTree(String clustalPath,
-			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{
+			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{			
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
 		clustalProcessCommands.add(clustalPath);

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 
 /**
@@ -47,6 +48,7 @@ public class MainController extends HttpServlet {
 		// Initialize the alignment request status and add to request		
 		SalsaWebParameters salsaParameters = new SalsaWebParameters();
 		salsaParameters.setGeneratePhylogeneticTree(true);
+		salsaParameters.setClustalType(ClustalType.CLUSTAL_O);
 			
 		request.setAttribute("salsaParameters", salsaParameters);
 		

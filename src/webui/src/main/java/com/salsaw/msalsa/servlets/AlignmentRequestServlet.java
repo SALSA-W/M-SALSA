@@ -31,81 +31,85 @@ import com.salsaw.msalsa.services.AlignmentRequestManager;
 @MultipartConfig
 public class AlignmentRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AlignmentRequestServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
-    	// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
-        private final EnumConverter enumConverter = new EnumConverter();
-
-        public Converter lookup(Class clazz) {
-            final Converter converter = super.lookup(clazz);
-            // no specific converter for this class, so it's neither a String, (which has a default converter),
-            // nor any known object that has a custom converter for it. It might be an enum !
-            if (converter == null && clazz.isEnum()) {
-                return enumConverter;
-            } else {
-                return converter;
-            }
-        }
-
-        private class EnumConverter implements Converter {
-            public Object convert(Class type, Object value) {
-                return Enum.valueOf(type, (String) value);
-            }
-        }
-    }
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SalsaWebParameters salsaParameters = new SalsaWebParameters();
+	public AlignmentRequestServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
+		// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
+		private final EnumConverter enumConverter = new EnumConverter();
+
+		public Converter lookup(Class clazz) {
+			final Converter converter = super.lookup(clazz);
+			// no specific converter for this class, so it's neither a String,
+			// (which has a default converter),
+			// nor any known object that has a custom converter for it. It might
+			// be an enum !
+			if (converter == null && clazz.isEnum()) {
+				return enumConverter;
+			} else {
+				return converter;
+			}
+		}
+
+		private class EnumConverter implements Converter {
+			public Object convert(Class type, Object value) {
+				return Enum.valueOf(type, (String) value);
+			}
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		SalsaWebParameters salsaWebParameters = new SalsaWebParameters();
 		try {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
 			EnumAwareConvertUtilsBean enumAwareConvertUtilsBean = new EnumAwareConvertUtilsBean();
 			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);
-			
-			beanUtils.populate(salsaParameters, request.getParameterMap());		
-			
-			AlignmentRequest newRequest = new AlignmentRequest(salsaParameters);		
-			
+
+			beanUtils.populate(salsaWebParameters, request.getParameterMap());
+
+			AlignmentRequest newRequest = new AlignmentRequest(salsaWebParameters);
+
 			Part filePart = request.getPart("inputFile");
 			String fileName = filePart.getSubmittedFileName();
-			try(InputStream inputAlignmentFileContet = filePart.getInputStream()){
-			
-				File requestProcessFolder= AlignmentRequestManager.getInstance()
+			try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {
+
+				File requestProcessFolder = AlignmentRequestManager.getInstance()
 						.getServerAligmentFolder(newRequest.getId()).toFile();
 
 				// if the directory does not exist, create it
-				if (requestProcessFolder.exists() == false) {					  
-				    requestProcessFolder.mkdir();	
+				if (requestProcessFolder.exists() == false) {
+					requestProcessFolder.mkdir();
 				}
-	    		
-	            // Open the file for writing.
-	            Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);	            	            
-				Files.copy(inputAlignmentFileContet, inputFilePath);				
-				salsaParameters.setInputFile(inputFilePath.toString());
-			}						
-						
+
+				// Open the file for writing.
+				Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);
+				Files.copy(inputAlignmentFileContet, inputFilePath);
+				salsaWebParameters.setInputFile(inputFilePath.toString());
+			}
+
 			AlignmentRequestManager.getInstance().startManageRequest(newRequest);
-			
-			// Redirect the request to index			
+
+			// Redirect the request to index
 			response.sendRedirect("loading.jsp?id=" + newRequest.getId());
-			
+
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}			
+		}
 	}
 
 }

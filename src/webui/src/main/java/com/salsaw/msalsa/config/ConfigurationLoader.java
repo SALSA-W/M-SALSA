@@ -29,23 +29,27 @@ public class ConfigurationLoader {
 	// CONSTANTS
 	private static final String CONFIGURATION_RESOURCE_FILE_PATH = "/config/config.properties";
 	
-	private static final String KEY_CLUSTALW_PATH =  "clustalw.path";
-	private static final String KEY_CLUSTALO_PATH =  "clustalo.path";
-	private static final String KEY_TEMP_PATH =  "temporary.folder.path";
+	private static final String KEY_CLUSTALW_PATH = "clustalw.path";
+	private static final String KEY_CLUSTALO_PATH = "clustalo.path";
+	private static final String KEY_TEMP_PATH = "temporary.folder.path";
+	private static final String KEY_MAIL_USERNAME = "mail.username";
+	private static final String KEY_MAIL_PASSWORD = "mail.password";
 	
 	public ServerConfiguration ReadConfiguration(){		
-		Properties prop = new Properties();
+		Properties properties = new Properties();
 		
 		try(InputStream input = App.class.getResourceAsStream(CONFIGURATION_RESOURCE_FILE_PATH)){
 	 
 			// load a properties file
-			prop.load(input);
+			properties.load(input);
 	 
 			// get the property value and print it out
 			return new ServerConfiguration(
-					prop.getProperty(KEY_CLUSTALW_PATH),
-					prop.getProperty(KEY_CLUSTALO_PATH),
-					prop.getProperty(KEY_TEMP_PATH));			
+					properties.getProperty(KEY_CLUSTALW_PATH),
+					properties.getProperty(KEY_CLUSTALO_PATH),
+					properties.getProperty(KEY_TEMP_PATH),
+					properties.getProperty(KEY_MAIL_USERNAME),
+					properties.getProperty(KEY_MAIL_PASSWORD));
 		} catch (IOException e) {
 			// TODO Better exception management
 			e.printStackTrace();

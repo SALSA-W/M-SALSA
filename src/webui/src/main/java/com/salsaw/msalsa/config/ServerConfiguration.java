@@ -26,12 +26,22 @@ public class ServerConfiguration {
 	private final File clustalW;
 	private final File clustalO;
 	private final String temporaryFilePath;
+	private final String mailUsername;
+	private final String mailPassword;
 	
 	// CONSTRUCTOR
-	ServerConfiguration(String clustalWPath, String clustalOPath, String temporaryFilePath){
+	ServerConfiguration(
+			String clustalWPath,
+			String clustalOPath,
+			String temporaryFilePath,
+			String mailUsername,
+			String mailPassword){
+		
 		this.clustalW = new File(clustalWPath);
 		this.clustalO = new File(clustalOPath);		
 		this.temporaryFilePath = temporaryFilePath;
+		this.mailUsername = mailUsername;
+		this.mailPassword = mailPassword;
 	}
 	
 	// GET
@@ -45,5 +55,13 @@ public class ServerConfiguration {
 	
 	public String getTemporaryFilePath() {
 		return this.temporaryFilePath;
+	}
+	
+	public String getMailUsername() {
+		return this.mailUsername;
+	}
+	
+	public String getMailPassword() {
+		return this.mailPassword;
 	}
 }

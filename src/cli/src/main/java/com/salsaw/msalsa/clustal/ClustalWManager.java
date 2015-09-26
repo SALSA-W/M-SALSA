@@ -118,7 +118,7 @@ public class ClustalWManager extends ClustalManager {
 		
 		// Use default parameters
 		commands.add(createParameterEqualsCommand(TREE_CLUSTERING, ClustalWClusteringMethod.NEIGHBOR_JOINING.toString()));
-		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.PHYLIP.toString()));
+		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.DISTANCE.toString()));
 	}
 	
 	public void generateTree(String clustalPath,
@@ -173,6 +173,14 @@ public class ClustalWManager extends ClustalManager {
 					throw new SALSAException("Unable to read the path of alignment file");
 				}
 				clustalFileMapper.setAlignmentFilePath(matcher.group(1));
+			}
+			
+			if (line.indexOf("Distance matrix file created:") >= 0){
+		    	Matcher matcher = pattern.matcher(line);
+				if (matcher.find() == false) {
+					throw new SALSAException("Unable to read the path of distance matrix file");
+				}
+				clustalFileMapper.setDistanceMatrixFilePath(matcher.group(1));
 			}
 		}
 

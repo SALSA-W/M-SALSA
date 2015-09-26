@@ -21,6 +21,7 @@ public class ClustalFileMapper {
 	private String alignmentFilePath;
 	private String guideTreeFilePath;
 	private String phylogeneticTreeFile;
+	private String distanceMatrixFilePath;
 	
 	// CONSTRUCTOR
 	public ClustalFileMapper(String inputFilePath){
@@ -36,6 +37,10 @@ public class ClustalFileMapper {
 		return this.guideTreeFilePath;
 	}
 	
+	public String getDistanceMatrixFilePath() {
+		return this.distanceMatrixFilePath;
+	}
+	
 	public String getPhylogeneticTreeFile(){
 		return this.phylogeneticTreeFile;
 	}
@@ -47,6 +52,10 @@ public class ClustalFileMapper {
 	public void setGuideTreeFilePath(String guideTreeFilePath){
 		this.guideTreeFilePath = guideTreeFilePath;
 	}
+	
+	public void setDistanceMatrixFilePath(String distanceMatrixFilePath) {
+		this.distanceMatrixFilePath = distanceMatrixFilePath;
+	}	
 
 	public void setPhylogeneticTreeFile(String phylogeneticTreeFile){
 		this.phylogeneticTreeFile = phylogeneticTreeFile;

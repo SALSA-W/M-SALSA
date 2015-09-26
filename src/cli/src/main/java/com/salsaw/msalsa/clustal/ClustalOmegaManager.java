@@ -41,6 +41,7 @@ public class ClustalOmegaManager extends ClustalManager {
 	 */
 	private static final String OUTPUT_FORMAT = "outfmt";
 	private static final String GUIDE_TREE_OUTPUT_FILE = "guidetree-out";
+	private static final String DISTANCE_MATRIX_OUTPUT_FILE = "distmat-out";
 	private static final String NUMBER_THREADS = "threads";
 	
 	// flag settings
@@ -52,6 +53,10 @@ public class ClustalOmegaManager extends ClustalManager {
 	 * over-writing of already existing files
 	 */
 	private static final String OVERWITE_OUTPUT_FILE = "force";
+	/**
+	 * Use full distance matrix for guide-tree calculation (slow; mBed is default)	
+	 */
+	private static final String FULL_DISTANCE_MATRIX_CALCULATION = "full";
 	
 	// FILEDS
 	private ClustalFileMapper clustalFileMapper;
@@ -92,13 +97,15 @@ public class ClustalOmegaManager extends ClustalManager {
 		commands.add(createParameterEqualsCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
 		commands.add(createParameterEqualsCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
 		
-		// Set where tree file will be write
-		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');			
+		// Set where tree file will be write		
+		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');
+		commands.add(createParameterEqualsCommand(DISTANCE_MATRIX_OUTPUT_FILE, '"' + this.clustalFileMapper.getDistanceMatrixFilePath())+ '"');
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
 		
 		// Use all available threads
 		commands.add(createParameterEqualsCommand(NUMBER_THREADS, String.valueOf(Runtime.getRuntime().availableProcessors())));
 		
+		commands.add(createBooleanParameterCommand(FULL_DISTANCE_MATRIX_CALCULATION));
 		commands.add(createBooleanParameterCommand(VERBOSE));
 		commands.add(createBooleanParameterCommand(OVERWITE_OUTPUT_FILE));
 			
@@ -118,10 +125,12 @@ public class ClustalOmegaManager extends ClustalManager {
 		String inputFileFolderPath = FilenameUtils.getFullPath(clustalFileMapper.getInputFilePath());			
 		Path alignmentFilePath = Paths.get(inputFileFolderPath, inputFileName + "-aln.fasta");
 		Path guideTreeFilePath = Paths.get(inputFileFolderPath, inputFileName + "-tree.dnd");
+		Path distanceMatrixFilePath = Paths.get(inputFileFolderPath, inputFileName + "-dist-mat.dst");
 		
 		// Set inside file mapper
 		clustalFileMapper.setAlignmentFilePath(alignmentFilePath.toString());
-		clustalFileMapper.setGuideTreeFilePath(guideTreeFilePath.toString());			
+		clustalFileMapper.setGuideTreeFilePath(guideTreeFilePath.toString());
+		clustalFileMapper.setDistanceMatrixFilePath(distanceMatrixFilePath.toString());
 		setClustalFileMapper(clustalFileMapper);
 		
 		// Create clustal omega data

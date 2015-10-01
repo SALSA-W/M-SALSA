@@ -82,10 +82,10 @@ public class AlignmentRequestServlet extends HttpServlet {
 
 			Part filePart = request.getPart("inputFile");
 			String fileName = filePart.getSubmittedFileName();
-			if (fileName.isEmpty())	{
+			if (fileName.isEmpty()) {
 				throw new ServletException("fileName empty");
 			}
-			
+
 			try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {
 
 				File requestProcessFolder = AlignmentRequestManager.getInstance()

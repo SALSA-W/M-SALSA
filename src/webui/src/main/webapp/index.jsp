@@ -32,89 +32,93 @@
 			    <input type="file" id="inputFile" name="inputFile" placeholder="The file to align" />
 			  </div>
 			</div>
-			 
-			<div class="form-group">
-			 	 <label class="control-label col-sm-2" for="clustalType">Clustal:</label>
-			 <div class="col-sm-10">
-				<select id="clustalType" name="clustalType" class="form-control">
-				    <c:forEach items="${clustalTypes}" var="clustalType">
-			    		<option value="${clustalType}" ${salsaParameters.clustalType == clustalType ? 'selected' : ''}>${clustalType}</option>
-					</c:forEach>
-				</select>
-				</div>
-			</div>		  
-			  
-			<div class="form-group">
-			  <label class="control-label col-sm-2" for="GOP">GOP:</label>
-			  <div class="col-sm-10">
-			    <input type="number" step="any" class="form-control" id="GOP" name="GOP" value="${fn:escapeXml(salsaParameters.GOP)}" placeholder="Enter password" />
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="control-label col-sm-2" for="GEP">GEP:</label>
-			  <div class="col-sm-10">
-			    <input type="number" step="any" class="form-control" id="GEP" name="GEP" value="${fn:escapeXml(salsaParameters.GEP)}" placeholder="Enter password">
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="control-label col-sm-2" for="gamma">Gamma:</label>
-			  <div class="col-sm-10">
-			    <input type="number" class="form-control" id="gamma" name="gamma" value="${fn:escapeXml(salsaParameters.gamma)}" placeholder="Enter password">
-			  </div>
-			</div>
-			  
-			<div class="form-group">
-			  	 <label class="control-label col-sm-2" for="terminalGAPsStrategy">Scoring Matrix:</label>
-				 <div class="col-sm-10">
-					<select id="scoringMatrix" name="scoringMatrix" class="form-control">
-					    <c:forEach items="${scoringMatrixes}" var="scoringMatrix">
-					        <option value="${scoringMatrix}" ${salsaParameters.scoringMatrix == scoringMatrix ? 'selected' : ''}>${scoringMatrix}</option>
-					    </c:forEach>
-					</select>
-				</div>
-			</div>
-			  
-			 <div class="form-group">
-			    <label class="control-label col-sm-2" for="minIterations">Min Iterations:</label>
-			    <div class="col-sm-10">
-			      <input type="number" class="form-control" id="minIterations" name="minIterations" value="${fn:escapeXml(salsaParameters.minIterations)}" placeholder="Enter password">
-			    </div>
-			  </div>
-			  
-			  <div class="form-group">
-			    <label class="control-label col-sm-2" for="probabilityOfSplit">Probability Of Split:</label>
-			    <div class="col-sm-10">
-			      <input type="number" step="0.01" class="form-control" id="probabilityOfSplit" name="probabilityOfSplit" value="${fn:escapeXml(salsaParameters.probabilityOfSplit)}" placeholder="Enter password">
-			    </div>
-			  </div>
-			  
-			  <div class="form-group">
-			  	  <label class="control-label col-sm-2" for="terminalGAPsStrategy">Terminal GAPs Strategy:</label>
-				  <div class="col-sm-10">					
-					<select id="terminalGAPsStrategy" name="terminalGAPsStrategy" class="form-control">
-					    <c:forEach items="${terminalGAPsStrategies}" var="terminalGAPsStrategy">
-					        <option value="${terminalGAPsStrategy}" ${salsaParameters.terminalGAPsStrategy == terminalGAPsStrategy ? 'selected' : ''}>${terminalGAPsStrategy}</option>
-					    </c:forEach>
-					</select>					
-					</div>
-				</div>
-		
-			  <div class="form-group">
-			    <div class="col-sm-offset-2 col-sm-10">
-			      <div class="checkbox">
-			        <label>
-			        <c:choose>
-			            <c:when test="${salsaParameters.generatePhylogeneticTree==true}">
-			            	<input type="checkbox" id="generatePhylogeneticTree" name="generatePhylogeneticTree" checked/>
-			            </c:when>
-			            <c:otherwise>
-			            	<input type="checkbox" id="generatePhylogeneticTree"  name="generatePhylogeneticTree" unchecked/>
-			            </c:otherwise>
-			        </c:choose>
-			        Generate Phylogenetic Tree</label>
-			      </div>
-			    </div>
-			  </div>
+			
+            <button class="text-center"  type="button" data-toggle="collapse" data-target="#demo">Advanced Options</button>
+      
+            <div id="demo" class="collapse">
+  			<div class="form-group">
+  			 	 <label class="control-label col-sm-2" for="clustalType">Clustal:</label>
+  			 <div class="col-sm-10">
+  				<select id="clustalType" name="clustalType" class="form-control">
+  				    <c:forEach items="${clustalTypes}" var="clustalType">
+  			    		<option value="${clustalType}" ${salsaParameters.clustalType == clustalType ? 'selected' : ''}>${clustalType}</option>
+  					</c:forEach>
+  				</select>
+  				</div>
+  			</div>		  
+  			  
+  			<div class="form-group">
+  			  <label class="control-label col-sm-2" for="GOP">GOP:</label>
+  			  <div class="col-sm-10">
+  			    <input type="number" step="any" class="form-control" id="GOP" name="GOP" value="${fn:escapeXml(salsaParameters.GOP)}" placeholder="Enter password" />
+  			  </div>
+  			</div>
+  			<div class="form-group">
+  			  <label class="control-label col-sm-2" for="GEP">GEP:</label>
+  			  <div class="col-sm-10">
+  			    <input type="number" step="any" class="form-control" id="GEP" name="GEP" value="${fn:escapeXml(salsaParameters.GEP)}" placeholder="Enter password">
+  			  </div>
+  			</div>
+  			<div class="form-group">
+  			  <label class="control-label col-sm-2" for="gamma">Gamma:</label>
+  			  <div class="col-sm-10">
+  			    <input type="number" class="form-control" id="gamma" name="gamma" value="${fn:escapeXml(salsaParameters.gamma)}" placeholder="Enter password">
+  			  </div>
+  			</div>
+  			  
+  			<div class="form-group">
+  			  	 <label class="control-label col-sm-2" for="terminalGAPsStrategy">Scoring Matrix:</label>
+  				 <div class="col-sm-10">
+  					<select id="scoringMatrix" name="scoringMatrix" class="form-control">
+  					    <c:forEach items="${scoringMatrixes}" var="scoringMatrix">
+  					        <option value="${scoringMatrix}" ${salsaParameters.scoringMatrix == scoringMatrix ? 'selected' : ''}>${scoringMatrix}</option>
+  					    </c:forEach>
+  					</select>
+  				</div>
+  			</div>
+  			  
+  			 <div class="form-group">
+  			    <label class="control-label col-sm-2" for="minIterations">Min Iterations:</label>
+  			    <div class="col-sm-10">
+  			      <input type="number" class="form-control" id="minIterations" name="minIterations" value="${fn:escapeXml(salsaParameters.minIterations)}" placeholder="Enter password">
+  			    </div>
+  			  </div>
+  			  
+  			  <div class="form-group">
+  			    <label class="control-label col-sm-2" for="probabilityOfSplit">Probability Of Split:</label>
+  			    <div class="col-sm-10">
+  			      <input type="number" step="0.01" class="form-control" id="probabilityOfSplit" name="probabilityOfSplit" value="${fn:escapeXml(salsaParameters.probabilityOfSplit)}" placeholder="Enter password">
+  			    </div>
+  			  </div>
+  			  
+  			  <div class="form-group">
+  			  	  <label class="control-label col-sm-2" for="terminalGAPsStrategy">Terminal GAPs Strategy:</label>
+  				  <div class="col-sm-10">					
+  					<select id="terminalGAPsStrategy" name="terminalGAPsStrategy" class="form-control">
+  					    <c:forEach items="${terminalGAPsStrategies}" var="terminalGAPsStrategy">
+  					        <option value="${terminalGAPsStrategy}" ${salsaParameters.terminalGAPsStrategy == terminalGAPsStrategy ? 'selected' : ''}>${terminalGAPsStrategy}</option>
+  					    </c:forEach>
+  					</select>					
+  					</div>
+  				</div>
+  		
+  			  <div class="form-group">
+  			    <div class="col-sm-offset-2 col-sm-10">
+  			      <div class="checkbox">
+  			        <label>
+  			        <c:choose>
+  			            <c:when test="${salsaParameters.generatePhylogeneticTree==true}">
+  			            	<input type="checkbox" id="generatePhylogeneticTree" name="generatePhylogeneticTree" checked/>
+  			            </c:when>
+  			            <c:otherwise>
+  			            	<input type="checkbox" id="generatePhylogeneticTree"  name="generatePhylogeneticTree" unchecked/>
+  			            </c:otherwise>
+  			        </c:choose>
+  			        Generate Phylogenetic Tree</label>
+  			      </div>
+  			    </div>
+  			  </div>
+          </div>
 			  
 			<div class="form-group">
 			  <div class="col-sm-offset-2 col-sm-10">

@@ -19,4 +19,5 @@
 
 		<div id="svgCanvas"> </div>
 
-<jsp:include page="footer.jsp"/>
+	<jsp:include page="standard-js.jsp"/>
+	<jsp:include page="footer.jsp"/>

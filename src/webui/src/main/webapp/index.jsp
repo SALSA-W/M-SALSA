@@ -17,19 +17,31 @@
 		<c:set var="scoringMatrixes" value="<%=ScoringMatrix.values()%>"/>
 		<c:set var="clustalTypes" value="<%=ClustalType.values()%>"/>
 		<c:set var="terminalGAPsStrategies" value="<%=TerminalGAPsStrategy.values()%>"/>
+			
+		<div class="alert alert-danger alert-dismissible collapse" role="alert" id="validation-errors">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <strong>Error!</strong> <p id="validation-errors-message"></p>
+		</div>
 		
-		 <form class="form-horizontal" role="form" action="AlignmentRequestServlet" method="post" enctype="multipart/form-data">
+		 <form id="salsa-parameters-form" class="form-horizontal" role="form" action="AlignmentRequestServlet" method="post" enctype="multipart/form-data" data-parsley-validate>
 			<div class="form-group">
 			  <label class="control-label col-sm-2" for="email">Email:</label>
-			  <div class="col-sm-10">
-			    <input type="email" class="form-control" id="recipientEmail" name="recipientEmail" placeholder="Enter email">
+			  <div class="col-sm-10">      
+			    <input type="email" class="form-control" id="recipientEmail" name="recipientEmail" data-parsley-trigger="change" placeholder="Enter email">
 			  </div>
 			</div>
+
+			<div class="form-group">
+				 <label class="control-label col-sm-2" for="inputText">Text to align:</label>
+				 <div class="col-sm-10">
+					<textarea class="form-control" rows="5" id="inputText" name="inputText" required data-parsley-errors-messages-disabled ></textarea>
+				</div>
+		    </div>
 			 
 			<div class="form-group">
 			  <label class="control-label col-sm-2" for="inputFile">Input file:</label>
 			  <div class="col-sm-10">
-			    <input type="file" id="inputFile" name="inputFile" placeholder="The file to align" />
+			    <input type="file" id="inputFile" name="inputFile" placeholder="The file to align" required data-parsley-errors-messages-disabled />
 			  </div>
 			</div>
 			
@@ -122,9 +134,12 @@
 			  
 			<div class="form-group">
 			  <div class="col-sm-offset-2 col-sm-10">
-			    <button type="submit" class="btn btn-default" >Submit</button>
+			 	 <input type="submit" class="btn btn-default validate" />
+			   <!--  <button type="submit" class="btn btn-default validate" >Submit</button>  -->
 			  </div>
 			</div>
 		</form>
-			
-		<jsp:include page="footer.jsp"/>
+		
+	<jsp:include page="standard-js.jsp"/>
+	<script src="js/index.js" type="text/javascript"></script>	
+	<jsp:include page="footer.jsp"/>

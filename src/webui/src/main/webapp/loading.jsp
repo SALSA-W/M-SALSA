@@ -8,4 +8,5 @@
 	<div class="container">
 		<h1>LOADING...</h1>
 		
-<jsp:include page="footer.jsp"/>
+	<jsp:include page="standard-js.jsp"/>
+	<jsp:include page="footer.jsp"/>

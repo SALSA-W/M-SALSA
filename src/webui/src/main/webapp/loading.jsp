@@ -4,8 +4,7 @@
 <html lang="en">
 <head>
 	<jsp:include page="header.jsp" />
-	<title>Loading</title>
-	<script src="js/loading.js" type="text/javascript"></script>
+	<title>Loading</title>	
 </head>
 <body>
 	<div class="container">
@@ -18,6 +17,7 @@
 
 		<jsp:include page="footer.jsp" />
 		<jsp:include page="standard-js.jsp" />
+		<script src="js/loading.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->
 </body>

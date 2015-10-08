@@ -7,5 +7,8 @@
 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
  
-<!-- Validation -->
-<script src=" http://parsleyjs.org/dist/parsley.min.js"></script>
+<!-- Parsley localization -->
+<script src="http://rawgit.com/guillaumepotier/Parsley.js/master/src/i18n/it.js" ></script>
+
+<!-- Parsley Validation -->
+<script src="http://parsleyjs.org/dist/parsley.min.js"></script>

@@ -25,7 +25,7 @@ import com.salsaw.msalsa.cli.App;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class ConfigurationLoader {
+class ConfigurationLoader {
 	// CONSTANTS
 	private static final String CONFIGURATION_RESOURCE_FILE_PATH = "/config/config.properties";
 	
@@ -35,7 +35,7 @@ public class ConfigurationLoader {
 	private static final String KEY_MAIL_USERNAME = "mail.username";
 	private static final String KEY_MAIL_PASSWORD = "mail.password";
 	
-	public ServerConfiguration ReadConfiguration(){		
+	ServerConfiguration ReadConfiguration(){		
 		Properties properties = new Properties();
 		
 		try(InputStream input = App.class.getResourceAsStream(CONFIGURATION_RESOURCE_FILE_PATH)){

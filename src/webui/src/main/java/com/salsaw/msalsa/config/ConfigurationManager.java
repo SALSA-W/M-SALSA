@@ -46,7 +46,7 @@ public class ConfigurationManager {
 	/* 
   	Static initialization
 	Runtime initialization
-	By defualt ThreadSafe
+	By default ThreadSafe
 	*/
     static{    	
     	// Load configuration from files

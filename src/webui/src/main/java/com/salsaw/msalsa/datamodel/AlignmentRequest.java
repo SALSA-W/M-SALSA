@@ -17,8 +17,6 @@ package com.salsaw.msalsa.datamodel;
 
 import java.util.UUID;
 
-import com.salsaw.msalsa.cli.SalsaParameters;
-
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *

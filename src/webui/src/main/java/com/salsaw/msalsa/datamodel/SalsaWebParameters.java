@@ -15,7 +15,6 @@
  */
 package com.salsaw.msalsa.datamodel;
 
-import com.beust.jcommander.Parameter;
 import com.salsaw.msalsa.cli.SalsaParameters;
 
 /**
@@ -24,6 +23,11 @@ import com.salsaw.msalsa.cli.SalsaParameters;
  */
 public class SalsaWebParameters extends SalsaParameters {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String recipientEmail;
 
 	public String getRecipientEmail() {

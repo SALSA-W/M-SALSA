@@ -22,6 +22,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
@@ -36,6 +38,7 @@ import com.salsaw.msalsa.datamodel.SalsaWebParameters;
  */
 public class AlignmentRequestExecutor implements Runnable {
 
+	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
 	private final AlignmentRequest alignmentRequest;
 	private final Thread thread;
 
@@ -101,6 +104,7 @@ public class AlignmentRequestExecutor implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (MessagingException e) {
+				logger.error(recipientEmail, e);
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

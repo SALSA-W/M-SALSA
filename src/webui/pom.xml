@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.salsaw.msalsa</groupId>
@@ -7,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
-	
+
 	<artifactId>msalsa-webui</artifactId>
 	<packaging>war</packaging>
 	<name>msalsa-webui</name>
@@ -18,56 +19,64 @@
 			<artifactId>msalsa-cli</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.salsaw.msalsa</groupId>
 			<artifactId>msalsa-algorithm</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>	
-	
+		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
-		
-		<!--		
-		<dependency>
-			<groupId>org.glassfish.web</groupId>
-			<artifactId>javax.servlet.jsp.jstl</artifactId>
-			<version>1.2.4</version>
-		</dependency>
-		-->
-		
+
+		<!-- <dependency> <groupId>org.glassfish.web</groupId> <artifactId>javax.servlet.jsp.jstl</artifactId> 
+			<version>1.2.4</version> </dependency> -->
+
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 			<version>1.5.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>smtp</artifactId>
 			<version>1.5.4</version>
-		</dependency>	
-		
+		</dependency>
+
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.2</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
-	
-		<plugins>		
+
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -77,14 +86,14 @@
 				</configuration>
 			</plugin>
 
-			<!-- The Jetty plugin allows us to easily test the development build by
+			<!-- The Jetty plugin allows us to easily test the development build by 
 				running jetty:run on the command line. -->
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.plugin.version}</version>
 				<configuration>
-				    <scanIntervalSeconds>2</scanIntervalSeconds>
+					<scanIntervalSeconds>2</scanIntervalSeconds>
 				</configuration>
 			</plugin>
 		</plugins>

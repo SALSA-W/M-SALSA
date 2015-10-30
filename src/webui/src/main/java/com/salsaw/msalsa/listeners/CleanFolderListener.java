@@ -15,12 +15,17 @@
  */
 package com.salsaw.msalsa.listeners;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.config.ConfigurationManager;
 
@@ -32,10 +37,22 @@ import com.salsaw.msalsa.config.ConfigurationManager;
 @WebListener
 public class CleanFolderListener implements ServletContextListener {
 	
+	static final Logger logger = LogManager.getLogger(CleanFolderListener.class);
+	
 	private static final int NUMBER_CLEAN_TREADS = 1;
 	private final ScheduledExecutorService executor;
 	
-	public CleanFolderListener(){
+	public CleanFolderListener() throws IOException{
+		
+		String path = new File(".").getCanonicalPath();
+		
+		System.out.println(path);
+		
+		logger.debug("Hello world - debug log");
+		logger.info("Hello world - info log");
+		logger.warn("Hello world - warn log");
+		logger.error("Hello world - error log");
+		
 		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
 		this.executor =  Executors.newScheduledThreadPool(NUMBER_CLEAN_TREADS);
 	}

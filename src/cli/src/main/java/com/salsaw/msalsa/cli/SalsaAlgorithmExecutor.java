@@ -40,8 +40,9 @@ import com.salsaw.msalsa.clustal.ClustalWManager;
  */
 public class SalsaAlgorithmExecutor {
 	
-	public static final String SALSA_ALIGMENT_SUFFIX = "-msalsa-aln.fasta";
-	public static final String SALSA_TREE_SUFFIX = "-msalsa-aln.ph";	
+	public static final String M_SALSA_HEADER = "MSALSA";
+	public static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln.fasta";
+	public static final String SALSA_TREE_SUFFIX = "-" + M_SALSA_HEADER + "-aln.ph";
 	
 	private static void validateParameters(SalsaParameters salsaParameters) throws SALSAException
 	{

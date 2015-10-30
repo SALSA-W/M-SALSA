@@ -122,7 +122,8 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		sender.addRecipient(recipientEmail);
 		sender.setSubject(String.format("Salsa job '%s' completed", jobName));
-		sender.setBody(String.format("Hi! Your salsa job '%s' has been completed.", jobName));
+		sender.setBody(
+				String.format("<p>Dear user</p><p>Your salsa job '%s' has been completed.</p>", jobName),  "ISO-8859-1", "text/html");
 		// sender.addAttachment("TestFile.txt");
 		sender.send();
 	}

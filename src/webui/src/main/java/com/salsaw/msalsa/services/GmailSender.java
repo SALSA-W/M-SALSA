@@ -60,11 +60,10 @@ public class GmailSender {
 		message.setSubject(subject);
 	}
 
-	public void setBody(String body) throws MessagingException {
-		BodyPart messageBodyPart = new MimeBodyPart();
-		messageBodyPart.setText(body);
-		multipart.addBodyPart(messageBodyPart);
-
+	public void setBody(String body, String charset, String contentType) throws MessagingException {
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
+		messageBodyPart.setText(body, charset, contentType);
+		multipart.addBodyPart(messageBodyPart);		
 		message.setContent(multipart);
 	}
 

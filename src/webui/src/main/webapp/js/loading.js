@@ -24,7 +24,7 @@ $(document).ready(function() {
 			statusCode: {
 			      200: function (responseText) {
 			    	// TODO - redirect to correct page				
-			    	 var redirectUrl = 'AligmentResultServlet?id=' + getUrlParameter('id');
+			    	 var redirectUrl = 'AlignmentResultServlet?id=' + getUrlParameter('id');
 			    	 window.location.href = redirectUrl;
 			      },
 			      

@@ -20,14 +20,6 @@ import com.salsaw.msalsa.services.AlignmentRequestManager;
 public class AlignmentStatusServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String ID_PARAMETER = "id";
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AlignmentStatusServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +38,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			requestDispatcher.forward(request, response);
 		}else{
 			
-			String aligmentResultServlet = "/AligmentResultServlet?" + ID_PARAMETER + URLEncoder.encode(idRequest.toString(), "UTF-8");
+			String aligmentResultServlet = "/"+ AlignmentResultServlet.class.getSimpleName() +"?" + ID_PARAMETER + URLEncoder.encode(idRequest.toString(), "UTF-8");
 			// Redirect the request to result servlet
 			RequestDispatcher requestDispatcher =
 				request.getRequestDispatcher(aligmentResultServlet);

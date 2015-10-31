@@ -16,23 +16,27 @@
 
 package com.salsaw.msalsa.servlets;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
-import com.salsaw.msalsa.config.ConfigurationManager;
+import com.salsaw.msalsa.datamodel.AlignmentResult;
+import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
 
 
 /**
@@ -41,70 +45,34 @@ import com.salsaw.msalsa.config.ConfigurationManager;
 @WebServlet("/AlignmentResultServlet")
 public class AlignmentResultServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	private String msalsaAligmentFilePath;
-	private String msalsaPhylogeneticTreeFilePath;     
+
+	private static final int BUFSIZE = 4096;
+	public static final String FILE_TYPE_DOWNLOAD_ATTRIBUTE = "fileToDownload";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-				
 		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 		if (idRequest == null){
 			// The input data are invalid
 			return;
 		}
+			
+		AlignmentResult alignmentResult = new AlignmentResult(idRequest);
 		
-		initSalsaData(idRequest.toString());
-		
-		String newickTree = getPhylogeneticTreeFileContent(this.msalsaPhylogeneticTreeFilePath);
+		String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
 		request.setAttribute("newickTree", newickTree);
 		
-		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(this.msalsaAligmentFilePath)));
+		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(alignmentResult.getAligmentFilePath())));
 		request.setAttribute("aligmentFileContent", aligmentFileContent);
-		
-		// Redirect the request to index
+				
+		// Redirect the request to index and add info to request
+		request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
 		RequestDispatcher requestDispatcher =
 			    request.getRequestDispatcher("results.jsp");
 		requestDispatcher.forward(request, response);
-	}
-
-	private void initSalsaData(String idProccedRequest) throws IOException, IllegalStateException{
-		// Get the folder where the files are stored
-		File processedRequestFolder = new File(Paths.get(
-				ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
-				idProccedRequest).toString());
-		File[] listOfFiles = processedRequestFolder.listFiles();
-		
-		String msalsaAligmentFilePath = null;
-		String msalsaPhylogeneticTreeFilePath = null; 
-		for (File file : listOfFiles) {
-		    if (file.isFile()) {
-		    	// Search SALSA aligmnet and tree files
-		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX)){
-		        	msalsaAligmentFilePath = file.getAbsolutePath();
-		        	continue;
-		        }
-		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX))
-		        {
-		        	msalsaPhylogeneticTreeFilePath = file.getAbsolutePath();
-		        	continue;
-		        }
-		    }
-		}
-		
-		if (msalsaAligmentFilePath == null){
-			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX + " for UUID " + idProccedRequest);
-		}		
-		if (msalsaPhylogeneticTreeFilePath == null){
-			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX + " for UUID " + idProccedRequest);
-		}
-		
-		this.msalsaAligmentFilePath = msalsaAligmentFilePath;
-		this.msalsaPhylogeneticTreeFilePath = msalsaPhylogeneticTreeFilePath;
-	}  
+	}	
 	
 	private String getPhylogeneticTreeFileContent(
 			String phylogeneticTreeFilePath) throws IOException {
@@ -118,5 +86,81 @@ public class AlignmentResultServlet extends HttpServlet {
         }
 		
 		return newickTreeBuilder.toString();
+	}	
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {			
+		// Download the requested file
+		AlignmentResultFileType alignmentResultFileType = 
+				AlignmentResultFileType.valueOf(request.getParameter(FILE_TYPE_DOWNLOAD_ATTRIBUTE));
+		
+		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+		if (idRequest == null){
+			// The input data are invalid
+			return;
+		}
+		
+		AlignmentResult alignmentResult = new AlignmentResult(idRequest);
+		
+		String fileToDownloadPath = null;
+		switch (alignmentResultFileType) {		
+		case Alignment:
+			fileToDownloadPath = alignmentResult.getAligmentFilePath();
+			break;
+
+		case PhylogeneticTree:
+			fileToDownloadPath = alignmentResult.getPhylogeneticTreeFilePath();
+			break;
+		}
+		
+		Path fileToDownload = Paths.get(fileToDownloadPath);		
+		doDownload(request, response, fileToDownloadPath, fileToDownload.getFileName().toString());
+	}
+	
+	/**
+	 * Sends a file to the ServletResponse output stream. Typically
+	 * you want the browser to receive a different name than the 
+	 * name the file has been saved in your local database, since 
+	 * your local names need to be unique.
+	 * @param req
+	 *            The request
+	 * @param resp
+	 *            The response
+	 * 
+	 * @param filePath
+	 *            The name of the file you want to download.
+	 * 
+	 * @param original_filename
+	 *            The name the browser should receive.
+	 * 
+	 */
+	// https://dzone.com/articles/example-file-download-servlet
+	private void doDownload(HttpServletRequest req, HttpServletResponse resp,
+			String filePath, String original_filename)
+					throws IOException
+	{
+		File f = new File(filePath);
+		int length = 0;
+
+		try(ServletOutputStream op = resp.getOutputStream()){
+			
+			String mimetype = getServletConfig().getServletContext().getMimeType(filePath);
+
+			// Set the response and go!
+			resp.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
+			resp.setContentLength((int) f.length());
+			resp.setHeader("Content-Disposition", "attachment; filename=\"" + original_filename + "\"");
+
+			// Stream to the requester.
+			byte[] bbuf = new byte[BUFSIZE];
+			try(DataInputStream in = new DataInputStream(new FileInputStream(f))){
+				while ((in != null) && ((length = in.read(bbuf)) != -1))
+				{
+					op.write(bbuf, 0, length);
+				}
+			}
+
+			op.flush();
+		}	
 	}
 }

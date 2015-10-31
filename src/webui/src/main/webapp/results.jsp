@@ -32,6 +32,13 @@
 			<input type="submit" value="Download Alignment" />
 		</form>
 		
+		<form method="post" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
+			<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.PhylogeneticTree.toString()%>"/>
+			<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
+			
+			<input type="submit" value="Download Phylogenetic Tree" />
+		</form>
+		
 		<div id="svgCanvas" />
 
 		<jsp:include page="footer.jsp"/>

@@ -28,6 +28,7 @@ public class ServerConfiguration {
 	private final String temporaryFilePath;
 	private final String mailUsername;
 	private final String mailPassword;
+	private final int cleanDaysValidityJob;
 	
 	// CONSTRUCTOR
 	ServerConfiguration(
@@ -35,13 +36,15 @@ public class ServerConfiguration {
 			String clustalOPath,
 			String temporaryFilePath,
 			String mailUsername,
-			String mailPassword){
+			String mailPassword,
+			String cleanDaysValidityJob){
 		
 		this.clustalW = new File(clustalWPath);
 		this.clustalO = new File(clustalOPath);		
 		this.temporaryFilePath = temporaryFilePath;
 		this.mailUsername = mailUsername;
 		this.mailPassword = mailPassword;
+		this.cleanDaysValidityJob = Integer.parseInt(cleanDaysValidityJob);
 	}
 	
 	// GET
@@ -63,5 +66,9 @@ public class ServerConfiguration {
 	
 	public String getMailPassword() {
 		return this.mailPassword;
+	}
+	
+	public int getCleanDaysValidityJob() {
+		return this.cleanDaysValidityJob;
 	}
 }

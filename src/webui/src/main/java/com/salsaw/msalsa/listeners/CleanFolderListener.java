@@ -35,24 +35,13 @@ import com.salsaw.msalsa.config.ConfigurationManager;
  */
 // http://www.journaldev.com/1945/servlet-listener-example-servletcontextlistener-httpsessionlistener-and-servletrequestlistener
 @WebListener
-public class CleanFolderListener implements ServletContextListener {
+public class CleanFolderListener implements ServletContextListener {	
+	private static final int NUMBER_CLEAN_TREADS = 1;
 	
 	static final Logger logger = LogManager.getLogger(CleanFolderListener.class);
-	
-	private static final int NUMBER_CLEAN_TREADS = 1;
 	private final ScheduledExecutorService executor;
 	
 	public CleanFolderListener() throws IOException{
-		
-		String path = new File(".").getCanonicalPath();
-		
-		System.out.println(path);
-		
-		logger.debug("Hello world - debug log");
-		logger.info("Hello world - info log");
-		logger.warn("Hello world - warn log");
-		logger.error("Hello world - error log");
-		
 		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
 		this.executor =  Executors.newScheduledThreadPool(NUMBER_CLEAN_TREADS);
 	}
@@ -60,6 +49,7 @@ public class CleanFolderListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		// TODO - clean old directories in ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath()
+		// Use the 
 	}
 
 	@Override

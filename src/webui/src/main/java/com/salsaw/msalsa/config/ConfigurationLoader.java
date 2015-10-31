@@ -34,6 +34,7 @@ class ConfigurationLoader {
 	private static final String KEY_TEMP_PATH = "temporary.folder.path";
 	private static final String KEY_MAIL_USERNAME = "mail.username";
 	private static final String KEY_MAIL_PASSWORD = "mail.password";
+	private static final String KEY_CLEAN_DAYS_VALIDITY = "clean.validitydays";
 	
 	ServerConfiguration ReadConfiguration(){		
 		Properties properties = new Properties();
@@ -49,7 +50,9 @@ class ConfigurationLoader {
 					properties.getProperty(KEY_CLUSTALO_PATH),
 					properties.getProperty(KEY_TEMP_PATH),
 					properties.getProperty(KEY_MAIL_USERNAME),
-					properties.getProperty(KEY_MAIL_PASSWORD));
+					properties.getProperty(KEY_MAIL_PASSWORD),
+					properties.getProperty(KEY_CLEAN_DAYS_VALIDITY)
+					);
 		} catch (IOException e) {
 			// TODO Better exception management
 			e.printStackTrace();

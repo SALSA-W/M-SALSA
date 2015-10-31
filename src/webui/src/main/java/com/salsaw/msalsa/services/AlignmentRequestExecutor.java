@@ -21,6 +21,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -140,17 +143,33 @@ public class AlignmentRequestExecutor implements Runnable {
 		messageBuilder.append("<h1>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
 		messageBuilder.append("</h1>");
+		
+		// Hello user :)
 		messageBuilder.append("<p>Dear user</p>");
 		messageBuilder.append("<p>Your salsa job ");
 		messageBuilder.append(jobName);
-		messageBuilder.append(" has been completed.</p>");		
-		messageBuilder.append("<p>Result is available at link:");		
+		messageBuilder.append(" has been completed.</p>");
+		
+		// Download link
+		messageBuilder.append("<p>Result is available at link: ");		
 		messageBuilder.append("<a href=\"");
 		messageBuilder.append(resultLink);
 		messageBuilder.append("\">");
 		messageBuilder.append(resultLink);
-		messageBuilder.append("</a>");
+		messageBuilder.append("</a>");		
 		messageBuilder.append("</p>");
+		
+		// Validity of link
+		messageBuilder.append("<p>The result will be available for ");
+		DateTimeFormatter fmtDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDateTime todayDate = LocalDateTime.now();
+		int validatyJobDays = ConfigurationManager.getInstance().getServerConfiguration().getCleanDaysValidityJob();
+		messageBuilder.append(validatyJobDays);		
+		messageBuilder.append(" days. The results will be delete form server ");
+		messageBuilder.append(todayDate.plusDays(validatyJobDays).format(fmtDate));
+		messageBuilder.append(".</p>");
+		
+		// Signature
 		messageBuilder.append("<p>Best Regards</p>");
 		messageBuilder.append("<p>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
@@ -162,7 +181,7 @@ public class AlignmentRequestExecutor implements Runnable {
 		
 		sender.setBody(messageBuilder.toString(), "ISO-8859-1", "text/html");
 		// sender.addAttachment("TestFile.txt");
-		sender.send();
+		//sender.send();
 	}
 	
 	public static URL GetJobResultPath(String jobId) throws UnknownHostException, MalformedURLException{		
@@ -180,3 +199,4 @@ public class AlignmentRequestExecutor implements Runnable {
 	
 	
 }
+

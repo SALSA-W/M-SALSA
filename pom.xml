@@ -10,8 +10,6 @@
 	<name>msalsa</name>
 
 	<properties>
-		<vaadin.version>7.4.6</vaadin.version>
-		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jetty.plugin.version>9.3.0.M2</jetty.plugin.version>
 		<project.source.version>1.8</project.source.version>
 		<project.target.version>1.8</project.target.version>	
@@ -36,6 +34,55 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>1.47</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+				<groupId>com.sun.mail</groupId>
+				<artifactId>javax.mail</artifactId>
+				<version>1.5.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sun.mail</groupId>
+				<artifactId>smtp</artifactId>
+				<version>1.5.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>2.4.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>2.4.1</version>
+			</dependency>
 		
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -43,48 +90,13 @@
 				<version>3.1.0</version>
 				<scope>provided</scope>
 			</dependency>
-			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-server</artifactId>
-				<version>${vaadin.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-push</artifactId>
-				<version>${vaadin.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-client</artifactId>
-				<version>${vaadin.version}</version>
-				<scope>provided</scope>
-			</dependency>
-		<!--
-		  Needed when using the widgetset optimizer (custom ConnectorBundleLoaderFactory).
-		  
-		  For widgetset compilation, vaadin-client-compiler is automatically added on the
-		  compilation classpath by vaadin-maven-plugin so normally there is no need for an
-		  explicit dependency.
-		-->
-		<!--
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client-compiler</artifactId>
-			<version>${vaadin.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		-->
-			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-themes</artifactId>
-				<version>${vaadin.version}</version>
-			</dependency>		
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.12</version>
-				<scope>test</scope>
-			</dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2.1</version>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	

@@ -30,7 +30,7 @@ public enum ClustalOmegaOputputFormat {
 
     private final String text;
 
-    private ClustalOmegaOputputFormat(final String text) {
+    ClustalOmegaOputputFormat(final String text) {
         this.text = text;
     }
 

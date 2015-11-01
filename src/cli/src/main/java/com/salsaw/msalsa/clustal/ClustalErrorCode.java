@@ -35,7 +35,7 @@ public enum ClustalErrorCode {
 
 	private final int code;
 
-	private ClustalErrorCode(int code) {
+	ClustalErrorCode(int code) {
 		this.code = code;
 	}
 

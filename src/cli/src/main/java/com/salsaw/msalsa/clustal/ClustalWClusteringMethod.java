@@ -28,7 +28,7 @@ public enum ClustalWClusteringMethod {
 
     private final String text;
 
-    private ClustalWClusteringMethod(final String text) {
+    ClustalWClusteringMethod(final String text) {
         this.text = text;
     }
 

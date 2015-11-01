@@ -30,7 +30,7 @@ public enum ClustalWOputputFormat {
 
     private final String text;
 
-    private ClustalWOputputFormat(final String text) {
+    ClustalWOputputFormat(final String text) {
         this.text = text;
     }
 

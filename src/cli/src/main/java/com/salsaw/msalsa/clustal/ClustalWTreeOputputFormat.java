@@ -42,7 +42,7 @@ public enum ClustalWTreeOputputFormat {
 
     private final String text;
 
-    private ClustalWTreeOputputFormat(final String text) {
+    ClustalWTreeOputputFormat(final String text) {
         this.text = text;
     }
 

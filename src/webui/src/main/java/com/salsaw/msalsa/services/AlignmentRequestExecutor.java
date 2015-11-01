@@ -23,14 +23,13 @@ import java.net.UnknownHostException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;

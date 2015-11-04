@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +40,7 @@ import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.servlets.AlignmentResultServlet;
 import com.salsaw.msalsa.servlets.AlignmentStatusServlet;
+import com.salsaw.msalsa.utils.SalsaParametersXMLExporter;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -52,7 +54,7 @@ public class AlignmentRequestExecutor implements Runnable {
 
 	public AlignmentRequestExecutor(AlignmentRequest alignmentRequest) {
 		if (alignmentRequest == null) {
-			throw new IllegalArgumentException("salsaParameters");
+			throw new IllegalArgumentException("alignmentRequest");
 		}
 
 		this.alignmentRequest = alignmentRequest;
@@ -84,21 +86,22 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		// Create M-SALSA output file name
 		String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());
-		salsaWebParameters.setOutputFile(
-				Paths.get(ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
-						this.alignmentRequest.getId().toString(),
-						inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
+		salsaWebParameters.setOutputFile(Paths.get(
+				this.alignmentRequest.getAlignmentRequestPath().toString(),
+				inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
 
 		try {
+			// Save parameters inside file
+			SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
+			String salsaParametersFilePath = Paths.get(
+					this.alignmentRequest.getAlignmentRequestPath().toString(),
+					SalsaParametersXMLExporter.FILE_NAME).toString();
+			salsaParametersExporter.exportSalsaParameters(salsaWebParameters, salsaParametersFilePath);
+
 			// Start alignment
 			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
-		} catch (SALSAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (SALSAException | IOException | InterruptedException | JAXBException e) {
+			logger.error(e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -108,17 +111,8 @@ public class AlignmentRequestExecutor implements Runnable {
 
 			try {
 				this.sendResultMail(recipientEmail, this.alignmentRequest.getId().toString());
-			} catch (AddressException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MessagingException e) {
+			} catch (UnknownHostException | MalformedURLException | MessagingException e) {
 				logger.error(recipientEmail, e);
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -127,7 +121,8 @@ public class AlignmentRequestExecutor implements Runnable {
 		AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
 	}
 
-	private void sendResultMail(String recipientEmail, String jobName) throws AddressException, MessagingException, UnknownHostException, MalformedURLException {
+	private void sendResultMail(String recipientEmail, String jobName)
+			throws AddressException, MessagingException, UnknownHostException, MalformedURLException {
 
 		ServerConfiguration serverConfiguration = ConfigurationManager.getInstance().getServerConfiguration();
 
@@ -136,66 +131,63 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		sender.addRecipient(recipientEmail);
 		sender.setSubject(String.format("Salsa job '%s' completed", jobName));
-		
+
 		URL resultLink = GetJobResultPath(jobName);
-		StringBuilder messageBuilder = new StringBuilder();		
+		StringBuilder messageBuilder = new StringBuilder();
 		messageBuilder.append("<h1>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
 		messageBuilder.append("</h1>");
-		
+
 		// Hello user :)
 		messageBuilder.append("<p>Dear user</p>");
 		messageBuilder.append("<p>Your salsa job ");
 		messageBuilder.append(jobName);
 		messageBuilder.append(" has been completed.</p>");
-		
+
 		// Download link
-		messageBuilder.append("<p>Result is available at link: ");		
+		messageBuilder.append("<p>Result is available at link: ");
 		messageBuilder.append("<a href=\"");
 		messageBuilder.append(resultLink);
 		messageBuilder.append("\">");
 		messageBuilder.append(resultLink);
-		messageBuilder.append("</a>");		
+		messageBuilder.append("</a>");
 		messageBuilder.append("</p>");
-		
+
 		// Validity of link
 		messageBuilder.append("<p>The result will be available for ");
 		DateTimeFormatter fmtDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime todayDate = LocalDateTime.now();
 		int validatyJobDays = ConfigurationManager.getInstance().getServerConfiguration().getCleanDaysValidityJob();
-		messageBuilder.append(validatyJobDays);		
+		messageBuilder.append(validatyJobDays);
 		messageBuilder.append(" days. The results will be delete form server ");
 		messageBuilder.append(todayDate.plusDays(validatyJobDays).format(fmtDate));
 		messageBuilder.append(".</p>");
-		
+
 		// Signature
 		messageBuilder.append("<p>Best Regards</p>");
 		messageBuilder.append("<p>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
 		messageBuilder.append(" TEAM: ");
-		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"https://www.linkedin.com/pub/alessandro-daniele/31/b1a/280\">Alessandro Daniele</a></address> ");
-		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/fabio-cesarato/4b/584/255/en\">Fabio Cesarato</a></address> ");
-		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/andrea-giraldin/30/452/121\">Andrea Giraldin</a></address>");
+		messageBuilder.append(
+				"<address class=\"author\"><a rel=\"author\" href=\"https://www.linkedin.com/pub/alessandro-daniele/31/b1a/280\">Alessandro Daniele</a></address> ");
+		messageBuilder.append(
+				"<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/fabio-cesarato/4b/584/255/en\">Fabio Cesarato</a></address> ");
+		messageBuilder.append(
+				"<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/andrea-giraldin/30/452/121\">Andrea Giraldin</a></address>");
 		messageBuilder.append("</p>");
-		
+
 		sender.setBody(messageBuilder.toString(), "ISO-8859-1", "text/html");
 		// sender.addAttachment("TestFile.txt");
-		//sender.send();
+		// sender.send();
 	}
-	
-	public static URL GetJobResultPath(String jobId) throws UnknownHostException, MalformedURLException{		
-        InetAddress ip = InetAddress.getLocalHost();
-        
-        // TODO - remove hard-coded params
-		// Compose the alignment result job url
-		return new URL(
-				"http",
-				ip.getHostAddress(),				
-				8080,
-				"/" + AlignmentResultServlet.class.getSimpleName() + "?" 
-				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId);		
-	}
-	
-	
-}
 
+	public static URL GetJobResultPath(String jobId) throws UnknownHostException, MalformedURLException {
+		InetAddress ip = InetAddress.getLocalHost();
+
+		// TODO - remove hard-coded params
+		// Compose the alignment result job url
+		return new URL("http", ip.getHostAddress(), 8080, "/" + AlignmentResultServlet.class.getSimpleName() + "?"
+				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId);
+	}
+
+}

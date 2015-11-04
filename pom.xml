@@ -12,7 +12,7 @@
 	<properties>
 		<jetty.plugin.version>9.3.0.M2</jetty.plugin.version>
 		<project.source.version>1.8</project.source.version>
-		<project.target.version>1.8</project.target.version>	
+		<project.target.version>1.8</project.target.version>
 		<project.encoding>UTF-8</project.encoding>
 	</properties>
 
@@ -35,26 +35,26 @@
 	<dependencyManagement>
 		<dependencies>
 
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
 
-            <dependency>
-                <groupId>com.beust</groupId>
-                <artifactId>jcommander</artifactId>
-                <version>1.47</version>
-            </dependency>
+			<dependency>
+				<groupId>com.beust</groupId>
+				<artifactId>jcommander</artifactId>
+				<version>1.47</version>
+			</dependency>
 
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.4</version>
-            </dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
 
-            <dependency>
+			<dependency>
 				<groupId>com.sun.mail</groupId>
 				<artifactId>javax.mail</artifactId>
 				<version>1.5.4</version>
@@ -83,7 +83,7 @@
 				<artifactId>log4j-core</artifactId>
 				<version>2.4.1</version>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
@@ -91,15 +91,27 @@
 				<scope>provided</scope>
 			</dependency>
 
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jstl</artifactId>
-                <version>1.2</version>
-            </dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-core</artifactId>
+				<version>2.2.11</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>2.2.11</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<modules>
 		<module>src/alghorithm/java</module>
 		<module>src/cli</module>

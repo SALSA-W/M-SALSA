@@ -17,10 +17,14 @@ package com.salsaw.msalsa.cli;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.beust.jcommander.Parameter;
 import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
 import com.salsaw.msalsa.clustal.ClustalType;
 
+@XmlRootElement
 public class SalsaParameters implements Serializable {
 	/**
 	 * 
@@ -168,14 +172,17 @@ public class SalsaParameters implements Serializable {
 		this.scoringMatrix = scoringMatrix;
 	}
 
+	@XmlTransient
 	public void setInputFile(String inputFile) {
 		this.inputFile = inputFile;
 	}
 
+	@XmlTransient
 	public void setOutputFile(String outputFile) {
 		this.outputFile = outputFile;
 	}
 
+	@XmlTransient
 	public void setPhylogeneticTreeFile(String phylogeneticTreeFile) {
 		this.phylogeneticTreeFile = phylogeneticTreeFile;
 	}
@@ -192,10 +199,12 @@ public class SalsaParameters implements Serializable {
 		this.minIterations = minIterations;
 	}
 	
+	@XmlTransient
 	public void setClustalPath(String clustalPath){
 		this.clustalPath = clustalPath;
 	}
 	
+	@XmlTransient
 	public void setClustalWPath(String clustalWPath){
 		this.clustalWPath = clustalWPath;
 	}		

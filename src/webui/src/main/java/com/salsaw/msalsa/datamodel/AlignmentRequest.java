@@ -15,25 +15,28 @@
  */
 package com.salsaw.msalsa.datamodel;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
+
+import com.salsaw.msalsa.config.ConfigurationManager;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
 public class AlignmentRequest {
-	
+
 	// FIELDS
 	private final SalsaWebParameters salsaWebParameters;
 	private final UUID id;
-	
+
 	// CONSTRUCTOR
-	public AlignmentRequest(SalsaWebParameters salsaWebParameters)
-	{
-		if (salsaWebParameters == null){
+	public AlignmentRequest(SalsaWebParameters salsaWebParameters) {
+		if (salsaWebParameters == null) {
 			throw new IllegalArgumentException("salsaWebParameters");
 		}
-		this.salsaWebParameters = salsaWebParameters; 
+		this.salsaWebParameters = salsaWebParameters;
 		// Generate new GUID
 		this.id = UUID.randomUUID();
 	}
@@ -45,5 +48,11 @@ public class AlignmentRequest {
 
 	public SalsaWebParameters getSalsaWebParameters() {
 		return salsaWebParameters;
+	}
+
+	public Path getAlignmentRequestPath() {
+		return Paths.get(
+				ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
+				this.getId().toString());
 	}
 }

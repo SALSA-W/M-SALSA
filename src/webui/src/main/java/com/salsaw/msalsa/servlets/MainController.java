@@ -31,9 +31,7 @@ import com.salsaw.msalsa.datamodel.SalsaWebParameters;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-@WebServlet(
-		name="test",
-		urlPatterns = {"/index"})
+@WebServlet(urlPatterns = {"/index"})
 public class MainController extends HttpServlet {
 
 	/**

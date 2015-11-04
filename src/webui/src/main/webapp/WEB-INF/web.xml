@@ -6,7 +6,7 @@
 	
 	<display-name>SALSA</display-name>
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index</welcome-file>
 	</welcome-file-list>
 
 	<error-page>

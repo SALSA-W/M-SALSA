@@ -16,6 +16,8 @@
 
 package com.salsaw.msalsa.services;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -83,7 +85,8 @@ public class GmailSender {
 		BodyPart messageBodyPart = new MimeBodyPart();
 		DataSource dataSource = new FileDataSource(filePath);
 		messageBodyPart.setDataHandler(new DataHandler(dataSource));
-		messageBodyPart.setFileName(filePath);
+		Path p = Paths.get(filePath);
+		messageBodyPart.setFileName(p.getFileName().toString());
 
 		return messageBodyPart;
 	}

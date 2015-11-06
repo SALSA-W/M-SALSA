@@ -15,14 +15,23 @@
  */
 package com.salsaw.msalsa.services;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -48,6 +57,7 @@ import com.salsaw.msalsa.utils.SalsaParametersXMLExporter;
  */
 public class AlignmentRequestExecutor implements Runnable {
 
+	static final String RESULT_ZIP_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "-results.zip";
 	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
 	private final AlignmentRequest alignmentRequest;
 	private final Thread thread;
@@ -86,17 +96,17 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		// Create M-SALSA output file name
 		String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());
-		salsaWebParameters.setOutputFile(Paths.get(
-				this.alignmentRequest.getAlignmentRequestPath().toString(),
+		salsaWebParameters.setOutputFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
 				inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
 
 		try {
 			// Save parameters inside file
 			SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
-			String salsaParametersFilePath = Paths.get(
-					this.alignmentRequest.getAlignmentRequestPath().toString(),
-					SalsaParametersXMLExporter.FILE_NAME).toString();
-			salsaParametersExporter.exportSalsaParameters(salsaWebParameters, salsaParametersFilePath);
+			salsaWebParameters
+					.setSalsaParametersFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
+							SalsaParametersXMLExporter.FILE_NAME).toString());
+			salsaParametersExporter.exportSalsaParameters(salsaWebParameters,
+					salsaWebParameters.getSalsaParametersFile());
 
 			// Start alignment
 			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
@@ -110,8 +120,8 @@ public class AlignmentRequestExecutor implements Runnable {
 		if (recipientEmail != null && recipientEmail.isEmpty() == false) {
 
 			try {
-				this.sendResultMail(recipientEmail, this.alignmentRequest.getId().toString());
-			} catch (UnknownHostException | MalformedURLException | MessagingException e) {
+				this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
+			} catch (MessagingException | IOException e) {
 				logger.error(recipientEmail, e);
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -121,17 +131,24 @@ public class AlignmentRequestExecutor implements Runnable {
 		AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
 	}
 
-	private void sendResultMail(String recipientEmail, String jobName)
-			throws AddressException, MessagingException, UnknownHostException, MalformedURLException {
+	private void sendResultMail(SalsaWebParameters salsaWebParameters, String recipientEmail, String jobName)
+			throws AddressException, MessagingException, IOException {
 
 		ServerConfiguration serverConfiguration = ConfigurationManager.getInstance().getServerConfiguration();
 
 		GmailSender sender = new GmailSender();
 		sender.setSender(serverConfiguration.getMailUsername(), serverConfiguration.getMailPassword());
-
 		sender.addRecipient(recipientEmail);
 		sender.setSubject(String.format("Salsa job '%s' completed", jobName));
-
+		sender.setBody(composeMailMessage(jobName), "ISO-8859-1", "text/html");
+		String resultsZipFile = composeZipResultFile(salsaWebParameters);
+		sender.addAttachment(resultsZipFile);
+		// sender.send();
+		// Delete the file use only as attachment
+		Files.delete(Paths.get(resultsZipFile));
+	}
+	
+	private String composeMailMessage(String jobName) throws UnknownHostException, MalformedURLException{
 		URL resultLink = GetJobResultPath(jobName);
 		StringBuilder messageBuilder = new StringBuilder();
 		messageBuilder.append("<h1>");
@@ -175,10 +192,46 @@ public class AlignmentRequestExecutor implements Runnable {
 		messageBuilder.append(
 				"<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/andrea-giraldin/30/452/121\">Andrea Giraldin</a></address>");
 		messageBuilder.append("</p>");
+		
+		return messageBuilder.toString();
+	}
 
-		sender.setBody(messageBuilder.toString(), "ISO-8859-1", "text/html");
-		// sender.addAttachment("TestFile.txt");
-		// sender.send();
+	private String composeZipResultFile(SalsaWebParameters salsaWebParameters) throws IOException {
+		String outputFolderPath = (new File(salsaWebParameters.getOutputFile())).getParent();
+		String resultZipFilePath = Paths.get(outputFolderPath, RESULT_ZIP_FILE_NAME).toString();
+
+		try (FileOutputStream fileOutStream = new FileOutputStream(resultZipFilePath)) {
+			try (ZipOutputStream zipOutStream = new ZipOutputStream(fileOutStream)) {
+				// Add all results files of SALSA
+				List<String> filesToCompress = new ArrayList<String>();
+				filesToCompress.add(salsaWebParameters.getOutputFile());
+				filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
+				if (salsaWebParameters.getGeneratePhylogeneticTree() == true){
+					filesToCompress.add(salsaWebParameters.getPhylogeneticTreeFile());
+				}
+
+				for (String file : filesToCompress) {
+					// Get file name and add as zip entity
+					Path filePath = Paths.get(file);
+					ZipEntry zipEntry = new ZipEntry(filePath.getFileName().toString());
+					zipOutStream.putNextEntry(zipEntry);
+
+					// Write file into zip entity
+					try (FileInputStream in = new FileInputStream(file)) {
+						int len;
+						byte[] buffer = new byte[1024];
+						while ((len = in.read(buffer)) > 0) {
+							zipOutStream.write(buffer, 0, len);
+						}						
+						in.close();
+					}				
+					zipOutStream.closeEntry();
+				}				
+				zipOutStream.close();
+			}
+		}
+
+		return resultZipFilePath;
 	}
 
 	public static URL GetJobResultPath(String jobId) throws UnknownHostException, MalformedURLException {

@@ -2,11 +2,12 @@
 <%@page import="com.salsaw.msalsa.servlets.AlignmentResultServlet"%>
 <%@ page import="com.salsaw.msalsa.datamodel.AlignmentResultFileType"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
+	<title>M-SALSA alignment results</title>
+	<meta name="robots" content="noindex, nofollow" />
 	<jsp:include page="header.jsp" />
-	<title>Result</title>
 	
 	<script type="text/javascript" src="js/raphael-min.js" ></script> 
 	<script type="text/javascript" src="js/jsphylosvg-min.js"></script> 

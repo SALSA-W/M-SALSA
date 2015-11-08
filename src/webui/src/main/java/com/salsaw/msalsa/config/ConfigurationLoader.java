@@ -35,6 +35,7 @@ class ConfigurationLoader {
 	private static final String KEY_MAIL_USERNAME = "mail.username";
 	private static final String KEY_MAIL_PASSWORD = "mail.password";
 	private static final String KEY_CLEAN_DAYS_VALIDITY = "clean.validitydays";
+	private static final String KEY_PUBLISHER = "author.publisher";
 	
 	ServerConfiguration ReadConfiguration(){		
 		Properties properties = new Properties();
@@ -51,7 +52,8 @@ class ConfigurationLoader {
 					properties.getProperty(KEY_TEMP_PATH),
 					properties.getProperty(KEY_MAIL_USERNAME),
 					properties.getProperty(KEY_MAIL_PASSWORD),
-					properties.getProperty(KEY_CLEAN_DAYS_VALIDITY)
+					properties.getProperty(KEY_CLEAN_DAYS_VALIDITY),
+					properties.getProperty(KEY_PUBLISHER)
 					);
 		} catch (IOException e) {
 			// TODO Better exception management

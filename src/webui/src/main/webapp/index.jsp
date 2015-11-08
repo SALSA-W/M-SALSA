@@ -1,20 +1,21 @@
+<%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
 <%@page import="com.salsaw.msalsa.cli.ScoringMatrix"%>
 <%@page import="com.salsaw.msalsa.clustal.ClustalType"%>
 <%@page import="com.salsaw.msalsa.algorithm.TerminalGAPsStrategy"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<jsp:include page="header.jsp" />
-<title>M-SALSA</title>
+	<title>M-SALSA multiple sequence alignments</title>
+	<meta name="robots" content="index, nofollow" />
+	<jsp:include page="header.jsp" />
 </head>
 <body>
 	<div class="container">
-		<h1 class="text-center">M-SALSA</h1>
+		<h1 class="text-center"><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></h1>
 		<jsp:useBean id="salsaParameters"
 			class="com.salsaw.msalsa.cli.SalsaParameters" scope="request">
 		</jsp:useBean>

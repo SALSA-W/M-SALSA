@@ -44,6 +44,13 @@ public class SalsaAlgorithmExecutor {
 	public static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln.fasta";
 	public static final String SALSA_TREE_SUFFIX = "-" + M_SALSA_HEADER + "-aln.ph";
 	
+	public static final String AUTHOR_ALESSANDRO_DANIELE = "Alessandro Daniele";
+	public static final String AUTHOR_LINK_ALESSANDRO_DANIELE = "https://www.linkedin.com/pub/alessandro-daniele/31/b1a/280";
+	public static final String AUTHOR_FABIO_CESARATO = "Fabio Cesarato";
+	public static final String AUTHOR_LINK_FABIO_CESARATO = "https://it.linkedin.com/pub/fabio-cesarato/4b/584/255/en";
+	public static final String AUTHOR_ANDREA_GIRALDIN = "Andrea Giraldin";
+	public static final String AUTHOR_LINK_ANDREA_GIRALDIN = "https://it.linkedin.com/pub/andrea-giraldin/30/452/121";
+	
 	private static void validateParameters(SalsaParameters salsaParameters) throws SALSAException
 	{
 		// VALIDATION

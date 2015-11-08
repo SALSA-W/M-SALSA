@@ -185,15 +185,22 @@ public class AlignmentRequestExecutor implements Runnable {
 		messageBuilder.append("<p>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
 		messageBuilder.append(" TEAM: ");
-		messageBuilder.append(
-				"<address class=\"author\"><a rel=\"author\" href=\"https://www.linkedin.com/pub/alessandro-daniele/31/b1a/280\">Alessandro Daniele</a></address> ");
-		messageBuilder.append(
-				"<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/fabio-cesarato/4b/584/255/en\">Fabio Cesarato</a></address> ");
-		messageBuilder.append(
-				"<address class=\"author\"><a rel=\"author\" href=\"https://it.linkedin.com/pub/andrea-giraldin/30/452/121\">Andrea Giraldin</a></address>");
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ALESSANDRO_DANIELE, SalsaAlgorithmExecutor.AUTHOR_LINK_ALESSANDRO_DANIELE);
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_FABIO_CESARATO, SalsaAlgorithmExecutor.AUTHOR_LINK_FABIO_CESARATO);
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ANDREA_GIRALDIN, SalsaAlgorithmExecutor.AUTHOR_LINK_ANDREA_GIRALDIN);		
 		messageBuilder.append("</p>");
 		
 		return messageBuilder.toString();
+	}
+	
+	private StringBuilder addAuthor(StringBuilder messageBuilder, String name, String link){
+		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"");
+		messageBuilder.append(link);
+		messageBuilder.append(">");
+		messageBuilder.append("name");
+		messageBuilder.append("</a></address>");
+		
+		return messageBuilder;
 	}
 
 	private String composeZipResultFile(SalsaWebParameters salsaWebParameters) throws IOException {

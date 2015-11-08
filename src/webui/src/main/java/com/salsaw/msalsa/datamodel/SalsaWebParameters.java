@@ -29,10 +29,11 @@ public class SalsaWebParameters extends SalsaParameters {
 	private static final long serialVersionUID = 1L;
 	
 	private String recipientEmail;
+	private String emailSubject;
 	private String salsaParametersFile;
 
 	public String getRecipientEmail() {
-		return recipientEmail;
+		return this.recipientEmail;
 	}
 
 	public void setRecipientEmail(String recipientEmail) {
@@ -40,7 +41,15 @@ public class SalsaWebParameters extends SalsaParameters {
 	}
 	
 	public String getSalsaParametersFile() {
-		return salsaParametersFile;
+		return this.salsaParametersFile;
+	}
+
+	public void setEmailSubject(String emailSubject) {
+		this.emailSubject = emailSubject;
+	}
+	
+	public String getEmailSubject() {
+		return this.emailSubject;
 	}
 
 	public void setSalsaParametersFile(String salsaParametersFile) {

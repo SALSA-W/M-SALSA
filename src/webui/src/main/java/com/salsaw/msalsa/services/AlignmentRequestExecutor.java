@@ -139,7 +139,17 @@ public class AlignmentRequestExecutor implements Runnable {
 		GmailSender sender = new GmailSender();
 		sender.setSender(serverConfiguration.getMailUsername(), serverConfiguration.getMailPassword());
 		sender.addRecipient(recipientEmail);
-		sender.setSubject(String.format("Salsa job '%s' completed", jobName));
+		
+		if (salsaWebParameters.getEmailSubject() != null &&
+			salsaWebParameters.getEmailSubject().isEmpty() == false){
+			sender.setSubject(salsaWebParameters.getEmailSubject());
+		}
+		else{
+			String inpuFileName = new File(salsaWebParameters.getInputFile()).getName();
+			sender.setSubject(String.format("'%s' job '%s' completed for input '%s'", 
+					SalsaAlgorithmExecutor.M_SALSA_HEADER, jobName, inpuFileName));
+		}
+		
 		sender.setBody(composeMailMessage(jobName), "ISO-8859-1", "text/html");
 		String resultsZipFile = composeZipResultFile(salsaWebParameters);
 		sender.addAttachment(resultsZipFile);

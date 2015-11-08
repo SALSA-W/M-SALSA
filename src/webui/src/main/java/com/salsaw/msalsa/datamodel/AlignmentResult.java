@@ -76,7 +76,7 @@ public class AlignmentResult {
 		String msalsaPhylogeneticTreeFilePath = null; 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	// Search SALSA aligmnet and tree files
+		    	// Search SALSA alignment and tree files
 		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX)){
 		        	msalsaAligmentFilePath = file.getAbsolutePath();
 		        	continue;

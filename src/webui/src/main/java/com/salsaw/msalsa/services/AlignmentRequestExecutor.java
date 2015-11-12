@@ -150,10 +150,10 @@ public class AlignmentRequestExecutor implements Runnable {
 					SalsaAlgorithmExecutor.M_SALSA_HEADER, jobName, inpuFileName));
 		}
 		
-		sender.setBody(composeMailMessage(jobName), "ISO-8859-1", "text/html");
+		sender.setBody(composeMailMessage(jobName), "ISO-8859-1", "html");
 		String resultsZipFile = composeZipResultFile(salsaWebParameters);
 		sender.addAttachment(resultsZipFile);
-		// sender.send();
+		sender.send();
 		// Delete the file use only as attachment
 		Files.delete(Paths.get(resultsZipFile));
 	}
@@ -206,8 +206,8 @@ public class AlignmentRequestExecutor implements Runnable {
 	private StringBuilder addAuthor(StringBuilder messageBuilder, String name, String link){
 		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"");
 		messageBuilder.append(link);
-		messageBuilder.append(">");
-		messageBuilder.append("name");
+		messageBuilder.append("\">");
+		messageBuilder.append(name);
 		messageBuilder.append("</a></address>");
 		
 		return messageBuilder;

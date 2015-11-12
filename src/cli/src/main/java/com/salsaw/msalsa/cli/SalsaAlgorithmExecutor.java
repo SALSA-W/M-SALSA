@@ -76,7 +76,7 @@ public class SalsaAlgorithmExecutor {
 		
 		if (salsaParameters.getClustalPath() != null &&
 			salsaParameters.getPhylogeneticTreeFile() == null) {			
-			// Use Clustal to generetate initial aligment
+			// Use Clustal to generate initial alignment
 			salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));
 			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
 			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
@@ -123,10 +123,11 @@ public class SalsaAlgorithmExecutor {
 			
 		
 		if (salsaParameters.getGeneratePhylogeneticTree() == true){
-			// Generate phylogenetic tree using ClustalW from SALSA aligment
+			// Generate phylogenetic tree using ClustalW from SALSA alignment
 			clustalFileMapper.setAlignmentFilePath(salsaParameters.getOutputFile());
 			ClustalWManager clustalWManager = new ClustalWManager();
 			clustalWManager.generateTree(salsaParameters.getClustalWPath(), clustalFileMapper);
+			salsaParameters.setPhylogeneticTreeFile(clustalFileMapper.getTreeFilePath());
 		}			
 	}
 	
@@ -141,18 +142,39 @@ public class SalsaAlgorithmExecutor {
 			Charset charset = StandardCharsets.UTF_8;
 	
 			String content = new String(Files.readAllBytes(inputFilePath), charset);
-			content = content.replaceAll(" ", "_");
-			content = content.replaceAll(":", "_");
-			content = content.replaceAll("\\.", "_");
+						
+			Boolean replaceChangesHeaders = false;
+			String replacedContent = content.replaceAll(" ", "_");
+			if (replacedContent.equals(content) == false){
+				replaceChangesHeaders = true;
+				replacedContent = content;
+			}
+			replacedContent = content.replaceAll(":", "_");
+			if (replacedContent.equals(content) == false){
+				replaceChangesHeaders = true;
+				replacedContent = content;
+			}			
+			replacedContent = content.replaceAll("\\.", "_");
+			if (replacedContent.equals(content) == false){
+				replaceChangesHeaders = true;
+				replacedContent = content;
+			}			
 			
-			// Create the name of normalized input files
-			String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
-			String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
-			String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
-			Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
+			// Check if file normalization is required
+			if (replaceChangesHeaders == true){
+				// Create the name of normalized input files
+				String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
+				String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
+				String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
+				Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
+					
+				Files.write(normalizedInputFilePath, content.getBytes(charset));
 				
-			Files.write(normalizedInputFilePath, content.getBytes(charset));
-			
-			return normalizedInputFilePath.toString();
+				return normalizedInputFilePath.toString();
+			} else{
+				// The input file isn't changed
+				return  inputFilePath.toString();
+			}
+
 		}
 }

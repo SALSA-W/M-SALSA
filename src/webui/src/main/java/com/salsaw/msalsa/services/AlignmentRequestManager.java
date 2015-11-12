@@ -39,13 +39,17 @@ public final class AlignmentRequestManager {
 		return instance;
 	}
 	
-	public final void startManageRequest(AlignmentRequest alignmentRequest){		
+	public final void startManageRequest(String webApplicationUri, AlignmentRequest alignmentRequest){		
 		if (alignmentRequest == null){
 			throw new IllegalArgumentException("salsaParameters");
 		}
+		if (webApplicationUri == null ||
+			webApplicationUri.isEmpty() == true){
+				throw new IllegalArgumentException("webApplicationUri");
+		}		
 		
 		// Start the request process
-		AlignmentRequestExecutor aligmentRequestExecutor = new AlignmentRequestExecutor(alignmentRequest);		
+		AlignmentRequestExecutor aligmentRequestExecutor = new AlignmentRequestExecutor(webApplicationUri, alignmentRequest);		
 		this.activeRequests.put(alignmentRequest.getId(), aligmentRequestExecutor);
 
 		aligmentRequestExecutor.startAsyncAlignment();

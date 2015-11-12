@@ -110,7 +110,10 @@ public class AlignmentRequestServlet extends HttpServlet {
 				salsaWebParameters.setInputFile(inputFilePath.toString());
 			}
 
-			AlignmentRequestManager.getInstance().startManageRequest(newRequest);
+			String webApplicationUri = request.getRequestURL().toString().substring(0,
+					request.getRequestURL().toString().indexOf(request.getServletPath()));
+
+			AlignmentRequestManager.getInstance().startManageRequest(webApplicationUri, newRequest);
 
 			// Redirect the request to index
 			response.sendRedirect("loading.jsp?id=" + newRequest.getId());

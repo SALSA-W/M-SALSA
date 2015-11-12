@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,14 +59,20 @@ public class AlignmentRequestExecutor implements Runnable {
 	static final String RESULT_ZIP_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "-results.zip";
 	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
 	private final AlignmentRequest alignmentRequest;
+	private final String webApplicationUri;
 	private final Thread thread;
 
-	public AlignmentRequestExecutor(AlignmentRequest alignmentRequest) {
+	public AlignmentRequestExecutor(String webApplicationUri, AlignmentRequest alignmentRequest) {
 		if (alignmentRequest == null) {
 			throw new IllegalArgumentException("alignmentRequest");
 		}
+		if (webApplicationUri == null ||
+			webApplicationUri.isEmpty() == true){
+			throw new IllegalArgumentException("webApplicationUri");
+		}		
 
 		this.alignmentRequest = alignmentRequest;
+		this.webApplicationUri = webApplicationUri;
 		this.thread = new Thread(this);
 	}
 
@@ -159,7 +164,7 @@ public class AlignmentRequestExecutor implements Runnable {
 	}
 	
 	private String composeMailMessage(String jobName) throws UnknownHostException, MalformedURLException{
-		URL resultLink = GetJobResultPath(jobName);
+		String resultLink = GetJobResultPath(this.webApplicationUri, jobName);
 		StringBuilder messageBuilder = new StringBuilder();
 		messageBuilder.append("<h1>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
@@ -251,13 +256,17 @@ public class AlignmentRequestExecutor implements Runnable {
 		return resultZipFilePath;
 	}
 
-	public static URL GetJobResultPath(String jobId) throws UnknownHostException, MalformedURLException {
-		InetAddress ip = InetAddress.getLocalHost();
+	public static String GetJobResultPath(String webApplicationUri, String jobId) throws UnknownHostException, MalformedURLException {
+		int indexOfLocalHost = webApplicationUri.indexOf("localhost");
+		if (indexOfLocalHost != -1)
+		{
+			// localhost - replace with local ip
+			InetAddress ip = InetAddress.getLocalHost();
+			webApplicationUri = webApplicationUri.replace("localhost", ip.getHostAddress());
+		}
 
-		// TODO - remove hard-coded params
-		// Compose the alignment result job url
-		return new URL("http", ip.getHostAddress(), 8080, "/" + AlignmentResultServlet.class.getSimpleName() + "?"
-				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId);
+		return webApplicationUri +  "/" + AlignmentResultServlet.class.getSimpleName() + "?"
+				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId;
 	}
 
 }

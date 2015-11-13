@@ -123,7 +123,6 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		String recipientEmail = salsaWebParameters.getRecipientEmail();
 		if (recipientEmail != null && recipientEmail.isEmpty() == false) {
-
 			try {
 				this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
 			} catch (MessagingException | IOException e) {
@@ -226,6 +225,7 @@ public class AlignmentRequestExecutor implements Runnable {
 			try (ZipOutputStream zipOutStream = new ZipOutputStream(fileOutStream)) {
 				// Add all results files of SALSA
 				List<String> filesToCompress = new ArrayList<String>();
+				filesToCompress.add(salsaWebParameters.getInputFile());
 				filesToCompress.add(salsaWebParameters.getOutputFile());
 				filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
 				if (salsaWebParameters.getGeneratePhylogeneticTree() == true){

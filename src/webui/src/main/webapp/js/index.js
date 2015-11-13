@@ -46,4 +46,18 @@ $(document).ready(function() {
         $('#validation-errors-message').html("An input text or a file is required to perfrom alignment");
         return;
     });
+    
+    $.listen('parsley:field:success', function(ParsleyField) {
+    	// Show the title to add to email if e-mail is correct
+        if(ParsleyField.$element.attr('name') === 'recipientEmail') {
+        	$("div#userJobTitleForm").removeClass('hidden').addClass('show');
+        }
+    });
+    
+    $.listen('parsley:field:error', function(ParsleyField) {
+    	// Hide the title to add to email if e-mail isn't correct
+        if(ParsleyField.$element.attr('name') === 'recipientEmail') {
+        	$("div#userJobTitleForm").removeClass('show').addClass('hidden');
+        }
+    });    
 });

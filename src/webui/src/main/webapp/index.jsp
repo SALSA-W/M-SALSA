@@ -46,6 +46,14 @@
 						placeholder="Enter email">
 				</div>
 			</div>
+			
+			<div class="form-group hidden" id="userJobTitleForm">
+				<label class="control-label col-sm-2" for="email">Job title:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="userJobTitle"
+						name="userJobTitle" placeholder="If available, the title will be included in the subject of the notification email and can be used as a way to identify your analysis">
+				</div>
+			</div>		
 
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="inputText">Text

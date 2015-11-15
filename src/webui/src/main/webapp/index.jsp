@@ -25,7 +25,7 @@
 		<c:set var="terminalGAPsStrategies"
 			value="<%=TerminalGAPsStrategy.values()%>" />
 
-		<div class="alert alert-danger alert-dismissible collapse"
+		<div class="alert alert-danger alert-dismissible collapse col-sm-12"
 			role="alert" id="validation-errors">
 			<button type="button" class="close" data-dismiss="alert"
 				aria-label="Close">

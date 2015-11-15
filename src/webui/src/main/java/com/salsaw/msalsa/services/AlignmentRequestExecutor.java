@@ -144,13 +144,13 @@ public class AlignmentRequestExecutor implements Runnable {
 		sender.setSender(serverConfiguration.getMailUsername(), serverConfiguration.getMailPassword());
 		sender.addRecipient(recipientEmail);
 		
-		if (salsaWebParameters.getEmailSubject() != null &&
-			salsaWebParameters.getEmailSubject().isEmpty() == false){
-			sender.setSubject(salsaWebParameters.getEmailSubject());
+		if (salsaWebParameters.getUserJobTitle() != null &&
+			salsaWebParameters.getUserJobTitle().isEmpty() == false){
+			sender.setSubject(salsaWebParameters.getUserJobTitle());
 		}
 		else{
 			String inpuFileName = new File(salsaWebParameters.getInputFile()).getName();
-			sender.setSubject(String.format("'%s' job '%s' completed for input '%s'", 
+			sender.setSubject(String.format("'%s' job completed for input '%s' id '%s'", 
 					SalsaAlgorithmExecutor.M_SALSA_HEADER, jobName, inpuFileName));
 		}
 		

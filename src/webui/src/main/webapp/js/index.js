@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+// http://stackoverflow.com/a/3261380
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
 // http://stackoverflow.com/a/30538844
 $(document).ready(function() {
 	// http://stackoverflow.com/a/30538844
@@ -50,7 +55,9 @@ $(document).ready(function() {
     $.listen('parsley:field:success', function(ParsleyField) {
     	// Show the title to add to email if e-mail is correct
         if(ParsleyField.$element.attr('name') === 'recipientEmail') {
-        	$("div#userJobTitleForm").removeClass('hidden').addClass('show');
+        	if (isBlank(document.getElementById ("recipientEmail").value) === false){
+        		$("div#userJobTitleForm").removeClass('hidden').addClass('show');        		
+        	}
         }
     });
     

@@ -56,13 +56,15 @@
 			<p>Multiple Sequence Alignment by Local Search Algorithm</p>
 		</div>
 
-		<!-- 
 		<div class="page-header">
-			<h1><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%>
-				<small>Multiple Sequence Alignment by Local Search Algorithm</small>
-			</h1>
+			<%=SalsaAlgorithmExecutor.M_SALSA_HEADER%>
+			is a new multiple sequence alignment program thought to generate
+			alignments between three or more sequences. For the alignment of two
+			sequences please instead use other <a
+				href="http://www.ebi.ac.uk/Tools/psa/">pairwise sequence
+				alignment tools</a>.
 		</div>
- 		-->
+
 
 		<div class="alert alert-danger alert-dismissible collapse col-sm-12"
 			role="alert" id="validation-errors">
@@ -107,8 +109,11 @@
 						<h4 class="panel-title">
 							<a role="button" data-toggle="collapse" data-parent="#accordion"
 								href="#collapseOne" aria-expanded="true"
-								aria-controls="collapseOne"> Advanced Options </a>
+								aria-controls="collapseOne">Set Advanced Options</a>
 						</h4>
+						<small> The default settings will
+							fulfill the needs of most users and, for that reason, are not
+							shown.</small>
 					</div>
 					<div id="collapseOne" class="panel-collapse collapse"
 						role="tabpanel" aria-labelledby="headingOne">
@@ -229,8 +234,10 @@
 				<label class="control-label col-sm-2" for="email">Email:</label>
 				<div class="col-sm-10">
 					<input type="email" class="form-control" id="recipientEmail"
-						name="recipientEmail" data-parsley-trigger="change"
+						name="recipientEmail" data-parsley-trigger="keyup change"
 						placeholder="Enter email">
+					<p class="text-muted">Add your email address if you want to be notified
+						by email when the results are available</p>
 				</div>
 			</div>
 
@@ -248,7 +255,7 @@
 					<input type="submit" class="btn btn-default validate" />
 				</div>
 			</div>
-			
+
 		</form>
 
 		<jsp:include page="footer.jsp" />

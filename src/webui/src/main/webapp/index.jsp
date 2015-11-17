@@ -14,6 +14,7 @@
 <meta name="robots" content="index, nofollow" />
 <jsp:include page="header.jsp" />
 <link rel="stylesheet" href="css/btn-file.css">
+<link rel="stylesheet" href="css/header.css">
 </head>
 <body>
 	<!-- Style theme: https://bootswatch.com/superhero/ -->
@@ -27,7 +28,7 @@
 		value="<%=TerminalGAPsStrategy.values()%>" />
 
 	<div class="container">
-		<div class="navbar navbar-default navbar-fixed-top">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="index.jsp"><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></a>
@@ -48,7 +49,7 @@
 
 				</div>
 			</div>
-		</div>
+		</nav>
 
 		<div class="jumbotron">
 			<h1><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></h1>
@@ -253,6 +254,7 @@
 		<jsp:include page="footer.jsp" />
 		<jsp:include page="standard-js.jsp" />
 		<script src="js/index.js" type="text/javascript"></script>
+		<script src="js/header.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->
 </body>

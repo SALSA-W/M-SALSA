@@ -1,11 +1,17 @@
-﻿language: java
+﻿# enable build for java8 - not working with container-based infrastructure
+sudo: required
+
+language: java
+
 jdk:
   - oraclejdk8
+
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "W7hvytvGfZ+/YYUFQfAnCd1QKZ5CzMaI/vhRdEPgv2SBpW2stR8pWZDfCej42C9PycvOW8WSBg9wZAYuMBbj32OhMTbB1IFyV8M+sYw6ZE0B7tsQBQyA0K1epXHdKt3HPUiXK1ckzVK6KuK0ko9UBXbsBcoj2p2+Q6xyu/hSOug="
+
 addons:
   coverity_scan:
     # GitHub project metadata
@@ -24,7 +30,9 @@ addons:
     # Take care in resource usage, and consider the build frequency allowances per
     #   https://scan.coverity.com/faq#frequency
     branch_pattern: master
+
 script:
   mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
 notifications:
   email: false

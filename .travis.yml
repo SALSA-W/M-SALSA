@@ -1,4 +1,4 @@
-language: java
+﻿language: java
 
 jdk:
   - oraclejdk8
@@ -14,8 +14,6 @@ addons:
     # GitHub project metadata
     project:
       name: "SALSA-W/M-SALSA"
-      description: "Build submitted via Travis CI"
-	  
     notification_email: m.salsa@scientist.com
     
     # Commands to prepare for build_command

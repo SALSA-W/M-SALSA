@@ -28,7 +28,7 @@ addons:
     # Pattern to match selecting branches that will run analysis.
     # Take care in resource usage, and consider the build frequency allowances per
     #   https://scan.coverity.com/faq#frequency
-    branch_pattern: coverity_scan
+    branch_pattern: master
 
 script:
   mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V

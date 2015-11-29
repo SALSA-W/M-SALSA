@@ -18,6 +18,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+
 #Build
 [![Build Status](https://travis-ci.org/SALSA-W/M-SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/M-SALSA)
 

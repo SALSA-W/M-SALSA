@@ -58,7 +58,7 @@ public class DistanceMatrix {
 			if (this.names[i].equals(name1) || (">" + this.names[i]).equals(name1)){
 				index1 = i;
 			}
-			if (this.names[i] == name2 || (">" + this.names[i]).equals(name2)){
+			if (this.names[i].equals(name2) || (">" + this.names[i]).equals(name2)){
 				index2 = i;
 			}
 		}

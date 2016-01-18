@@ -36,14 +36,44 @@ public class Alphabet {
 	private final char[] alphabet;
 
 	// CONSTRUCTOR
-	public Alphabet(String matrixInputLine)
-			throws SALSAException {
+	
+	public Alphabet(String matrixInputLine) throws SALSAException{
+		this.alphabet = calculateAlphabetArray(matrixInputLine);
+		this.numberOfCharacters = this.alphabet.length;
+	}
+	
+	public Alphabet(AlphabetType type) throws SALSAException {
+		String matrixInputLine = null;
+		switch (type) {
+		case DNA:
+			matrixInputLine = "ATCG";
+			break;
+		case PROTEINS:
+			matrixInputLine = "AUCG";
+			break;
+		case RNA:
+			matrixInputLine = "ARNDCQEGHILKMFPSTWYVBZX";
+			break;
+		default:
+			throw new SALSAException(
+					"Error: the specified type of alphabet is not supported. Supported types are: PROTEINS, DNA or RNA");
+		}
+
+		this.alphabet = calculateAlphabetArray(matrixInputLine);
+		this.numberOfCharacters = this.alphabet.length;
+	}
+	
+	private static final char[] calculateAlphabetArray(String matrixInputLine) throws SALSAException{
 		matrixInputLine = matrixInputLine.trim();
 		String[] alphabetsSymbols = matrixInputLine.split("  ");
 		int alphabetLength = alphabetsSymbols.length;
 		
-		this.alphabet = new char[alphabetLength];		
-		
+		if (alphabetLength <= 0){
+			throw new SALSAException("Error: number of characters in the alphabet should be greater than 0!");
+		}
+
+		char[] alphabet = new char[alphabetLength];
+
 		for (int i = 0; i < alphabetsSymbols.length; i++) {
 
 			// For short string charAt has higher performance
@@ -51,14 +81,13 @@ public class Alphabet {
 			char symbol = alphabetsSymbols[i].charAt(0);
 			alphabet[i] = symbol;
 		}
-
-		this.numberOfCharacters = alphabetLength;
+		
+		return alphabet;
 	}
-	
+
 	// GET/SET
-	
-	public final int getNumberOfCharacters()
-	{
+
+	public final int getNumberOfCharacters() {
 		return this.numberOfCharacters;
 	}
 
@@ -89,8 +118,7 @@ public class Alphabet {
 			// INDEL
 			return this.numberOfCharacters;
 		} else {
-			throw new SALSAException("Alphabet doesn't contain character \'"
-					+ c + "\'.");
+			throw new SALSAException("Alphabet doesn't contain character \'" + c + "\'.");
 		}
 	}
 

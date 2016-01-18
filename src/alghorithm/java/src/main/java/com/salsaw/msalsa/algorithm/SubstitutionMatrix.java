@@ -50,9 +50,10 @@ public final class SubstitutionMatrix {
 	// GET/SET
 	public final Alphabet getAlphabet() {
 		return this.alphabet;
-	}
+	}	
+	
 
-	public SubstitutionMatrix(InputStream scoringMatrixStream, float gep)
+	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet alphabet, float gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;		
 		
@@ -67,11 +68,23 @@ public final class SubstitutionMatrix {
 			}
 			
 			// Read first line with the alphabet
-			this.alphabet = new Alphabet(line);
+			Alphabet recognizedAlphabet = new Alphabet(line);
 			
-			int alphabetLength = this.alphabet.getNumberOfCharacters();
+			int alphabetLength = alphabet.getNumberOfCharacters();
 			this.matrix = new int[alphabetLength * alphabetLength];
+			
 			this.alphabetLength = alphabetLength;
+			
+			if (alphabetLength != recognizedAlphabet.dimension()) {
+				//The two alphabets are different
+				throw new SALSAException("Error: substitution matrix file format is not supported");
+			}
+			else { //Find out if the order of characters is the same in the two alphabets
+				for (int i = 0; i < alphabetLength; i++) {
+					if (alphabet.intToChar(i) != recognizedAlphabet.intToChar(i))
+						throw new SALSAException("Error: substitution matrix file format is not supported");
+				}
+			}
 			
 			// Read the values for the matrix value (the matrix is alphabet x alphabet)
 			for (int i=0; i<alphabetLength;i++){
@@ -79,7 +92,9 @@ public final class SubstitutionMatrix {
 					this.matrix[i*alphabetLength+j] = scanner.nextInt();
 				}
 			}
-		}		
+		}	
+		
+		this.alphabet = alphabet;
 	}
 
 	/**
@@ -94,14 +109,48 @@ public final class SubstitutionMatrix {
 			if (b == this.alphabet.INDEL()) {
 				return 0;
 			} else {
-				return -GEP;
+				return -GEP; // *scalingFactor;
 			}
 		}
 		if (b == this.alphabet.INDEL()) {
-			return -GEP;
+			return -GEP; // *scalingFactor;
 		}
 
 		return matrix[a * alphabetLength + b];
 	}
+	
+	public static final SubstitutionMatrix getSubstitutionMatrix(String matrixSerie, float pid, float GEP, Alphabet alphabet) throws SALSAException, IOException {
+		if (alphabet == null){
+			alphabet = new Alphabet(AlphabetType.PROTEINS);
+		}
+		
+		if (matrixSerie.startsWith("BLOSUM")) {
+			if (pid > 0.8) return loadEmbeddedMatirx("BLOSUM80", alphabet, GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx("BLOSUM62", alphabet, GEP);
+			if (pid > 0.3) return loadEmbeddedMatirx("BLOSUM45", alphabet, GEP);
+			return loadEmbeddedMatirx("BLOSUM30", alphabet, GEP);
+		}
+		else if (matrixSerie.startsWith("PAM")) {
+			if (pid > 0.8) return loadEmbeddedMatirx("PAM20", alphabet, GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx("PAM60", alphabet, GEP);
+			if (pid > 0.4) return loadEmbeddedMatirx("PAM120", alphabet, GEP);
+			return loadEmbeddedMatirx("PAM350", alphabet, GEP);
+		}
 
+		//MatrixSerie is not BLOSUM and it is not PAM
+		return null;
+	}
+
+	/**
+	 * Load well-known matrix from embedded resources
+	 * 
+	 * @return
+	 * @throws IOException 
+	 * @throws SALSAException 
+	 */
+	private static final SubstitutionMatrix loadEmbeddedMatirx(String scoringMatrixName, Alphabet alphabet, float GEP) throws IOException, SALSAException {
+		try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
+			return new SubstitutionMatrix(stream, alphabet, GEP);
+		}
+	}
 }

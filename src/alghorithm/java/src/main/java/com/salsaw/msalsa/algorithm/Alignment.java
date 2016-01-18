@@ -67,8 +67,8 @@ public final class Alignment {
 	 * The alignment
 	 */
 	private final int[] alignMatrix;
-	private final SubstitutionMatrix substitution;
 	private final Alphabet alphabet;
+	private SubstitutionMatrix substitution;
 	/**
 	 * Sequences name and properties (found in FASTA files)
 	 */
@@ -87,18 +87,31 @@ public final class Alignment {
 	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTORS
-	Alignment(String inputFilePath, String treeFileName, SubstitutionMatrix s,
-			float g) throws IOException, SALSAException {
-		this(inputFilePath, treeFileName, s, g, TerminalGAPsStrategy.ONLY_GEP);
-	}
 
 	public Alignment(String inputFilePath, String treeFileName,
-			SubstitutionMatrix s, float g, TerminalGAPsStrategy tgs)
+			SubstitutionMatrix s, float gop, TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
+		this(inputFilePath, treeFileName, s.getAlphabet(), gop, tgs);
 		this.substitution = s;
-		this.GOP = g;
+	}
+	
+	public Alignment(String inputFilePath, String treeFileName,
+			final String matrixSerie, float gep, 
+			SubstitutionMatrix s, float gop, TerminalGAPsStrategy tgs)
+			throws IOException, SALSAException {
+		
+		this(inputFilePath, treeFileName, new Alphabet(AlphabetType.PROTEINS), gop, tgs);
+		
+		float pid = getAverageIdentityScore();
+		this.substitution = SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, gep, this.alphabet);
+	}
+	
+	private Alignment(String inputFilePath, String treeFileName,
+			Alphabet alphabet, float gop, TerminalGAPsStrategy tgs)
+			throws IOException, SALSAException {
+		this.GOP = gop;
 		this.terminal = tgs;
-		this.alphabet = s.getAlphabet();
+		this.alphabet = alphabet;
 		ArrayList<String> sequences = readInputSequences(inputFilePath);
 		this.alignMatrix = new int[this.numberOfSequences * this.length];
 		this.GAPS = new ArrayList<GAP>();
@@ -106,7 +119,7 @@ public final class Alignment {
 		createWeights(treeFileName);
 		preprocessing(sequences);
 		createCounters();
-	}
+	}	
 
 	// GET / SET
 	public final int getNumberOfSequences() {
@@ -125,7 +138,78 @@ public final class Alignment {
 		return this.terminal;
 	}
 
-	// METHODS
+	// METHODS	
+	/**
+	 * It calculates the identity score of two sequences (the percentage of identical residues found in the pairwise alignment)
+	 * 
+	 * @param firstRow
+	 * @param secondRow
+	 * @return
+	 * @throws SALSAException
+	 */
+	private final float getIdentityScore(int firstRow, int secondRow) throws SALSAException{
+		if (firstRow < 0 || 
+			firstRow >= numberOfSequences || 
+			secondRow < 0 || 
+			secondRow >= numberOfSequences){
+			throw new SALSAException("Error: the two rows are not inside the correct range");		
+		}
+
+		int count = 0;
+		int lengthFirstRow = 0;
+		int lengthSecondRow = 0;
+
+		for (int column = 0; column < length; column++){
+			if (this.alignMatrix[firstRow * this.length + column] != this.alphabet.INDEL()) {
+				lengthFirstRow++;
+			}
+			if (this.alignMatrix[firstRow * this.length + column] != this.alphabet.INDEL()) {
+				lengthSecondRow++;
+			}
+			if (this.alignMatrix[firstRow * this.length + column] != this.alphabet.INDEL() && 
+					this.alignMatrix[firstRow * this.length + column] == this.alignMatrix[secondRow * this.length + column]) {
+				count++;
+			}
+		}
+
+		if (lengthFirstRow < lengthSecondRow) {
+			return count / ((float) lengthFirstRow);
+		}
+		else {
+			return count / ((float) lengthSecondRow);
+		}
+	}
+	
+	/**
+	 * It calculates the mean of the identity scores of all couples of sequences in the alignment
+	 * 
+	 * @return
+	 * @throws SALSAException 
+	 */
+	private final float getAverageIdentityScore() throws SALSAException{
+		float sum = 0.0f;
+
+		for (int i = 0; i < numberOfSequences - 1; i++){
+			for (int j = i + 1; j < numberOfSequences; j++){
+				sum += getIdentityScore(i, j);
+			}
+		}
+
+		return 2 * sum / ((float) numberOfSequences * (numberOfSequences - 1));
+	}
+	
+	/**
+	 * It calculate the distance between two sequences
+	 * 
+	 * @param firstRow
+	 * @param secondRow
+	 * @return
+	 * @throws SALSAException 
+	 */
+	protected final float getPairwiseDistance(int firstRow, int secondRow) throws SALSAException{
+		return (1.0f - getIdentityScore(firstRow, secondRow)) * 100;		
+	}
+	
 	/**
 	 * Calculate the WSP-score (in the classic way, without using the counters)
 	 * 

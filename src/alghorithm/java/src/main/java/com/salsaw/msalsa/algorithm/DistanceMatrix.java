@@ -17,6 +17,7 @@ package com.salsaw.msalsa.algorithm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Scanner;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -38,14 +39,15 @@ public final class DistanceMatrix {
 			this.distMatrix = new float[numberOfSequences * numberOfSequences];
 			this.names = new String[numberOfSequences];
 
-			// Read the values for the matrix value (the matrix is alphabet x
-			// alphabet)
+			// Read the values for the matrix value (the matrix is numberOfSequences x numberOfSequences)
+			// Set US culture
+			scanner.useLocale(Locale.US);
 			for (int i = 0; i < this.numberOfSequences; i++) {
 				// Read name
 				names[i] = scanner.next();
 				for (int j = 0; j < this.numberOfSequences; j++) {
 					// Read value of distance matrix
-					distMatrix[i * numberOfSequences + j] = scanner.nextInt();
+					distMatrix[i * numberOfSequences + j] = scanner.nextFloat();
 				}
 			}
 		}

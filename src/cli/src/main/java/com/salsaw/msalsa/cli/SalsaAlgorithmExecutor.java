@@ -74,6 +74,7 @@ public class SalsaAlgorithmExecutor {
 		// PROCESS
 		String phylogeneticTreeFilePath = salsaParameters.getPhylogeneticTreeFile();
 		String alignmentFilePath = salsaParameters.getInputFile();
+		String distanceMatrixFilePath = salsaParameters.getDistanceMatrix();
 		
 		ClustalFileMapper clustalFileMapper = null;
 		
@@ -86,6 +87,7 @@ public class SalsaAlgorithmExecutor {
 			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
 			alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 			phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
+			distanceMatrixFilePath = clustalFileMapper.getDistanceMatrixFilePath();
 		}
 		else
 		{
@@ -93,6 +95,7 @@ public class SalsaAlgorithmExecutor {
 			clustalFileMapper = new ClustalFileMapper(null);
 			clustalFileMapper.setAlignmentFilePath(alignmentFilePath);
 			clustalFileMapper.setPhylogeneticTreeFile(phylogeneticTreeFilePath);
+			clustalFileMapper.setDistanceMatrixFilePath(distanceMatrixFilePath);
 		}
 		
 		SubstitutionMatrix matrix = null;
@@ -107,8 +110,8 @@ public class SalsaAlgorithmExecutor {
 				throw new SALSAException("Error: if the type of residues is different from "+ AlphabetType.PROTEINS.toString() +" it is required to specify the substitutionMatrix.");
 			}
 			
-			if (salsaParameters.getDistanceMatrix() != null){
-				try(InputStream stream = new FileInputStream(salsaParameters.getDistanceMatrix())) {
+			if (distanceMatrixFilePath != null){
+				try(InputStream stream = new FileInputStream(distanceMatrixFilePath)) {
 					DistanceMatrix dm = new DistanceMatrix(stream);
 					matrix = dm.createSubstitutionMatrix(salsaParameters.getMatrixSerie(), salsaParameters.getGEP());
 				}				

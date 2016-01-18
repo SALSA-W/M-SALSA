@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.beust.jcommander.Parameter;
+import com.salsaw.msalsa.algorithm.AlphabetType;
+import com.salsaw.msalsa.algorithm.MatrixSerie;
 import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
 import com.salsaw.msalsa.clustal.ClustalType;
 
@@ -49,23 +51,29 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-gamma", description = "dimension of the range of positions for a GAP during an iteration")
 	private int gamma = 30;
 
-	@Parameter(names = "-scoringMatrix", description = "scoring matrix")
-	private ScoringMatrix scoringMatrix = ScoringMatrix.Gonnet;
+	@Parameter(names = "-scoringMatrix", description = "scoring matrix file")
+	private ScoringMatrix scoringMatrix;
 
 	@Parameter(names = "-minIt", description = "minimum number of iterations")
-	private int minIterations = 500;
+	private int minIterations = 1000;
 
 	@Parameter(names = "-pSplit", description = "probability of split")
-	private float probabilityOfSplit = 0.5f;
+	private float probabilityOfSplit = 0.1f;
 
 	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs.", converter = TerminalGAPsStrategyConverter.class)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
+	
+	@Parameter(names = "-matrixSerie", description = "matrix serie. Possible options: BLOSUM or PAM (default BLOSUM)", converter = MatrixSerieConverter.class)
+	private MatrixSerie matrixSerie = MatrixSerie.BLOSUM;
+	
+	@Parameter(names = "-type", description = "type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)", converter = AlphabetTypeConverter.class)
+	private AlphabetType alphabetType = AlphabetType.PROTEINS;
 	
 	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
 	private String clustalPath;
 	
 	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega)")
-	private ClustalType clustalType = ClustalType.CLUSTAL_W;
+	private ClustalType clustalType = ClustalType.CLUSTAL_O;
 	
 	@Parameter(names = "-generatePhTree", description = "define if the phylogenetic neighbour-joining tree file must be generated")
 	private boolean generatePhylogeneticTree = false;
@@ -155,6 +163,14 @@ public class SalsaParameters implements Serializable {
 		return this.generatePhylogeneticTree;
 	}
 	
+	public MatrixSerie getMatrixSerie() {
+		return this.matrixSerie;
+	}
+	
+	public AlphabetType getAlphabetType() {
+		return this.alphabetType;
+	}
+	
 	// SET
 	public void setGOP(float gop) {
 		this.GOP = gop;
@@ -216,4 +232,12 @@ public class SalsaParameters implements Serializable {
 	public void setGeneratePhylogeneticTree(boolean generatePhylogeneticTree) {
 		this.generatePhylogeneticTree = generatePhylogeneticTree;
 	}
+	
+	public void getMatrixSerie(MatrixSerie matrixSerie) {
+		this.matrixSerie = matrixSerie;
+	}
+	
+	public  void getAlphabetType(AlphabetType alphabetType) {
+		this.alphabetType = alphabetType;
+	}	
 }

@@ -16,4 +16,15 @@ public enum AlphabetType {
     public String toString() {
         return text;
     }
+    
+    public static AlphabetType fromString(String alphabetTypeString) {
+   	 
+        for(AlphabetType alphabetType : AlphabetType.values()) {
+            if(alphabetType.toString().equalsIgnoreCase(alphabetTypeString)) {
+                return alphabetType;
+            }
+        }
+        
+        return null;
+    }
 }

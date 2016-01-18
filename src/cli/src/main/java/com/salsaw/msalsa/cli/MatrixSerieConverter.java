@@ -13,36 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.algorithm;
+package com.salsaw.msalsa.cli;
+
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.ParameterException;
+import com.salsaw.msalsa.algorithm.MatrixSerie;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public enum MatrixSerie {
-	BLOSUM("BLOSUM"),
-	PAM("PAM"),
-    ;
+public class MatrixSerieConverter implements IStringConverter<MatrixSerie> {
 
-    private final String text;
-
-    MatrixSerie(final String text) {
-        this.text = text;
-    }
-
-    @Override
-    public String toString() {
-        return text;
-    }
-    
-    public static MatrixSerie fromString(String matrixSerieString) {
+	@Override
+	public MatrixSerie convert(String value) {
+		MatrixSerie convertedValue = MatrixSerie.fromString(value);
     	 
-        for(MatrixSerie matrixSerie : MatrixSerie.values()) {
-            if(matrixSerie.toString().equalsIgnoreCase(matrixSerieString)) {
-                return matrixSerie;
-            }
+        if(convertedValue == null) {
+            throw new ParameterException(TerminalGAPsStrategyConverter.composeInvalidStringError(MatrixSerie.class, value));
         }
-        
-        return null;
-    }
+        return convertedValue;
+	}
+
 }

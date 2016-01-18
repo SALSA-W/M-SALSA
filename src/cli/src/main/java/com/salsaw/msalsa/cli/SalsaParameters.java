@@ -52,7 +52,7 @@ public class SalsaParameters implements Serializable {
 	private int gamma = 30;
 
 	@Parameter(names = "-scoringMatrix", description = "scoring matrix file")
-	private ScoringMatrix scoringMatrix;
+	private String scoringMatrix;
 
 	@Parameter(names = "-minIt", description = "minimum number of iterations")
 	private int minIterations = 1000;
@@ -68,6 +68,9 @@ public class SalsaParameters implements Serializable {
 	
 	@Parameter(names = "-type", description = "type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)", converter = AlphabetTypeConverter.class)
 	private AlphabetType alphabetType = AlphabetType.PROTEINS;
+	
+	@Parameter(names = "-distanceMatrix", description = "distance matrix file")
+	private String distanceMatrix;
 	
 	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
 	private String clustalPath;
@@ -110,11 +113,11 @@ public class SalsaParameters implements Serializable {
 	}
 
 	/**
-	 * Scoring matrix
+	 * Scoring matrix file path
 	 * 
 	 * @return
 	 */
-	public ScoringMatrix getScoringMatrix() {
+	public String getScoringMatrix() {
 		return scoringMatrix;
 	}
 
@@ -171,6 +174,10 @@ public class SalsaParameters implements Serializable {
 		return this.alphabetType;
 	}
 	
+	public String getDistanceMatrix() {
+		return this.distanceMatrix;
+	}
+	
 	// SET
 	public void setGOP(float gop) {
 		this.GOP = gop;
@@ -184,7 +191,7 @@ public class SalsaParameters implements Serializable {
 		this.gamma = gamma;
 	}
 
-	public void setScoringMatrix(ScoringMatrix scoringMatrix) {
+	public void setScoringMatrix(String scoringMatrix) {
 		this.scoringMatrix = scoringMatrix;
 	}
 
@@ -239,5 +246,9 @@ public class SalsaParameters implements Serializable {
 	
 	public  void getAlphabetType(AlphabetType alphabetType) {
 		this.alphabetType = alphabetType;
-	}	
+	}
+	
+	public void getDistanceMatrix(String distanceMatrix) {
+		this.distanceMatrix = distanceMatrix;
+	}
 }

@@ -97,7 +97,7 @@ public final class Alignment {
 	
 	public Alignment(String inputFilePath, String treeFileName,
 			final MatrixSerie matrixSerie, float gep, 
-			SubstitutionMatrix s, float gop, TerminalGAPsStrategy tgs)
+			float gop, TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		
 		this(inputFilePath, treeFileName, new Alphabet(AlphabetType.PROTEINS), gop, tgs);

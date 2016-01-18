@@ -27,6 +27,9 @@ import java.nio.file.Paths;
 import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.Alignment;
+import com.salsaw.msalsa.algorithm.Alphabet;
+import com.salsaw.msalsa.algorithm.AlphabetType;
+import com.salsaw.msalsa.algorithm.DistanceMatrix;
 import com.salsaw.msalsa.algorithm.LocalSearch;
 import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -92,27 +95,34 @@ public class SalsaAlgorithmExecutor {
 			clustalFileMapper.setPhylogeneticTreeFile(phylogeneticTreeFilePath);
 		}
 		
-		SubstitutionMatrix matrix;
-		String scoringMatrixName = salsaParameters.getScoringMatrix().toString();
-		
-		if (salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM50 ||
-			salsaParameters.getScoringMatrix() == ScoringMatrix.BLOSUM62 ||
-			salsaParameters.getScoringMatrix() == ScoringMatrix.Gonnet) {
-			// Load well-known matrix from embedded resources
-			try(InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
-				matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
-			}
-		}
-		else {
+		SubstitutionMatrix matrix = null;
+		if (salsaParameters.getScoringMatrix() != null){
 			// Load user matrix from file
-			try(InputStream stream = new FileInputStream(scoringMatrixName)) {
-				matrix = new SubstitutionMatrix(stream, salsaParameters.getGEP());
+			try(InputStream stream = new FileInputStream(salsaParameters.getScoringMatrix())) {
+				matrix = new SubstitutionMatrix(stream, new Alphabet(salsaParameters.getAlphabetType()), salsaParameters.getGEP());
 			}
 		}
+		else{
+			if (salsaParameters.getAlphabetType() != AlphabetType.PROTEINS){
+				throw new SALSAException("Error: if the type of residues is different from "+ AlphabetType.PROTEINS.toString() +" it is required to specify the substitutionMatrix.");
+			}
+			
+			if (salsaParameters.getDistanceMatrix() != null){
+				try(InputStream stream = new FileInputStream(salsaParameters.getDistanceMatrix())) {
+					DistanceMatrix dm = new DistanceMatrix(stream);
+					matrix = dm.createSubstitutionMatrix(salsaParameters.getMatrixSerie(), salsaParameters.getGEP());
+				}				
+			}
+		}		
 		
-		Alignment alignment = new Alignment(alignmentFilePath,
-				phylogeneticTreeFilePath, matrix, salsaParameters.getGOP(),
-				salsaParameters.getTerminalGAPsStrategy());
+		Alignment alignment;		
+		if (matrix != null) {
+			alignment = new Alignment(alignmentFilePath, phylogeneticTreeFilePath, 
+					matrix, salsaParameters.getGOP(), salsaParameters.getTerminalGAPsStrategy());
+		} else {
+			alignment = new Alignment(alignmentFilePath, phylogeneticTreeFilePath, 
+					salsaParameters.getMatrixSerie(), salsaParameters.getGEP(), salsaParameters.getGOP(), salsaParameters.getTerminalGAPsStrategy());
+		}			
 
 		LocalSearch localSearch = new LocalSearch(alignment, salsaParameters.getGamma(),
 				salsaParameters.getMinIterations(),

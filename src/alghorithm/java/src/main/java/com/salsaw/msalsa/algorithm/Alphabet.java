@@ -15,6 +15,10 @@
  */
 package com.salsaw.msalsa.algorithm;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**
@@ -30,10 +34,13 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class Alphabet {
+public class Alphabet {	
 	// FIELDS
 	private final int numberOfCharacters;
-	private final char[] alphabet;
+	private final char[] alphabet;	
+	private static final char[] AlphabetDNA = new char[] {'A', 'T', 'C', 'G'};
+	private static final char[] AlphabetRNA = new char[] {'A', 'U', 'C', 'G'};
+	private static final char[] AlphabetPROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
 
 	// CONSTRUCTOR
 	
@@ -43,46 +50,49 @@ public class Alphabet {
 	}
 	
 	public Alphabet(AlphabetType type) throws SALSAException {
-		String matrixInputLine = null;
 		switch (type) {
 		case DNA:
-			matrixInputLine = "ATCG";
+			this.alphabet = AlphabetDNA;
 			break;
 		case PROTEINS:
-			matrixInputLine = "AUCG";
+			this.alphabet = AlphabetPROTEINS;
 			break;
 		case RNA:
-			matrixInputLine = "ARNDCQEGHILKMFPSTWYVBZX";
+			this.alphabet = AlphabetRNA;
 			break;
 		default:
 			throw new SALSAException(
 					"Error: the specified type of alphabet is not supported. Supported types are: PROTEINS, DNA or RNA");
 		}
 
-		this.alphabet = calculateAlphabetArray(matrixInputLine);
 		this.numberOfCharacters = this.alphabet.length;
 	}
 	
 	private static final char[] calculateAlphabetArray(String matrixInputLine) throws SALSAException{
 		matrixInputLine = matrixInputLine.trim();
-		String[] alphabetsSymbols = matrixInputLine.split("  ");
-		int alphabetLength = alphabetsSymbols.length;
+
+		List<Character> alphabetsSymbols = new ArrayList<Character>();		
 		
-		if (alphabetLength <= 0){
+		// Use scanner to avoid probles due to wrong spaces number
+		try(Scanner scanner = new Scanner(matrixInputLine))
+		{
+			while(scanner.hasNext() == true){
+				// For short string charAt has higher performance
+				// http://stackoverflow.com/a/11876086
+				alphabetsSymbols.add(scanner.next().charAt(0));
+			}
+		}
+		
+		if (alphabetsSymbols.size() <= 0){
 			throw new SALSAException("Error: number of characters in the alphabet should be greater than 0!");
 		}
-
-		char[] alphabet = new char[alphabetLength];
-
-		for (int i = 0; i < alphabetsSymbols.length; i++) {
-
-			// For short string charAt has higher performance
-			// http://stackoverflow.com/a/11876086
-			char symbol = alphabetsSymbols[i].charAt(0);
-			alphabet[i] = symbol;
+		
+		char[] alphabet = new char[alphabetsSymbols.size()];
+		for (int i = 0; i < alphabetsSymbols.size(); i++) {
+			alphabet[i] = alphabetsSymbols.get(i).charValue();
 		}
 		
-		return alphabet;
+		return alphabet;	
 	}
 
 	// GET/SET

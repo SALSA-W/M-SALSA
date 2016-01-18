@@ -102,7 +102,7 @@ public final class GAP {
 	 * @return
 	 */
 	public final boolean terminalGAP() {
-		return (this.getBegin() == 0 || this.end == this.sequencesLength - 1);
+		return (this.begin == 0 || this.end == this.sequencesLength - 1);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public final class GAP {
 		this.begin--;
 		this.end--;
 
-		if (this.getBegin() < 0) {
+		if (this.begin < 0) {
 			throw new SALSAException("Error: border exceeded by a GAP.");
 		}
 		if (this.previous != null && this.getBegin() < (this.previous.end + 1)) {

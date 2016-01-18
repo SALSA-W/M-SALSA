@@ -79,7 +79,7 @@ public final class DistanceMatrix {
 	 * @throws SALSAException
 	 * @throws IOException
 	 */
-	public final SubstitutionMatrix createSubstitutionMatrix(final String matrixSerie, float GEP)
+	public final SubstitutionMatrix createSubstitutionMatrix(final MatrixSerie matrixSerie, float GEP)
 			throws SALSAException, IOException {
 		float pid = 0.0f;
 

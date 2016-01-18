@@ -96,7 +96,7 @@ public final class Alignment {
 	}
 	
 	public Alignment(String inputFilePath, String treeFileName,
-			final String matrixSerie, float gep, 
+			final MatrixSerie matrixSerie, float gep, 
 			SubstitutionMatrix s, float gop, TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		

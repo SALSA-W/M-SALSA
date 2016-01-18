@@ -119,26 +119,29 @@ public final class SubstitutionMatrix {
 		return matrix[a * alphabetLength + b];
 	}
 	
-	public static final SubstitutionMatrix getSubstitutionMatrix(String matrixSerie, float pid, float GEP, Alphabet alphabet) throws SALSAException, IOException {
+	public static final SubstitutionMatrix getSubstitutionMatrix(MatrixSerie matrixSerie, float pid, float GEP, Alphabet alphabet) throws SALSAException, IOException {
 		if (alphabet == null){
 			alphabet = new Alphabet(AlphabetType.PROTEINS);
 		}
 		
-		if (matrixSerie.startsWith("BLOSUM")) {
+		switch (matrixSerie) {
+		case BLOSUM:
 			if (pid > 0.8) return loadEmbeddedMatirx("BLOSUM80", alphabet, GEP);
 			if (pid > 0.6) return loadEmbeddedMatirx("BLOSUM62", alphabet, GEP);
 			if (pid > 0.3) return loadEmbeddedMatirx("BLOSUM45", alphabet, GEP);
 			return loadEmbeddedMatirx("BLOSUM30", alphabet, GEP);
-		}
-		else if (matrixSerie.startsWith("PAM")) {
+
+		case PAM:
 			if (pid > 0.8) return loadEmbeddedMatirx("PAM20", alphabet, GEP);
 			if (pid > 0.6) return loadEmbeddedMatirx("PAM60", alphabet, GEP);
 			if (pid > 0.4) return loadEmbeddedMatirx("PAM120", alphabet, GEP);
 			return loadEmbeddedMatirx("PAM350", alphabet, GEP);
-		}
 
-		//MatrixSerie is not BLOSUM and it is not PAM
-		return null;
+		default:
+			//MatrixSerie is not BLOSUM and it is not PAM
+			return null;
+
+		}		
 	}
 
 	/**

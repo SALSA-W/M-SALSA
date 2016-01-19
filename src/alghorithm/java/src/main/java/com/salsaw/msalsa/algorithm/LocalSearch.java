@@ -184,7 +184,7 @@ public final class LocalSearch {
 
 				// The GAP is attached to another one, so a penalty for the GAP
 				// opening should be removed
-				if (deltaSum + deltaGOP > deltaMax) {
+				if (deltaSum+deltaGOP-deltaMax > 0.00001f) {
 					g.unify();
 
 					// Delete g and remove it form GAPS vector
@@ -206,7 +206,7 @@ public final class LocalSearch {
 					finished = true;
 				}
 
-				if (deltaSum > deltaMax) {
+				if (deltaSum-deltaMax > 0.00001f) {
 					deltaMax = deltaSum;
 					bestIterator = iterator;
 					improvement = true;

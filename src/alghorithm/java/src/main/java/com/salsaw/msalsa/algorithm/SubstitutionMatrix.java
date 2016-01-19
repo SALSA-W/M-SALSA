@@ -17,6 +17,7 @@ package com.salsaw.msalsa.algorithm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -44,6 +45,8 @@ public final class SubstitutionMatrix {
 	private final Alphabet alphabet;
 
 	private final int[] matrix;
+	
+	private final static HashMap<String, SubstitutionMatrix> substitutionMatrixCache = new HashMap<String, SubstitutionMatrix>();
 
 	// CONSTRUCTOR
 
@@ -109,11 +112,11 @@ public final class SubstitutionMatrix {
 			if (b == this.alphabet.INDEL()) {
 				return 0;
 			} else {
-				return -GEP; // *scalingFactor;
+				return -GEP;
 			}
 		}
 		if (b == this.alphabet.INDEL()) {
-			return -GEP; // *scalingFactor;
+			return -GEP;
 		}
 
 		return matrix[a * alphabetLength + b];
@@ -140,7 +143,6 @@ public final class SubstitutionMatrix {
 		default:
 			//MatrixSerie is not BLOSUM and it is not PAM
 			return null;
-
 		}		
 	}
 
@@ -151,9 +153,18 @@ public final class SubstitutionMatrix {
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
-	private static final SubstitutionMatrix loadEmbeddedMatirx(String scoringMatrixName, Alphabet alphabet, float GEP) throws IOException, SALSAException {
-		try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
-			return new SubstitutionMatrix(stream, alphabet, GEP);
+	private static final SubstitutionMatrix loadEmbeddedMatirx(String scoringMatrixName, Alphabet alphabet, float GEP)
+			throws IOException, SALSAException {
+		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrixName, null);
+
+		if (cachedSubstitutionMatrix == null) {
+			// Data isn't present in the cache - load from file system
+			try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
+				cachedSubstitutionMatrix = new SubstitutionMatrix(stream, alphabet, GEP);
+				substitutionMatrixCache.put(scoringMatrixName, cachedSubstitutionMatrix);
+			}
 		}
+
+		return cachedSubstitutionMatrix;
 	}
 }

@@ -1,5 +1,5 @@
+<%@page import="com.salsaw.msalsa.algorithm.MatrixSerie"%>
 <%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
-<%@page import="com.salsaw.msalsa.cli.ScoringMatrix"%>
 <%@page import="com.salsaw.msalsa.clustal.ClustalType"%>
 <%@page import="com.salsaw.msalsa.algorithm.TerminalGAPsStrategy"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -22,7 +22,7 @@
 		class="com.salsaw.msalsa.cli.SalsaParameters" scope="request">
 	</jsp:useBean>
 
-	<c:set var="scoringMatrixes" value="<%=ScoringMatrix.values()%>" />
+	<c:set var="matrixSeries" value="<%=MatrixSerie.values()%>" />
 	<c:set var="clustalTypes" value="<%=ClustalType.values()%>" />
 	<c:set var="terminalGAPsStrategies"
 		value="<%=TerminalGAPsStrategy.values()%>" />
@@ -158,13 +158,13 @@
 
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="terminalGAPsStrategy">Scoring
-									Matrix:</label>
+									Matrix Serie:</label>
 								<div class="col-sm-10">
-									<select id="scoringMatrix" name="scoringMatrix"
+									<select id="matrixSerie" name="matrixSerie"
 										class="form-control">
-										<c:forEach items="${scoringMatrixes}" var="scoringMatrix">
-											<option value="${scoringMatrix}"
-												${salsaParameters.scoringMatrix == scoringMatrix ? 'selected' : ''}>${scoringMatrix}</option>
+										<c:forEach items="${matrixSeries}" var="matrixSerie">
+											<option value="${matrixSerie}"
+												${salsaParameters.matrixSerie == matrixSerie ? 'selected' : ''}>${matrixSerie}</option>
 										</c:forEach>
 									</select>
 								</div>

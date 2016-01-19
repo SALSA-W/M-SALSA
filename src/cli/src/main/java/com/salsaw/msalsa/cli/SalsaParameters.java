@@ -240,15 +240,15 @@ public class SalsaParameters implements Serializable {
 		this.generatePhylogeneticTree = generatePhylogeneticTree;
 	}
 	
-	public void getMatrixSerie(MatrixSerie matrixSerie) {
+	public void setMatrixSerie(MatrixSerie matrixSerie) {
 		this.matrixSerie = matrixSerie;
 	}
 	
-	public  void getAlphabetType(AlphabetType alphabetType) {
+	public void setAlphabetType(AlphabetType alphabetType) {
 		this.alphabetType = alphabetType;
 	}
 	
-	public void getDistanceMatrix(String distanceMatrix) {
+	public void setDistanceMatrix(String distanceMatrix) {
 		this.distanceMatrix = distanceMatrix;
 	}
 }

@@ -53,25 +53,6 @@ public final class DistanceMatrix {
 		}
 	}
 
-	public final float similarity(String name1, String name2) throws SALSAException {
-		Integer index1 = null, index2 = null;
-
-		for (int i = 0; i < this.numberOfSequences; i++) {
-			if (this.names[i].equals(name1) || (">" + this.names[i]).equals(name1)) {
-				index1 = i;
-			}
-			if (this.names[i].equals(name2) || (">" + this.names[i]).equals(name2)) {
-				index2 = i;
-			}
-		}
-
-		if (index1 == null || index2 == null) {
-			throw new SALSAException("Unable to find similarity indexes");
-		}
-
-		return 1 - this.distMatrix[index1 * this.numberOfSequences + index2];
-	}
-
 	/**
 	 * It calculates the average percentage of identity of the sequences and based on that it choose the correct substitution matrix
 	 * 
@@ -87,7 +68,7 @@ public final class DistanceMatrix {
 
 		for (int i = 0; i < this.numberOfSequences; i++) {
 			for (int j = i + 1; j < this.numberOfSequences; j++) {
-				pid += this.distMatrix[i * this.numberOfSequences + j];
+				pid += 1.0f - this.distMatrix[i * this.numberOfSequences + j];
 			}
 		}
 

@@ -10,11 +10,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>M-SALSA multiple sequence alignments</title>
-<meta name="robots" content="index, nofollow" />
-<jsp:include page="header.jsp" />
-<link rel="stylesheet" href="css/btn-file.css">
-<link rel="stylesheet" href="css/header.css">
+	<title>M-SALSA multiple sequence alignments</title>
+	<meta name="robots" content="index, nofollow" />
+	<jsp:include page="header.jsp" />
 </head>
 <body>
 	<!-- Style theme: https://bootswatch.com/superhero/ -->
@@ -28,33 +26,7 @@
 		value="<%=TerminalGAPsStrategy.values()%>" />
 
 	<div class="container">
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="index.jsp"><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></a>
-					<button data-target="#navbar-main" data-toggle="collapse"
-						type="button" class="navbar-toggle">
-						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-				</div>
-				<div id="navbar-main" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="">Documentation</a></li>
-					</ul>
-
-					<ul class="nav navbar-nav navbar-right">
-						<li><a target="_blank" href="">Contacts</a></li>
-					</ul>
-
-				</div>
-			</div>
-		</nav>
-
-		<div class="jumbotron">
-			<h1><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></h1>
-			<p>Multiple Sequence Alignment by Local Search Algorithm</p>
-		</div>
+		<jsp:include page="navbar.jsp" />
 
 		<div class="page-header">
 			<%=SalsaAlgorithmExecutor.M_SALSA_HEADER%>
@@ -64,7 +36,6 @@
 				href="http://www.ebi.ac.uk/Tools/psa/">pairwise sequence
 				alignment tools</a>.
 		</div>
-
 
 		<div class="alert alert-danger alert-dismissible collapse col-sm-12"
 			role="alert" id="validation-errors">

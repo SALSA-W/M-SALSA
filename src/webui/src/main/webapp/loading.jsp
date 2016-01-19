@@ -9,6 +9,8 @@
 </head>
 <body>
 	<div class="container">
+		<jsp:include page="navbar.jsp" />
+	
 		<h1>LOADING...</h1>
 		
 		<div class="progress">

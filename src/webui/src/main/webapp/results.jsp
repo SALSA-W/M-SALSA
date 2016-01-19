@@ -12,19 +12,24 @@
 <body>
 	<!-- http://stackoverflow.com/questions/10982153/servlet-pdf-download-button-creation -->
 	<div class="container">
-		<form method="post" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
-			<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.Alignment.toString()%>"/>
-			<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
-			
-			<input type="submit" value="Download Alignment" />
-		</form>
+		<jsp:include page="navbar.jsp" />
+	
+		<div class="spacer">
+			<form method="post" class="form-horizontal" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
+				<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.Alignment.toString()%>"/>
+				<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
+				
+				<input type="submit" class="btn btn-default" value="Download Alignment" />
+			</form>
+		</div>
 		
-		<form method="post" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
-			<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.PhylogeneticTree.toString()%>"/>
-			<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
-			
-			<input type="submit" value="Download Phylogenetic Tree" />
-		</form>
+		<div class="spacer">
+			<form method="post" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
+				<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.PhylogeneticTree.toString()%>"/>
+				<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
+				<input type="submit" class="btn btn-default" value="Download Phylogenetic Tree" />
+			</form>
+		</div>
 		
 		<div id="svgCanvas" />
 

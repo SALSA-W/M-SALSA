@@ -76,6 +76,14 @@ public class SalsaAlgorithmExecutor {
 				throw new SALSAParameterException("The clusal path passed reference a process called " + clustalProcessName + ". The expected one is " + expectedClustalProcessName);
 			}			
 		}
+		
+		// INIT PARAMTERS
+		if (salsaParameters.getClustalType() == ClustalType.CLUSTAL_W &&
+			salsaParameters.getClustalPath() != null &&
+			salsaParameters.getClustalWPath() == null){
+			// If the path for ClustalW is already set, ensure is set in all properties
+			salsaParameters.setClustalWPath(salsaParameters.getClustalPath());
+		}
 	}
 	
 	public static void callClustal(SalsaParameters salsaParameters) throws SALSAException, IOException, InterruptedException {

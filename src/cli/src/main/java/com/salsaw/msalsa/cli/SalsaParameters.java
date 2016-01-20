@@ -39,7 +39,7 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = { "-outputFile" }, description = "The FASTA produced after the process", required = true)
 	private String outputFile;
 
-	@Parameter(names = { "-phTreeFile" }, description = "The ph file that contains the phylogenetic tree", required = false)
+	@Parameter(names = { "-phTreeFile" }, description = "The ph or dnd file that contains the phylogenetic tree", required = false)
 	private String phylogeneticTreeFile;
 
 	@Parameter(names = { "-GOP" }, description = "GAP Opening Penalty")

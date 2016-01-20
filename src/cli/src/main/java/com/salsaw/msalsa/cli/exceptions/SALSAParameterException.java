@@ -13,26 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.cli;
+package com.salsaw.msalsa.cli.exceptions;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.ParameterException;
-import com.salsaw.msalsa.algorithm.MatrixSerie;
+import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class MatrixSerieConverter implements IStringConverter<MatrixSerie> {
+public class SALSAParameterException extends SALSAException {
 
-	@Override
-	public MatrixSerie convert(String value) {
-		MatrixSerie convertedValue = MatrixSerie.fromString(value);
-    	 
-        if(convertedValue == null) {
-            throw new ParameterException(TerminalGAPsStrategyConverter.composeInvalidStringError(MatrixSerie.class, value));
-        }
-        return convertedValue;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2305025882465669689L;
+
+	public SALSAParameterException(String message) {
+		super(message);
 	}
 
 }

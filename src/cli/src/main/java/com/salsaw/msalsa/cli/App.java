@@ -16,12 +16,16 @@
 package com.salsaw.msalsa.cli;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
 
 /**
  * Hello world!
  *
  */
 public class App {
+	
 	public static void main(String[] args) {
 		SalsaParameters salsaParameters = new SalsaParameters();
 		JCommander commands = new JCommander(salsaParameters);
@@ -30,9 +34,24 @@ public class App {
 			commands.parse(args);
 
 			SalsaAlgorithmExecutor.callClustal(salsaParameters);
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+			System.out.println("Aligned completed successfully");			
+			System.exit(ExitCode.Success.ordinal());
+		} catch(ParameterException pe){
 			commands.usage();
+			System.exit(ExitCode.ParametersError.ordinal());
+		} catch(SALSAParameterException pe){
+			System.err.println(pe.getMessage());
+			commands.usage();
+			System.exit(ExitCode.ParametersError.ordinal());
+		}
+		catch(SALSAException se){
+			se.printStackTrace();
+			System.exit(ExitCode.InternalSalsaError.ordinal());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.exit(ExitCode.GenericException.ordinal());
 		}
 	}
 }

@@ -33,8 +33,10 @@ import com.salsaw.msalsa.algorithm.DistanceMatrix;
 import com.salsaw.msalsa.algorithm.LocalSearch;
 import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
 import com.salsaw.msalsa.clustal.ClustalFileMapper;
 import com.salsaw.msalsa.clustal.ClustalManager;
+import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.clustal.ClustalWManager;
 
 /**
@@ -59,12 +61,20 @@ public class SalsaAlgorithmExecutor {
 		// VALIDATION
 		if (salsaParameters.getClustalPath() == null &&
 			salsaParameters.getPhylogeneticTreeFile() == null){
-			throw new SALSAException("Required input missing: - clustal path for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
+			throw new SALSAParameterException("Required input missing: - clustal path for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
 		}		
 		
 		if (salsaParameters.getGeneratePhylogeneticTree() == true &&
 			salsaParameters.getClustalWPath() == null){
-				throw new SALSAException("To calculate the phylogenetic tree the ClustalW path is required");
+				throw new SALSAParameterException("To calculate the phylogenetic tree the ClustalW path is required");
+		}
+		
+		if (salsaParameters.getClustalPath() != null){
+			String clustalProcessName = FilenameUtils.getBaseName(salsaParameters.getClustalPath());
+			String expectedClustalProcessName = ClustalType.getClustalProcessName(salsaParameters.getClustalType());
+			if (clustalProcessName.equalsIgnoreCase(expectedClustalProcessName) == false){
+				throw new SALSAParameterException("The clusal path passed reference a process called " + clustalProcessName + ". The expected one is " + expectedClustalProcessName);
+			}			
 		}
 	}
 	

@@ -30,28 +30,27 @@ public enum ClustalType {
 	private static final String CLUSTAL_O_PROCESS_NAME = "clustalo";
 	
 	// GET / SET
-	public static final File getClustalProcessFile(ClustalType clustalType)
-	{	
-		String processName;		
+	public static final String getClustalProcessName(ClustalType clustalType)
+	{		
 		switch (clustalType) {
 		case CLUSTAL_W:
-			processName = CLUSTAL_W_PROCESS_NAME;
-			break;
+			return CLUSTAL_W_PROCESS_NAME;
 			
 		case CLUSTAL_O:
-			processName = CLUSTAL_O_PROCESS_NAME;
-			break;
+			return CLUSTAL_O_PROCESS_NAME;
 
 		default:
-			throw new UnsupportedOperationException("Not implemented");
-			//break;
-		}
-		
+			throw new UnsupportedOperationException("Not available name for " + clustalType);
+		}		
+	}
+	
+	public static final File getClustalProcessFile(ClustalType clustalType)
+	{	
 		//Get file from resources folder
 		ClassLoader classLoader = ClustalType.class.getClassLoader();
 		
 		String osFolder = getOpertiveSystemPath();
-		Path processFilePath = Paths.get(osFolder, processName);		
+		Path processFilePath = Paths.get(osFolder, getClustalProcessName(clustalType));		
 		
 		return new File(classLoader.getResource(processFilePath.toString()).getFile());
 	}

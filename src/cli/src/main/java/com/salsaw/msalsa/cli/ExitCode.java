@@ -15,24 +15,13 @@
  */
 package com.salsaw.msalsa.cli;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.ParameterException;
-import com.salsaw.msalsa.algorithm.MatrixSerie;
-
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class MatrixSerieConverter implements IStringConverter<MatrixSerie> {
-
-	@Override
-	public MatrixSerie convert(String value) {
-		MatrixSerie convertedValue = MatrixSerie.fromString(value);
-    	 
-        if(convertedValue == null) {
-            throw new ParameterException(TerminalGAPsStrategyConverter.composeInvalidStringError(MatrixSerie.class, value));
-        }
-        return convertedValue;
-	}
-
+public enum ExitCode {
+	Success,
+	ParametersError,
+	InternalSalsaError,
+	GenericException	
 }

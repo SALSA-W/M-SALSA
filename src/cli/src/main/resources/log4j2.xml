@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- status => The level of internal Log4j events that should be logged to the console.  -->
+<Configuration status="WARN">
+
+	<Properties>
+		<Property name="log-path">logs</Property>
+	</Properties>
+	
+	<Appenders>
+		<Console name="console-log" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%-5level] %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n" />
+		</Console>
+		
+		<RollingFile name="error-log" fileName="${log-path}/msalsa-error.log"
+			filePattern="${log-path}/msalsa-error-%d{yyyy-MM-dd}.log">
+			<PatternLayout header="${java:runtime} - ${java:vm} - ${java:os} - ${sys:line.separator}">
+				<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="debug" additivity="false">
+			<AppenderRef ref="error-log" level="error" />
+			<AppenderRef ref="console-log" level="all" />
+		</Root>
+	</Loggers>
+</Configuration>

@@ -15,6 +15,11 @@
  */
 package com.salsaw.msalsa.cli;
 
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -26,13 +31,15 @@ import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
  */
 public class App {
 	
+    private static final Logger logger = LogManager.getLogger(App.class);
+    
 	public static void main(String[] args) {
 		SalsaParameters salsaParameters = new SalsaParameters();
 		JCommander commands = new JCommander(salsaParameters);
 
 		try {
 			commands.parse(args);
-
+			
 			SalsaAlgorithmExecutor.callClustal(salsaParameters);
 			
 			System.out.println("Aligned completed successfully");			
@@ -46,11 +53,11 @@ public class App {
 			System.exit(ExitCode.ParametersError.ordinal());
 		}
 		catch(SALSAException se){
-			se.printStackTrace();
+			logger.error("SALSAException during msalsa execution", se);
 			System.exit(ExitCode.InternalSalsaError.ordinal());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception during msalsa execution", e);
 			System.exit(ExitCode.GenericException.ordinal());
 		}
 	}

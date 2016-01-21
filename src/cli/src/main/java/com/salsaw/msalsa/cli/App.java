@@ -53,12 +53,21 @@ public class App {
 			System.exit(ExitCode.ParametersError.ordinal());
 		}
 		catch(SALSAException se){
-			logger.error("SALSAException during msalsa execution", se);
+			logger.error(composeErrorMessage("SALSAException during msalsa execution."), se);
 			System.exit(ExitCode.InternalSalsaError.ordinal());
 		}
 		catch (Exception e) {
-			logger.error("Exception during msalsa execution", e);
+			logger.error(composeErrorMessage("Exception during msalsa execution"), e);
 			System.exit(ExitCode.GenericException.ordinal());
 		}
+	}
+	
+	private static String composeErrorMessage(String errorMessage){
+		StringBuilder stringBuilder = new StringBuilder("Application version: ");
+		Package p = App.class.getPackage();
+		stringBuilder.append(p.getImplementationVersion());
+		stringBuilder.append(System.lineSeparator());
+		stringBuilder.append(errorMessage);
+		return stringBuilder.toString();
 	}
 }

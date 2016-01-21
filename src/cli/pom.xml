@@ -34,7 +34,7 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-core</artifactId>
@@ -44,7 +44,7 @@
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -53,8 +53,8 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-		</dependency>		
-		
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -68,10 +68,13 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<!-- MainClass in mainfest make a executable jar -->
+
 					<archive>
 						<manifest>
-							<mainClass>com.salsaw.msalsa.cli.App</mainClass>							
+							<!-- MainClass in mainfest make a executable jar -->
+							<mainClass>com.salsaw.msalsa.cli.App</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
 					</archive>
 

@@ -15,26 +15,39 @@
 	<!-- http://stackoverflow.com/questions/10982153/servlet-pdf-download-button-creation -->
 	<div class="container">
 		<jsp:include page="navbar.jsp" />
-	
-		<div class="spacer">
+			
+		<div class="spacer"></div>
+		
+		<div  class="col-md-6">
 			<form method="post" class="form-horizontal" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
 				<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.Alignment.toString()%>"/>
 				<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
 				
-				<input type="submit" class="btn btn-default" value="Download Alignment" />
+				<div class="text-center"> 
+					<input type="submit" class="btn btn-default" value="Download Alignment" />
+				</div>
 			</form>
 		</div>
 		
 		<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
-			<div class="spacer">
+			<div  class="col-md-6">
+											
 				<form method="post" action="<%=AlignmentResultServlet.class.getSimpleName()%>">
 					<input type="hidden" name="<%=AlignmentResultServlet.FILE_TYPE_DOWNLOAD_ATTRIBUTE %>" value="<%=AlignmentResultFileType.PhylogeneticTree.toString()%>"/>
 					<input type="hidden" name="<%=AlignmentStatusServlet.ID_PARAMETER%>" value="<%=request.getAttribute(AlignmentStatusServlet.ID_PARAMETER)%>"/>
-					<input type="submit" class="btn btn-default" value="Download Phylogenetic Tree" />
-				</form>
-			</div>
+					<div class="text-center"> 
+						<input type="submit" class="btn btn-default" value="Download Phylogenetic Tree" />
+					</div>
+				</form>					
+				
+			</div>										
 			
-			<div id="svgCanvas" />
+			<div class="spacer"></div>
+			
+			<div class="col-md-12 text-center"> 
+				<div id="svgCanvas"></div>
+			</div>
+				
 		</c:if>
 		
 		<jsp:include page="footer.jsp"/>

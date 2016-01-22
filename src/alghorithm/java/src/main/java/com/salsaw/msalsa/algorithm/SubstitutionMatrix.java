@@ -56,7 +56,7 @@ public final class SubstitutionMatrix {
 	}	
 	
 
-	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet alphabet, float gep)
+	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet expectedAlphabet, float gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;		
 		
@@ -73,21 +73,28 @@ public final class SubstitutionMatrix {
 			// Read first line with the alphabet
 			Alphabet recognizedAlphabet = new Alphabet(line);
 			
-			int alphabetLength = alphabet.getNumberOfCharacters();
-			this.matrix = new int[alphabetLength * alphabetLength];
-			
-			this.alphabetLength = alphabetLength;
-			
-			if (alphabetLength != recognizedAlphabet.dimension()) {
-				//The two alphabets are different
-				throw new SALSAException("Error: substitution matrix file format is not supported");
-			}
-			else { //Find out if the order of characters is the same in the two alphabets
-				for (int i = 0; i < alphabetLength; i++) {
-					if (alphabet.intToChar(i) != recognizedAlphabet.intToChar(i))
-						throw new SALSAException("Error: substitution matrix file format is not supported");
+			int alphabetLength;
+			if (expectedAlphabet != null){
+				// Check if expected alphabet and one load from stream corresponds
+				alphabetLength = expectedAlphabet.getNumberOfCharacters();
+				if (alphabetLength != recognizedAlphabet.dimension()) {
+					//The two alphabets are different
+					throw new SALSAException("Error: substitution matrix file format is not supported");
 				}
-			}
+				else { //Find out if the order of characters is the same in the two alphabets
+					for (int i = 0; i < alphabetLength; i++) {
+						if (expectedAlphabet.intToChar(i) != recognizedAlphabet.intToChar(i))
+							throw new SALSAException("Error: substitution matrix file format is not supported");
+					}
+				}
+				this.alphabet = expectedAlphabet;
+			} else {
+				alphabetLength = recognizedAlphabet.getNumberOfCharacters();
+				this.alphabet = recognizedAlphabet;
+			}				
+			
+			this.matrix = new int[alphabetLength * alphabetLength];			
+			this.alphabetLength = alphabetLength;
 			
 			// Read the values for the matrix value (the matrix is alphabet x alphabet)
 			for (int i=0; i<alphabetLength;i++){
@@ -95,9 +102,7 @@ public final class SubstitutionMatrix {
 					this.matrix[i*alphabetLength+j] = scanner.nextInt();
 				}
 			}
-		}	
-		
-		this.alphabet = alphabet;
+		}			
 	}
 
 	/**
@@ -139,6 +144,12 @@ public final class SubstitutionMatrix {
 			if (pid > 0.6) return loadEmbeddedMatirx("PAM60", alphabet, GEP);
 			if (pid > 0.4) return loadEmbeddedMatirx("PAM120", alphabet, GEP);
 			return loadEmbeddedMatirx("PAM350", alphabet, GEP);
+			
+		case BLOSUM62:
+			return loadEmbeddedMatirx("BLOSUM62", alphabet, GEP);
+			
+		case GONNET:
+			return loadEmbeddedMatirx("Gonnet", null, GEP);
 
 		default:
 			//MatrixSerie is not BLOSUM and it is not PAM

@@ -63,8 +63,8 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs. Possible options: BOTH_PENALTIES, ONLY_GEP" , converter = TerminalGAPsStrategyConverter.class)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
 	
-	@Parameter(names = "-matrixSerie", description = "matrix serie. Possible options: BLOSUM, PAM", converter = MatrixSerieConverter.class)
-	private MatrixSerie matrixSerie = MatrixSerie.BLOSUM;
+	@Parameter(names = "-matrixSerie", description = "matrix serie. Possible options: BLOSUM, PAM, BLOSUM62, GONNET", converter = MatrixSerieConverter.class)
+	private MatrixSerie matrixSerie = MatrixSerie.BLOSUM62;
 	
 	@Parameter(names = "-type", description = "type of sequences. Possible options: DNA, RNA, PROTEINS", converter = AlphabetTypeConverter.class)
 	private AlphabetType alphabetType = AlphabetType.PROTEINS;

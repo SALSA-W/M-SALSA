@@ -21,7 +21,9 @@ package com.salsaw.msalsa.algorithm;
  */
 public enum MatrixSerie {
 	BLOSUM("BLOSUM"),
+	BLOSUM62("BLOSUM62"),
 	PAM("PAM"),
+	GONNET("GONNET"),	
     ;
 
     private final String text;

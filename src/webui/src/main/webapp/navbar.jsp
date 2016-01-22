@@ -3,7 +3,7 @@
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="index.jsp"><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></a>
+			<a class="navbar-brand" href="index"><%=SalsaAlgorithmExecutor.M_SALSA_HEADER%></a>
 			<button data-target="#navbar-main" data-toggle="collapse"
 				type="button" class="navbar-toggle">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span

@@ -48,6 +48,7 @@ public class AlignmentResultServlet extends HttpServlet {
 
 	private static final int BUFSIZE = 4096;
 	public static final String FILE_TYPE_DOWNLOAD_ATTRIBUTE = "fileToDownload";
+	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -61,8 +62,13 @@ public class AlignmentResultServlet extends HttpServlet {
 			
 		AlignmentResult alignmentResult = new AlignmentResult(idRequest);
 		
-		String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
-		request.setAttribute("newickTree", newickTree);
+		boolean phylogeneticTreeDataAvailable = false;
+		if (alignmentResult.getPhylogeneticTreeFilePath() != null) {
+			phylogeneticTreeDataAvailable = true;
+			String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
+			request.setAttribute("newickTree", newickTree);
+		}	
+		request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
 		
 		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(alignmentResult.getAligmentFilePath())));
 		request.setAttribute("aligmentFileContent", aligmentFileContent);

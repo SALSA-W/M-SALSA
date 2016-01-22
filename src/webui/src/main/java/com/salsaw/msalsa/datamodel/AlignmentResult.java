@@ -91,9 +91,6 @@ public class AlignmentResult {
 		
 		if (msalsaAligmentFilePath == null){
 			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX + " for UUID " + idProccedRequest);
-		}		
-		if (msalsaPhylogeneticTreeFilePath == null){
-			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX + " for UUID " + idProccedRequest);
 		}
 		
 		this.msalsaAligmentFilePath = msalsaAligmentFilePath;

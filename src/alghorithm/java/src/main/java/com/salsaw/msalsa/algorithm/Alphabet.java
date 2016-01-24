@@ -16,7 +16,9 @@
 package com.salsaw.msalsa.algorithm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -34,38 +36,56 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class Alphabet {	
-	// FIELDS
-	private final int numberOfCharacters;
-	private final char[] alphabet;	
+public class Alphabet {
+	
+	// CONSTANTS
 	private static final char[] AlphabetDNA = new char[] {'A', 'T', 'C', 'G'};
 	private static final char[] AlphabetRNA = new char[] {'A', 'U', 'C', 'G'};
 	private static final char[] AlphabetPROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
+	private static final char GAP_SYMBOL = '-';
+	
+	// FIELDS
+	private final int numberOfCharacters;
+	private final char[] alphabet;	
+	private final Map<Integer, Character> symbolMapIntKey = new HashMap<Integer, Character>();
+	private final Map<Character, Integer> symbolMapCharKey = new HashMap<Character, Integer>();
 
 	// CONSTRUCTOR
 	
-	public Alphabet(String matrixInputLine) throws SALSAException{
-		this.alphabet = calculateAlphabetArray(matrixInputLine);
+	private Alphabet(char[] alphabet){
+		this.alphabet = alphabet;
 		this.numberOfCharacters = this.alphabet.length;
+		
+		// Init maps
+		for (int i = 0; i < this.numberOfCharacters; i++) {
+			this.symbolMapIntKey.put(i, this.alphabet[i]);
+			this.symbolMapCharKey.put(this.alphabet[i], i);
+		}
+		// this.numberOfCharacters as INDEL
+		this.symbolMapIntKey.put(this.numberOfCharacters, GAP_SYMBOL);
+		this.symbolMapCharKey.put(GAP_SYMBOL, this.numberOfCharacters);
+	}
+	
+	public Alphabet(String matrixInputLine) throws SALSAException{
+		this(calculateAlphabetArray(matrixInputLine));
 	}
 	
 	public Alphabet(AlphabetType type) throws SALSAException {
+		this(getEmbeddedAlphabetArray(type));
+	}
+	
+	private static final char[] getEmbeddedAlphabetArray(AlphabetType type) throws SALSAException{
 		switch (type) {
 		case DNA:
-			this.alphabet = AlphabetDNA;
-			break;
+			return AlphabetDNA;
 		case PROTEINS:
-			this.alphabet = AlphabetPROTEINS;
-			break;
+			return AlphabetPROTEINS;
 		case RNA:
-			this.alphabet = AlphabetRNA;
-			break;
+			return AlphabetRNA;
 		default:
 			throw new SALSAException(
 					"Error: the specified type of alphabet is not supported. Supported types are: PROTEINS, DNA or RNA");
 		}
-
-		this.numberOfCharacters = this.alphabet.length;
 	}
 	
 	private static final char[] calculateAlphabetArray(String matrixInputLine) throws SALSAException{
@@ -118,18 +138,11 @@ public class Alphabet {
 	 * @throws SALSAException
 	 */
 	public final int charToInt(char c) throws SALSAException {
-		for (int i = 0; i < this.numberOfCharacters; i++) {
-			if (this.alphabet[i] == c) {
-				return i;
-			}
-		}
-
-		if (c == '-') {
-			// INDEL
-			return this.numberOfCharacters;
-		} else {
+		Integer value = this.symbolMapCharKey.getOrDefault(c, null);
+		if(value == null){
 			throw new SALSAException("Alphabet doesn't contain character \'" + c + "\'.");
 		}
+		return value.intValue();		
 	}
 
 	/**
@@ -149,15 +162,12 @@ public class Alphabet {
 	 * @throws SALSAException
 	 */
 	public final char intToChar(int i) throws SALSAException {
-		// this.numberOfCharacters as INDEL
-		if (i == this.numberOfCharacters) {
-			return '-';
-		}
-		if (i < 0 || i > (this.numberOfCharacters - 1)) {
+		Character value = this.symbolMapIntKey.getOrDefault(i, null);
+		if(value == null){
 			throw new SALSAException("Error while saving the alignment");
 		}
-
-		return alphabet[i];
+		return value.charValue();
+		
 	}
 
 	/**

@@ -20,6 +20,7 @@ package com.salsaw.msalsa.algorithm;
  *
  */
 public enum MatrixSerie {
+	NONE("null"),
 	BLOSUM("BLOSUM"),
 	BLOSUM62("BLOSUM62"),
 	PAM("PAM"),

@@ -128,26 +128,22 @@ public final class SubstitutionMatrix {
 		return matrix[a * alphabetLength + b];
 	}
 	
-	public static final SubstitutionMatrix getSubstitutionMatrix(MatrixSerie matrixSerie, float pid, float GEP, Alphabet alphabet) throws SALSAException, IOException {
-		if (alphabet == null){
-			alphabet = new Alphabet(AlphabetType.PROTEINS);
-		}
-		
+	public static final SubstitutionMatrix getSubstitutionMatrix(MatrixSerie matrixSerie, float pid, float GEP) throws SALSAException, IOException {		
 		switch (matrixSerie) {
 		case BLOSUM:
-			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM80, alphabet, GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, alphabet, GEP);
-			if (pid > 0.3) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM45, alphabet, GEP);
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM30, alphabet, GEP);
+			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM80, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.3) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM45, new Alphabet(AlphabetType.PROTEINS), GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM30, new Alphabet(AlphabetType.PROTEINS), GEP);
 
 		case PAM:
-			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM20, alphabet, GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM60, alphabet, GEP);
-			if (pid > 0.4) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM120, alphabet, GEP);
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM350, alphabet, GEP);
+			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM20, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM60, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.4) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM120, new Alphabet(AlphabetType.PROTEINS), GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM350, new Alphabet(AlphabetType.PROTEINS), GEP);
 			
 		case BLOSUM62:
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, alphabet, GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
 			
 		case GONNET:
 			return loadEmbeddedMatirx(EmbeddedScoringMatrix.Gonnet, null, GEP);

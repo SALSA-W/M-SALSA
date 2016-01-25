@@ -91,27 +91,32 @@ public final class Alignment {
 	public Alignment(final String inputFilePath, final String treeFileName,
 			final SubstitutionMatrix s, final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
-		this(inputFilePath, treeFileName, s.getAlphabet(), gop, tgs);
-		this.substitution = s;
+		this(inputFilePath, treeFileName, s, gop, tgs, MatrixSerie.NONE, null);
 	}
 	
 	public Alignment(final String inputFilePath, final String treeFileName,
 			final MatrixSerie matrixSerie, final float gep, 
 			final float gop, final TerminalGAPsStrategy tgs)
-			throws IOException, SALSAException {
-		
-		this(inputFilePath, treeFileName, new Alphabet(AlphabetType.PROTEINS), gop, tgs);
-		
-		float pid = getAverageIdentityScore();
-		this.substitution = SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, gep, this.alphabet);
+			throws IOException, SALSAException {		
+		this(inputFilePath, treeFileName, null, gop, tgs, matrixSerie, gep);			
 	}
 	
 	private Alignment(final String inputFilePath, final String treeFileName,
-			final Alphabet alphabet, final float gop, final TerminalGAPsStrategy tgs)
+			final SubstitutionMatrix substitutionMatrix, final float gop, 
+			final TerminalGAPsStrategy tgs, final MatrixSerie matrixSerie, final Float gep)
 			throws IOException, SALSAException {
+		
+		if (substitutionMatrix == null){
+			// Create SubstitutionMatrix from data
+			float pid = getAverageIdentityScore();
+			this.substitution = SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, gep);
+		}else{
+			this.substitution = substitutionMatrix;
+		}
+		
 		this.GOP = gop;
 		this.terminal = tgs;
-		this.alphabet = alphabet;
+		this.alphabet = this.substitution.getAlphabet();
 		ArrayList<String> sequences = readInputSequences(inputFilePath);
 		this.alignMatrix = new int[this.numberOfSequences * this.length];
 		this.GAPS = new ArrayList<GAP>();

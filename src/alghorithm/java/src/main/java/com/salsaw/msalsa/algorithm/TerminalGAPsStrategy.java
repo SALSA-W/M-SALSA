@@ -32,7 +32,7 @@ public enum TerminalGAPsStrategy {
 	 */
 	ONLY_GEP;
 	
-    public static TerminalGAPsStrategy fromString(String strategy) {
+    public static final TerminalGAPsStrategy fromString(String strategy) {
  
         for(TerminalGAPsStrategy terminalGAPsStrategy : TerminalGAPsStrategy.values()) {
             if(terminalGAPsStrategy.toString().equalsIgnoreCase(strategy)) {

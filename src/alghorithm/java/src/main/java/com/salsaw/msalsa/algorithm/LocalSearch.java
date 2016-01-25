@@ -38,8 +38,8 @@ public final class LocalSearch {
 	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTOR
-	public LocalSearch(Alignment alignment, int gamma, int minIterations,
-			float probabiltyOfSplit) {
+	public LocalSearch(final Alignment alignment, final int gamma, final int minIterations,
+			final float probabiltyOfSplit) {
 		this.align = alignment;
 		this.gamma = gamma;
 		this.minIterations = minIterations;

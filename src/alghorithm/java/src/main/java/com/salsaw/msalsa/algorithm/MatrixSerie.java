@@ -33,11 +33,11 @@ public enum MatrixSerie {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return text;
     }
     
-    public static MatrixSerie fromString(String matrixSerieString) {
+    public static final MatrixSerie fromString(String matrixSerieString) {
     	 
         for(MatrixSerie matrixSerie : MatrixSerie.values()) {
             if(matrixSerie.toString().equalsIgnoreCase(matrixSerieString)) {

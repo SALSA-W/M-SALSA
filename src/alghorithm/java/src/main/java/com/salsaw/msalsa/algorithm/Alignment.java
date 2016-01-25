@@ -88,16 +88,16 @@ public final class Alignment {
 
 	// CONSTRUCTORS
 
-	public Alignment(String inputFilePath, String treeFileName,
-			SubstitutionMatrix s, float gop, TerminalGAPsStrategy tgs)
+	public Alignment(final String inputFilePath, final String treeFileName,
+			final SubstitutionMatrix s, final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		this(inputFilePath, treeFileName, s.getAlphabet(), gop, tgs);
 		this.substitution = s;
 	}
 	
-	public Alignment(String inputFilePath, String treeFileName,
-			final MatrixSerie matrixSerie, float gep, 
-			float gop, TerminalGAPsStrategy tgs)
+	public Alignment(final String inputFilePath, final String treeFileName,
+			final MatrixSerie matrixSerie, final float gep, 
+			final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		
 		this(inputFilePath, treeFileName, new Alphabet(AlphabetType.PROTEINS), gop, tgs);
@@ -106,8 +106,8 @@ public final class Alignment {
 		this.substitution = SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, gep, this.alphabet);
 	}
 	
-	private Alignment(String inputFilePath, String treeFileName,
-			Alphabet alphabet, float gop, TerminalGAPsStrategy tgs)
+	private Alignment(final String inputFilePath, final String treeFileName,
+			final Alphabet alphabet, final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		this.GOP = gop;
 		this.terminal = tgs;

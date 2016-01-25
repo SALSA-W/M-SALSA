@@ -17,8 +17,7 @@ public enum AlphabetType {
         return text;
     }
     
-    public static AlphabetType fromString(String alphabetTypeString) {
-   	 
+    public static final AlphabetType fromString(String alphabetTypeString) {   	 
         for(AlphabetType alphabetType : AlphabetType.values()) {
             if(alphabetType.toString().equalsIgnoreCase(alphabetTypeString)) {
                 return alphabetType;

@@ -40,7 +40,7 @@ public final class Node {
 	private float difference;
 
 	// CONSTRUCTORS
-	public Node(String name, Node left, Node right, Node parent, float distance) {
+	public Node(final String name, final Node left, final Node right, final Node parent, final float distance) {
 
 		this.name = name;
 		this.left = left;
@@ -92,19 +92,19 @@ public final class Node {
 		return this.descendantLeaves;
 	}
 
-	public final void setName(String name) {
+	public final void setName(final String name) {
 		this.name = name;
 	}
 
-	public final void setParent(Node parent) {
+	public final void setParent(final Node parent) {
 		this.parent = parent;
 	}
 
-	public final void setDistance(float distance) {
+	public final void setDistance(final float distance) {
 		this.distance = distance;
 	}
 
-	public final void setLeft(Node left) {
+	public final void setLeft(final Node left) {
 		this.left = left;
 
 		this.descendantLeaves = 0;
@@ -126,7 +126,7 @@ public final class Node {
 		}
 	}
 
-	public final void setRight(Node right) {
+	public final void setRight(final Node right) {
 		this.right = right;
 
 		this.descendantLeaves = 0;
@@ -168,7 +168,7 @@ public final class Node {
 	 * @return
 	 * @throws SALSAException
 	 */
-	public final Node calculatePositionOfRoot(int totalNumberOfLeafs)
+	public final Node calculatePositionOfRoot(final int totalNumberOfLeafs)
 			throws SALSAException {
 		return calculatePositionOfRoot(totalNumberOfLeafs, 0.0f);
 	}
@@ -189,8 +189,8 @@ public final class Node {
 	 * @return
 	 * @throws SALSAException
 	 */
-	public final Node calculatePositionOfRoot(int totalNumberOfLeafs,
-			float parentLeftSum) throws SALSAException {
+	public final Node calculatePositionOfRoot(final int totalNumberOfLeafs,
+			final float parentLeftSum) throws SALSAException {
 		Node brother = getBrother();
 		int numberOfLeftLeaves = totalNumberOfLeafs - this.descendantLeaves;
 
@@ -276,7 +276,7 @@ public final class Node {
 	 * 
 	 * @throws SALSAException
 	 */
-	private final void invertNode(Node newParent, float newDistance)
+	private final void invertNode(final Node newParent, final float newDistance)
 			throws SALSAException {
 		Node oldParent = this.parent;
 		float oldDistance = this.distance;

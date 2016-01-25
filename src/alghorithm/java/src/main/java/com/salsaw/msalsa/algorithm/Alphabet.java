@@ -42,7 +42,7 @@ public class Alphabet {
 	private static final char[] AlphabetDNA = new char[] {'A', 'T', 'C', 'G'};
 	private static final char[] AlphabetRNA = new char[] {'A', 'U', 'C', 'G'};
 	private static final char[] AlphabetPROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
-	private static final char GAP_SYMBOL = '-';
+	public static final char GAP_SYMBOL = '-';
 	
 	// FIELDS
 	private final int numberOfCharacters;
@@ -52,7 +52,7 @@ public class Alphabet {
 
 	// CONSTRUCTOR
 	
-	private Alphabet(char[] alphabet){
+	public Alphabet(final char[] alphabet){
 		this.alphabet = alphabet;
 		this.numberOfCharacters = this.alphabet.length;
 		
@@ -66,11 +66,11 @@ public class Alphabet {
 		this.symbolMapCharKey.put(GAP_SYMBOL, this.numberOfCharacters);
 	}
 	
-	public Alphabet(String matrixInputLine) throws SALSAException{
+	public Alphabet(final String matrixInputLine) throws SALSAException{
 		this(calculateAlphabetArray(matrixInputLine));
 	}
 	
-	public Alphabet(AlphabetType type) throws SALSAException {
+	public Alphabet(final AlphabetType type) throws SALSAException {
 		this(getEmbeddedAlphabetArray(type));
 	}
 	
@@ -119,6 +119,10 @@ public class Alphabet {
 
 	public final int getNumberOfCharacters() {
 		return this.numberOfCharacters;
+	}
+	
+	public final char[] getAlphabet(){
+		return this.alphabet;
 	}
 
 	// METHODS

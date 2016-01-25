@@ -37,13 +37,13 @@ public final class GAP {
 	private GAP next;
 
 	// CONSTRUCTOR
-	public GAP(int row, int begin, int sequencesLength, GAP previous, GAP next)
+	public GAP(final int row, final int begin, final int sequencesLength, final GAP previous, final GAP next)
 			throws SALSAException {
 		this(row, begin, sequencesLength, previous, next, 1);
 	}
 
-	public GAP(int row, int begin, int sequencesLength, GAP previous, GAP next,
-			int length) throws SALSAException {
+	public GAP(final int row, final int begin, final int sequencesLength, final GAP previous, final GAP next,
+			final int length) throws SALSAException {
 		this.row = row;
 		this.begin = begin;
 		this.sequencesLength = sequencesLength;
@@ -53,8 +53,7 @@ public final class GAP {
 		this.next = next;
 
 		if (end > sequencesLength - 1) {
-			throw new SALSAException(
-					"Error: GAP exceed the end of the sequence");
+			throw new SALSAException("Error: GAP exceed the end of the sequence");
 		}
 	}
 
@@ -75,7 +74,7 @@ public final class GAP {
 		return this.end;
 	}
 
-	public final void setNext(GAP next) {
+	public final void setNext(final GAP next) {
 		this.next = next;
 	}
 

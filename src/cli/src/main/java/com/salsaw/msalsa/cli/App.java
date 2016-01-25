@@ -45,6 +45,7 @@ public class App {
 			System.out.println("Aligned completed successfully");			
 			System.exit(ExitCode.Success.ordinal());
 		} catch(ParameterException pe){
+			System.err.println(pe.getMessage());
 			commands.usage();
 			System.exit(ExitCode.ParametersError.ordinal());
 		} catch(SALSAParameterException pe){

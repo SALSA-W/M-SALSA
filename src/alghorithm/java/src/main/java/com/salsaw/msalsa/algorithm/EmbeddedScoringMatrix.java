@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.cli;
+package com.salsaw.msalsa.algorithm;
 
 /**
  * See {@link https://www.ddbj.nig.ac.jp/search/help/clustalwhelp-e.html} for documentation
@@ -22,20 +22,25 @@ package com.salsaw.msalsa.cli;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public enum ScoringMatrix {
+public enum EmbeddedScoringMatrix {
 	// Proteins
 	/**
-	 * These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series.
+	 * Gonnet -These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series.
 	 */
-	Gonnet,	
+	Gonnet,
 	/**
-	 * These matrices appear to be the best available for carrying out data base similarity (homology searches).
+	 * BLOSUM - These matrices appear to be the best available for carrying out data base similarity (homology searches).
 	 */
+	BLOSUM30,
+	BLOSUM45,
 	BLOSUM50,
-	/**
-	 * These matrices appear to be the best available for carrying out data base similarity (homology searches).
-	 */
 	BLOSUM62,
+	BLOSUM80,
+	PAM20,
+	PAM60,
+	PAM120,
+	PAM250,
+	PAM350,
 	// DNA
  	/**
  	 * This is the default scoring matrix used by BESTFIT for the comparison of nucleic acid sequences. X's and N's are treated as matches to any IUB ambiguity symbol. All matches score 1.9; all mismatches for IUB symbols score 0.
@@ -48,9 +53,9 @@ public enum ScoringMatrix {
 	;
 	
     // converter that will be used later
-    public static ScoringMatrix fromString(String matrixName) {
+    public static final EmbeddedScoringMatrix fromString(String matrixName) {
  
-        for(ScoringMatrix scoringMatrix : ScoringMatrix.values()) {
+        for(EmbeddedScoringMatrix scoringMatrix : EmbeddedScoringMatrix.values()) {
             if(scoringMatrix.toString().equalsIgnoreCase(matrixName)) {
                 return scoringMatrix;
             }

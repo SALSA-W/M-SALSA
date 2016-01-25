@@ -18,6 +18,7 @@ package com.salsaw.msalsa.algorithm;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -46,7 +47,7 @@ public final class SubstitutionMatrix {
 
 	private final int[] matrix;
 	
-	private final static HashMap<String, SubstitutionMatrix> substitutionMatrixCache = new HashMap<String, SubstitutionMatrix>();
+	private final static Map<EmbeddedScoringMatrix, SubstitutionMatrix> substitutionMatrixCache = new HashMap<EmbeddedScoringMatrix, SubstitutionMatrix>();
 
 	// CONSTRUCTOR
 
@@ -134,22 +135,22 @@ public final class SubstitutionMatrix {
 		
 		switch (matrixSerie) {
 		case BLOSUM:
-			if (pid > 0.8) return loadEmbeddedMatirx("BLOSUM80", alphabet, GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx("BLOSUM62", alphabet, GEP);
-			if (pid > 0.3) return loadEmbeddedMatirx("BLOSUM45", alphabet, GEP);
-			return loadEmbeddedMatirx("BLOSUM30", alphabet, GEP);
+			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM80, alphabet, GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, alphabet, GEP);
+			if (pid > 0.3) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM45, alphabet, GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM30, alphabet, GEP);
 
 		case PAM:
-			if (pid > 0.8) return loadEmbeddedMatirx("PAM20", alphabet, GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx("PAM60", alphabet, GEP);
-			if (pid > 0.4) return loadEmbeddedMatirx("PAM120", alphabet, GEP);
-			return loadEmbeddedMatirx("PAM350", alphabet, GEP);
+			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM20, alphabet, GEP);
+			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM60, alphabet, GEP);
+			if (pid > 0.4) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM120, alphabet, GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM350, alphabet, GEP);
 			
 		case BLOSUM62:
-			return loadEmbeddedMatirx("BLOSUM62", alphabet, GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, alphabet, GEP);
 			
 		case GONNET:
-			return loadEmbeddedMatirx("Gonnet", null, GEP);
+			return loadEmbeddedMatirx(EmbeddedScoringMatrix.Gonnet, null, GEP);
 
 		default:
 			//MatrixSerie is not BLOSUM and it is not PAM
@@ -164,15 +165,15 @@ public final class SubstitutionMatrix {
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
-	private static final SubstitutionMatrix loadEmbeddedMatirx(String scoringMatrixName, Alphabet alphabet, float GEP)
+	private static final SubstitutionMatrix loadEmbeddedMatirx(EmbeddedScoringMatrix scoringMatrix, Alphabet alphabet, float GEP)
 			throws IOException, SALSAException {
-		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrixName, null);
+		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrix, null);
 
 		if (cachedSubstitutionMatrix == null) {
 			// Data isn't present in the cache - load from file system
-			try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrixName)) {
+			try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrix.toString())) {
 				cachedSubstitutionMatrix = new SubstitutionMatrix(stream, alphabet, GEP);
-				substitutionMatrixCache.put(scoringMatrixName, cachedSubstitutionMatrix);
+				substitutionMatrixCache.put(scoringMatrix, cachedSubstitutionMatrix);
 			}
 		}
 

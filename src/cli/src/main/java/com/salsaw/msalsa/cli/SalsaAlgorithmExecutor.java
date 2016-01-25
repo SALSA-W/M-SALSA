@@ -149,9 +149,8 @@ public class SalsaAlgorithmExecutor {
 				salsaParameters.getMinIterations(),
 				salsaParameters.getProbabilityOfSplit());
 
-		alignment = localSearch.execute();
-		alignment.save(salsaParameters.getOutputFile());
-			
+		alignment = localSearch.execute();		
+		alignment.save(salsaParameters.getOutputFile());					
 		
 		if (salsaParameters.getGeneratePhylogeneticTree() == true){
 			// Generate phylogenetic tree using ClustalW from SALSA alignment
@@ -175,21 +174,13 @@ public class SalsaAlgorithmExecutor {
 			String content = new String(Files.readAllBytes(inputFilePath), charset);
 						
 			Boolean replaceChangesHeaders = false;
-			String replacedContent = content.replaceAll(" ", "_");
+			String replacedContent = content
+					.replaceAll(" ", "_")
+					.replaceAll(":", "_")
+					.replaceAll("\\.", "_");
 			if (replacedContent.equals(content) == false){
 				replaceChangesHeaders = true;
-				replacedContent = content;
-			}
-			replacedContent = content.replaceAll(":", "_");
-			if (replacedContent.equals(content) == false){
-				replaceChangesHeaders = true;
-				replacedContent = content;
-			}			
-			replacedContent = content.replaceAll("\\.", "_");
-			if (replacedContent.equals(content) == false){
-				replaceChangesHeaders = true;
-				replacedContent = content;
-			}			
+			}		
 			
 			// Check if file normalization is required
 			if (replaceChangesHeaders == true){
@@ -199,7 +190,7 @@ public class SalsaAlgorithmExecutor {
 				String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
 				Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
 					
-				Files.write(normalizedInputFilePath, content.getBytes(charset));
+				Files.write(normalizedInputFilePath, replacedContent.getBytes(charset));
 				
 				return normalizedInputFilePath.toString();
 			} else{

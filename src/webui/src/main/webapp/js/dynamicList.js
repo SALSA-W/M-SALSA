@@ -2,7 +2,7 @@
 function initToDoList() {
 
 	var textBox = document.getElementById('newitem');
-	var list = document.getElementById('uniprodIds');
+	var list = document.getElementById('dynamicList');
 	var addButton = document.getElementById('btnAdd');
 
 	addButton.addEventListener("click", addItem);
@@ -15,7 +15,6 @@ function initToDoList() {
 		deleteLink.innerHTML = "x";
 		deleteLink.addEventListener("click", removeItem);
 		return deleteLink;
-
 	}
 
 	function addItem() {

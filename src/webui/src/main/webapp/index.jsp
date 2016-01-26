@@ -81,8 +81,8 @@
 					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem">
 					<button type="button" value="Add" id="btnAdd" class="btn btn-default">Add</button>
 					
-					<ul id="uniprodIds">
-					</ul>					
+					<ul id="dynamicList">
+					</ul>								
 				</div>
 			</div>
 

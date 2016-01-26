@@ -31,6 +31,7 @@ public class SalsaWebParameters extends SalsaParameters {
 	private String recipientEmail;
 	private String salsaParametersFile;
 	private String userJobTitle;
+	private String[] uniProtIds;
 
 	public String getRecipientEmail() {
 		return this.recipientEmail;
@@ -42,6 +43,10 @@ public class SalsaWebParameters extends SalsaParameters {
 	
 	public String getSalsaParametersFile() {
 		return this.salsaParametersFile;
+	}
+	
+	public String[] getUniProtIds() {
+		return this.uniProtIds;
 	}
 	
 	public void setSalsaParametersFile(String salsaParametersFile) {
@@ -60,4 +65,8 @@ public class SalsaWebParameters extends SalsaParameters {
 	public void setUserJobTitle(String userJobTitle) {
 		this.userJobTitle = userJobTitle;
 	}	
+	
+	public void setUniProtIds(String[] uniProtIds) {
+		this.uniProtIds = uniProtIds;
+	}
 }

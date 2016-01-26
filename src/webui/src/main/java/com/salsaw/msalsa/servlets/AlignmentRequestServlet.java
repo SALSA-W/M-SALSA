@@ -35,6 +35,8 @@ import javax.servlet.http.Part;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.converters.ArrayConverter;
+import org.apache.commons.beanutils.converters.StringConverter;
 
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
@@ -52,7 +54,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 		// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
 		private final EnumConverter enumConverter = new EnumConverter();
 
-		public Converter lookup(Class clazz) {
+		public Converter lookup(Class<?> clazz) {
 			final Converter converter = super.lookup(clazz);
 			// no specific converter for this class, so it's neither a String,
 			// (which has a default converter),
@@ -82,8 +84,15 @@ public class AlignmentRequestServlet extends HttpServlet {
 		try {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
 			EnumAwareConvertUtilsBean enumAwareConvertUtilsBean = new EnumAwareConvertUtilsBean();
+						
+			// See https://commons.apache.org/proper/commons-beanutils/apidocs/org/apache/commons/beanutils/converters/ArrayConverter.html
+		    // Construct an String Converter for an String array (i.e. String[]) using a StringConverter as the element converter.
+		    // N.B. Uses the default comma (i.e. ",") as the delimiter between individual numbers
+			ArrayConverter stringArrayConverter = new ArrayConverter(String[].class, new StringConverter());
+			stringArrayConverter.setDelimiter(',');
+			enumAwareConvertUtilsBean.register(stringArrayConverter, String[].class);
+			
 			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);
-
 			beanUtils.populate(salsaWebParameters, request.getParameterMap());
 
 			AlignmentRequest newRequest = new AlignmentRequest(salsaWebParameters);

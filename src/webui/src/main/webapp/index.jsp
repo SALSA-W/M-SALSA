@@ -72,6 +72,19 @@
 					</span> &nbsp; <span class='label label-info' id="upload-file-info"></span>
 				</div>
 			</div>
+			
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="inputFile">Input	UniProt proteins:</label>
+				<div class="col-sm-10">
+				
+					<label for="newitem">Add UniProt proteins ID</label>
+					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem">
+					<button type="button" value="Add" id="btnAdd" class="btn btn-default">Add</button>
+					
+					<ul id="uniprodIds">
+					</ul>					
+				</div>
+			</div>
 
 			<div class="panel-group" id="accordion" role="tablist"
 				aria-multiselectable="true">
@@ -233,6 +246,7 @@
 		<jsp:include page="standard-js.jsp" />
 		<script src="js/index.js" type="text/javascript"></script>
 		<script src="js/header.js" type="text/javascript"></script>
+		<script src="js/dynamicList.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->
 </body>

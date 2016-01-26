@@ -20,5 +20,6 @@ package com.salsaw.msalsa.algorithm;
  *
  */
 public final class Constants {
-	public static final String NEW_LINE = System.getProperty("line.separator"); 
+	public static final String NEW_LINE = System.getProperty("line.separator");
+	public static final String FASTA_FILE_EXSTENSION = ".fasta";
 }

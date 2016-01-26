@@ -29,6 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.salsaw.msalsa.algorithm.Alignment;
 import com.salsaw.msalsa.algorithm.Alphabet;
 import com.salsaw.msalsa.algorithm.AlphabetType;
+import com.salsaw.msalsa.algorithm.Constants;
 import com.salsaw.msalsa.algorithm.DistanceMatrix;
 import com.salsaw.msalsa.algorithm.LocalSearch;
 import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
@@ -46,7 +47,7 @@ import com.salsaw.msalsa.clustal.ClustalWManager;
 public class SalsaAlgorithmExecutor {
 	
 	public static final String M_SALSA_HEADER = "MSALSA";
-	public static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln.fasta";
+	public static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln" + Constants.FASTA_FILE_EXSTENSION;
 	public static final String SALSA_TREE_SUFFIX = "-" + M_SALSA_HEADER + "-aln.ph";
 	
 	public static final String AUTHOR_ALESSANDRO_DANIELE = "Alessandro Daniele";
@@ -99,7 +100,9 @@ public class SalsaAlgorithmExecutor {
 		if (salsaParameters.getClustalPath() != null &&
 			salsaParameters.getPhylogeneticTreeFile() == null) {			
 			// Use Clustal to generate initial alignment
-			salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));
+			if (salsaParameters.getClustalType() == ClustalType.CLUSTAL_O){
+				salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));				
+			}
 			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
 			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
 			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
@@ -168,35 +171,34 @@ public class SalsaAlgorithmExecutor {
 	 * @return The path to file with the replaced characters 
 	 * @throws IOException
 	 */
-	public static final String normalizeInputFile(Path inputFilePath) throws IOException{
-			Charset charset = StandardCharsets.UTF_8;
-	
-			String content = new String(Files.readAllBytes(inputFilePath), charset);
-						
-			Boolean replaceChangesHeaders = false;
-			String replacedContent = content
-					.replaceAll(" ", "_")
-					.replaceAll(":", "_")
-					.replaceAll("\\.", "_");
-			if (replacedContent.equals(content) == false){
-				replaceChangesHeaders = true;
-			}		
-			
-			// Check if file normalization is required
-			if (replaceChangesHeaders == true){
-				// Create the name of normalized input files
-				String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
-				String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
-				String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
-				Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
-					
-				Files.write(normalizedInputFilePath, replacedContent.getBytes(charset));
-				
-				return normalizedInputFilePath.toString();
-			} else{
-				// The input file isn't changed
-				return  inputFilePath.toString();
-			}
+	public static final String normalizeInputFile(final Path inputFilePath) throws IOException{
+		Charset charset = StandardCharsets.UTF_8;
 
+		String content = new String(Files.readAllBytes(inputFilePath), charset);
+					
+		Boolean replaceChangesHeaders = false;
+		String replacedContent = content
+				.replaceAll(" ", "_")
+				.replaceAll(":", "_")
+				.replaceAll("\\.", "_");
+		if (replacedContent.equals(content) == false){
+			replaceChangesHeaders = true;
+		}		
+		
+		// Check if file normalization is required
+		if (replaceChangesHeaders == true){
+			// Create the name of normalized input files
+			String inputFileName = FilenameUtils.getBaseName(inputFilePath.toString());
+			String inputFileExtension = FilenameUtils.getExtension(inputFilePath.toString());
+			String inputFileFolderPath = FilenameUtils.getFullPath(inputFilePath.toString());			
+			Path normalizedInputFilePath = Paths.get(inputFileFolderPath, inputFileName + "-normalized." + inputFileExtension);
+				
+			Files.write(normalizedInputFilePath, replacedContent.getBytes(charset));
+			
+			return normalizedInputFilePath.toString();
+		} else{
+			// The input file isn't changed
+			return  inputFilePath.toString();
 		}
+	}
 }

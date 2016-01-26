@@ -21,11 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.apache.commons.io.FilenameUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
@@ -93,13 +92,13 @@ public class ClustalOmegaManager extends ClustalManager {
 		if (clustalFileMapper == null){
 			throw new IllegalArgumentException("clustalFileMapper");
 		}
-		
-		commands.add(createParameterEqualsCommand(INPUT_FILE, '"' +this.clustalFileMapper.getInputFilePath()) + '"');
-		commands.add(createParameterEqualsCommand(OUTPUT_FILE, '"' + this.clustalFileMapper.getAlignmentFilePath()) + '"');
+				
+		commands.add(createParameterEqualsCommand(INPUT_FILE, escapePath(this.clustalFileMapper.getInputFilePath())));
+		commands.add(createParameterEqualsCommand(OUTPUT_FILE, escapePath(this.clustalFileMapper.getAlignmentFilePath())));
 		
 		// Set where tree file will be write		
-		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, '"' + this.clustalFileMapper.getGuideTreeFilePath())+ '"');
-		commands.add(createParameterEqualsCommand(DISTANCE_MATRIX_OUTPUT_FILE, '"' + this.clustalFileMapper.getDistanceMatrixFilePath())+ '"');
+		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, escapePath(this.clustalFileMapper.getGuideTreeFilePath())));
+		commands.add(createParameterEqualsCommand(DISTANCE_MATRIX_OUTPUT_FILE, escapePath(this.clustalFileMapper.getDistanceMatrixFilePath())));
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
 		
 		// Use all available threads
@@ -118,7 +117,7 @@ public class ClustalOmegaManager extends ClustalManager {
 			InterruptedException, SALSAException {
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(clustalPath);
+		clustalProcessCommands.add(escapePath(clustalPath));
 		
 		// Create the name of output files
 		String inputFileName = FilenameUtils.getBaseName(clustalFileMapper.getInputFilePath());
@@ -136,11 +135,7 @@ public class ClustalOmegaManager extends ClustalManager {
 		// Create clustal omega data
 		generateClustalArguments(clustalProcessCommands);
 
-		// http://www.rgagnon.com/javadetails/java-0014.html
-		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
-		builder.redirectErrorStream(true);
-		System.out.println(builder.command());
-		final Process process = builder.start();
+		final Process process = Runtime.getRuntime().exec(composeProcessCall(clustalProcessCommands));	
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
@@ -154,5 +149,5 @@ public class ClustalOmegaManager extends ClustalManager {
 		if (process.exitValue() != 0) {
 			throw new SALSAException("Failed clustal omega call");
 		}		
-	}
+	}	
 }

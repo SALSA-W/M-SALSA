@@ -101,10 +101,10 @@ public class ClustalWManager extends ClustalManager {
 		
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(clustalPath);
-		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
+		clustalProcessCommands.add(escapePath(clustalPath));
+		clustalProcessCommands.add(escapePath(clustalFileMapper.getInputFilePath()));
 		// Set output file name			
-		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FILE, '"' + clustalFileMapper.getAlignmentFilePath() + '"' ));
+		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FILE, escapePath(clustalFileMapper.getAlignmentFilePath())));
 		generateClustalArguments(clustalProcessCommands);
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
@@ -113,7 +113,7 @@ public class ClustalWManager extends ClustalManager {
 	private void generateTreeArguments(ClustalFileMapper clustalFileMapper, List<String> commands)
 	{
 		// Create tree starting from alignment produced
-		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
+		commands.add(createParameterEqualsCommand(INPUT_FILE, escapePath(clustalFileMapper.getAlignmentFilePath())));
 		commands.add(createBooleanParameterCommand(NEIGHBOUR_JOINING_TREE));		
 		
 		// Use default parameters
@@ -121,23 +121,19 @@ public class ClustalWManager extends ClustalManager {
 		commands.add(createParameterEqualsCommand(TREE_OUTPUT_FORMAT, ClustalWTreeOputputFormat.DISTANCE.toString()));
 	}
 	
-	public void generateTree(String clustalPath,
+	public final void generateTree(String clustalPath,
 			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{			
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(clustalPath);
+		clustalProcessCommands.add(escapePath(clustalPath));
 		generateTreeArguments(clustalFileMapper, clustalProcessCommands);
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
 	}
 
-	private void callClustalWProcess(List<String> clustalProcessCommands,
+	private final void callClustalWProcess(List<String> clustalProcessCommands,
 			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{
-		// http://www.rgagnon.com/javadetails/java-0014.html
-		ProcessBuilder builder = new ProcessBuilder(clustalProcessCommands);
-		builder.redirectErrorStream(true);
-		System.out.println(builder.command());
-		final Process process = builder.start();
+		final Process process = Runtime.getRuntime().exec(composeProcessCall(clustalProcessCommands));
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);

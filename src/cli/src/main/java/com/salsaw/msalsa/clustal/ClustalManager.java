@@ -30,11 +30,11 @@ public abstract class ClustalManager {
 	private ClustalWOputputFormat oputputFormat = ClustalWOputputFormat.FASTA;	
 
 	// GET/SET
-	public ClustalWOputputFormat getOputputFormat() {
+	public final ClustalWOputputFormat getOputputFormat() {
 		return this.oputputFormat;
 	}
 	
-	public void setOputputFormat(ClustalWOputputFormat oputputFormat) {
+	public final void setOputputFormat(final ClustalWOputputFormat oputputFormat) {
 		this.oputputFormat = oputputFormat;
 	}
 
@@ -48,11 +48,28 @@ public abstract class ClustalManager {
 
 	protected abstract String createParameterEqualsCommand(String key, String value);
 	
+	protected final String escapePath(String pathInput){
+		// Add quotes to manage path with spaces 
+		return '"' + pathInput + '"';
+	}
+	
+	protected final String composeProcessCall(Iterable<String> clustalProcessCommands) {
+		// Compose process call for Runtime.getRuntime().exec
+		// avoid ProcessBuilder due to quotes escape issues
+		StringBuilder processCall = new StringBuilder();
+		for (String clustalProcessCommand : clustalProcessCommands) {
+			processCall.append(clustalProcessCommand);
+			processCall.append(" ");
+		}
+
+		return processCall.toString();
+	}
+	
 	/**
 	 * Factory method
 	 * @throws SALSAException 
 	 */
-	public static ClustalManager CreateClustalManager(ClustalType clustalType) throws SALSAException{		
+	public static final ClustalManager CreateClustalManager(ClustalType clustalType) throws SALSAException{		
 		switch (clustalType) {
 		case CLUSTAL_W:
 			return new ClustalWManager();

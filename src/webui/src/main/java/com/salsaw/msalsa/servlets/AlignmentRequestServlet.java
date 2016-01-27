@@ -118,14 +118,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 				requestProcessFolder.mkdir();
 			}
 
-			if (salsaWebParameters.getUniProtIds() != null && salsaWebParameters.getUniProtIds().length != 0) {
-				// Load data from UniProt
-				UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
-						requestProcessFolder.toString(), salsaWebParameters.getUniProtIds());
-				uniProtSequenceManager.composeInputFromId();
-				salsaWebParameters.setInputFile(uniProtSequenceManager.getGeneratedInputFile().toString());
-			}
-			else{
+			if (fileName.isEmpty() == false) {
 				// Load data from file
 				try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {			
 					// Open the file for writing.

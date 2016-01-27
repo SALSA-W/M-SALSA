@@ -49,6 +49,7 @@ import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.servlets.AlignmentResultServlet;
 import com.salsaw.msalsa.servlets.AlignmentStatusServlet;
 import com.salsaw.msalsa.utils.SalsaParametersXMLExporter;
+import com.salsaw.msalsa.utils.UniProtSequenceManager;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -83,6 +84,21 @@ public class AlignmentRequestExecutor implements Runnable {
 	@Override
 	public void run() {
 		SalsaWebParameters salsaWebParameters = this.alignmentRequest.getSalsaWebParameters();
+		
+		if (salsaWebParameters.getInputFile() == null &&
+			salsaWebParameters.getUniProtIds() != null && 
+			salsaWebParameters.getUniProtIds().length != 0) {
+			// Load data from UniProt
+			UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
+					this.alignmentRequest.getAlignmentRequestPath().toString(), salsaWebParameters.getUniProtIds());
+			try {
+				uniProtSequenceManager.composeInputFromId();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			salsaWebParameters.setInputFile(uniProtSequenceManager.getGeneratedInputFile().toString());
+		}
 
 		// Get path to correct Clustal process
 		switch (salsaWebParameters.getClustalType()) {

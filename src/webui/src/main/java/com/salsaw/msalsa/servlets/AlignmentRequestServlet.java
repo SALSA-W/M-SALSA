@@ -98,6 +98,8 @@ public class AlignmentRequestServlet extends HttpServlet {
 						
 			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);				
 			beanUtils.populate(salsaWebParameters, request.getParameterMap());
+			// Fix issue to array read of beanUtils
+			beanUtils.setProperty(salsaWebParameters, "uniProtIds", request.getParameter("uniProtIds"));
 
 			AlignmentRequest newRequest = new AlignmentRequest(salsaWebParameters);
 			

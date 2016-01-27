@@ -75,8 +75,6 @@ public class UniProtSequenceManager {
 					}
 				}				
 			}
-
-			inputFileBuilder.append(Constants.NEW_LINE);
 		}
 		
 		// Compose file name from id and save

@@ -15,11 +15,14 @@
  */
 package com.salsaw.msalsa.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -32,10 +35,10 @@ import com.salsaw.msalsa.algorithm.Constants;
 public class UniProtSequenceManager {
 	
 	private final String inputFileFolder;
-	private final Iterable<String> uniProtIds;
+	private final Set<String> uniProtIds;
 	private Path generatedInputFile;
 	
-	public UniProtSequenceManager(String inputFileFolder, Iterable<String> uniProtIds){
+	public UniProtSequenceManager(String inputFileFolder, String[] uniProtIds){
 		if (inputFileFolder == null) {
 			throw new IllegalArgumentException("inputFileFolder");
 		}
@@ -44,14 +47,18 @@ public class UniProtSequenceManager {
 		}
 		
 		this.inputFileFolder = inputFileFolder;
-		this.uniProtIds = uniProtIds;		
+		// Use hash set to ensure no duplicated values
+		this.uniProtIds = new HashSet<String>();		
+		for (String uniProtId : uniProtIds) {
+			this.uniProtIds.add(uniProtId);
+		}
 	}
 	
 	public Path getGeneratedInputFile(){
 		return this.generatedInputFile;
 	}
 
-	public void composeInputFromId() throws Exception {
+	public void composeInputFromId() throws IOException  {
 
 		// idea from http://grepcode.com/file_/repo1.maven.org/maven2/org.biojava/biojava-alignment/4.1.0/demo/DemoAlignProteins.java/?v=source
 		

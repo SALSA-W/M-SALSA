@@ -25,7 +25,8 @@ $(document).ready(function() {
     $('#salsa-parameters-form').parsley().subscribe('parsley:form:validate', function (formInstance) {
         // If any of these fields are valid
         if ($("textarea[name=inputText]").parsley().isValid() || 
-            $("input[name=inputFile]").parsley().isValid()) 
+            $("input[name=inputFile]").parsley().isValid() ||
+            $('#dynamicList').children('li').length > 0) 
         {
             // Remove the error message
             $('.invalid-form-error-message').html('');
@@ -35,6 +36,9 @@ $(document).ready(function() {
             // Also, destroy parsley's object
             $("textarea[name=inputText]").removeAttr('required').parsley().destroy();
             $("input[name=inputFile]").removeAttr('required').parsley().destroy();
+            
+            // Set correct values for hidden input
+            SetUniProtIdsValues();
 
             return;
         }
@@ -68,3 +72,20 @@ $(document).ready(function() {
         }
     });    
 });
+
+function SetUniProtIdsValues(){
+	if ($('#dynamicList').children('li').length > 0){	
+		// Compose value to pass to servlet
+		var uniProtIdsValueArray = [];
+		$('#dynamicList li').each(function(){
+		    uniProtIdsValueArray.push($(this).text().slice(0, -1));
+		});
+		
+		$('<input>').attr({
+		    type: 'hidden',
+		    id: 'uniProtIds',
+		    name: 'uniProtIds',
+		    value: uniProtIdsValueArray.join(','),		    
+		}).appendTo("#salsa-parameters-form");
+	}
+};

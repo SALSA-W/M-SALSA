@@ -41,6 +41,7 @@ import org.apache.commons.beanutils.converters.StringConverter;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
+import com.salsaw.msalsa.utils.UniProtSequenceManager;
 
 /**
  * Servlet implementation class AlignmentRequestServlet
@@ -96,27 +97,38 @@ public class AlignmentRequestServlet extends HttpServlet {
 			beanUtils.populate(salsaWebParameters, request.getParameterMap());
 
 			AlignmentRequest newRequest = new AlignmentRequest(salsaWebParameters);
-
+			
 			Part filePart = request.getPart("inputFile");
 			String fileName = filePart.getSubmittedFileName();
-			if (fileName.isEmpty()) {
-				throw new ServletException("fileName empty");
+			if (salsaWebParameters.getUniProtIds() == null &&
+				fileName.isEmpty() == true){
+				throw new ServletException("Missing input data");
+			}					
+			
+			File requestProcessFolder = AlignmentRequestManager.getInstance()
+					.getServerAligmentFolder(newRequest.getId()).toFile();
+			
+			// if the directory does not exist, create it
+			if (requestProcessFolder.exists() == false) {
+				requestProcessFolder.mkdir();
 			}
+			
+			if (salsaWebParameters.getUniProtIds() != null && salsaWebParameters.getUniProtIds().length != 0) {
+				// Load data from UniProt
+				UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
+						requestProcessFolder.toString(), salsaWebParameters.getUniProtIds());
+				uniProtSequenceManager.composeInputFromId();
+				salsaWebParameters.setInputFile(uniProtSequenceManager.getGeneratedInputFile().toString());
+			}
+			else{
+				// Load data from file
 
-			try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {
-
-				File requestProcessFolder = AlignmentRequestManager.getInstance()
-						.getServerAligmentFolder(newRequest.getId()).toFile();
-
-				// if the directory does not exist, create it
-				if (requestProcessFolder.exists() == false) {
-					requestProcessFolder.mkdir();
+				try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {			
+					// Open the file for writing.
+					Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);
+					Files.copy(inputAlignmentFileContet, inputFilePath);
+					salsaWebParameters.setInputFile(inputFilePath.toString());
 				}
-
-				// Open the file for writing.
-				Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);
-				Files.copy(inputAlignmentFileContet, inputFilePath);
-				salsaWebParameters.setInputFile(inputFilePath.toString());
 			}
 
 			String webApplicationUri = request.getRequestURL().toString().substring(0,

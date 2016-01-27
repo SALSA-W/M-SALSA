@@ -236,7 +236,7 @@
 
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<input type="submit" class="btn btn-default validate" />
+					<input type="submit" class="btn btn-default validate" onclick="submitSalsaParametersForm()"/>
 				</div>
 			</div>
 

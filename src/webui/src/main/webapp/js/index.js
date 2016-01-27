@@ -35,11 +35,7 @@ $(document).ready(function() {
             // We already validated each field, so one is filled.
             // Also, destroy parsley's object
             $("textarea[name=inputText]").removeAttr('required').parsley().destroy();
-            $("input[name=inputFile]").removeAttr('required').parsley().destroy();
-            
-            // Set correct values for hidden input
-            SetUniProtIdsValues();
-
+            $("input[name=inputFile]").removeAttr('required').parsley().destroy();            
             return;
         }
 
@@ -89,3 +85,8 @@ function SetUniProtIdsValues(){
 		}).appendTo("#salsa-parameters-form");
 	}
 };
+
+function submitSalsaParametersForm(){
+	 // Set correct values for hidden input
+	SetUniProtIdsValues();
+}

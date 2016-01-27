@@ -86,14 +86,17 @@ public class AlignmentRequestServlet extends HttpServlet {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
 			EnumAwareConvertUtilsBean enumAwareConvertUtilsBean = new EnumAwareConvertUtilsBean();
 						
+			
+			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.converters.ArrayConverter
 			// See https://commons.apache.org/proper/commons-beanutils/apidocs/org/apache/commons/beanutils/converters/ArrayConverter.html
 		    // Construct an String Converter for an String array (i.e. String[]) using a StringConverter as the element converter.
 		    // N.B. Uses the default comma (i.e. ",") as the delimiter between individual numbers
 			ArrayConverter stringArrayConverter = new ArrayConverter(String[].class, new StringConverter());
+			stringArrayConverter.setOnlyFirstToString(false);
 			stringArrayConverter.setDelimiter(',');
 			enumAwareConvertUtilsBean.register(stringArrayConverter, String[].class);
-			
-			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);
+						
+			BeanUtilsBean beanUtils = new BeanUtilsBean(enumAwareConvertUtilsBean);				
 			beanUtils.populate(salsaWebParameters, request.getParameterMap());
 
 			AlignmentRequest newRequest = new AlignmentRequest(salsaWebParameters);
@@ -112,7 +115,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 			if (requestProcessFolder.exists() == false) {
 				requestProcessFolder.mkdir();
 			}
-			
+
 			if (salsaWebParameters.getUniProtIds() != null && salsaWebParameters.getUniProtIds().length != 0) {
 				// Load data from UniProt
 				UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
@@ -122,7 +125,6 @@ public class AlignmentRequestServlet extends HttpServlet {
 			}
 			else{
 				// Load data from file
-
 				try (InputStream inputAlignmentFileContet = filePart.getInputStream()) {			
 					// Open the file for writing.
 					Path inputFilePath = Paths.get(requestProcessFolder.toString(), fileName);
@@ -130,7 +132,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 					salsaWebParameters.setInputFile(inputFilePath.toString());
 				}
 			}
-
+			
 			String webApplicationUri = request.getRequestURL().toString().substring(0,
 					request.getRequestURL().toString().indexOf(request.getServletPath()));
 

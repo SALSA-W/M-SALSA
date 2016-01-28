@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.beust.jcommander.Parameter;
 import com.salsaw.msalsa.algorithm.AlphabetType;
+import com.salsaw.msalsa.algorithm.EmbeddedScoringMatrix;
 import com.salsaw.msalsa.algorithm.MatrixSerie;
 import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
 import com.salsaw.msalsa.clustal.ClustalType;
@@ -51,8 +52,8 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-gamma", description = "dimension of the range of positions for a GAP during an iteration")
 	private int gamma = 30;
 
-	@Parameter(names = "-scoringMatrix", description = "scoring matrix file")
-	private String scoringMatrix;
+	@Parameter(names = "-scoringMatrixPath", description = "scoring matrix file path")
+	private String scoringMatrixFilePath;
 
 	@Parameter(names = "-minIt", description = "minimum number of iterations")
 	private int minIterations = 1000;
@@ -64,7 +65,11 @@ public class SalsaParameters implements Serializable {
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
 	
 	@Parameter(names = "-matrixSerie", description = "matrix serie. Possible options: BLOSUM, PAM, BLOSUM62, GONNET", converter = MatrixSerieConverter.class)
-	private MatrixSerie matrixSerie = MatrixSerie.BLOSUM62;
+	private MatrixSerie matrixSerie = MatrixSerie.NONE;
+	
+	// TODO - set all parameters
+	@Parameter(names = "-scoringMatrix", description = "scoring matrix to use. Possible options: BLOSUM, PAM, BLOSUM62, GONNET")
+	private EmbeddedScoringMatrix embeddedScoringMatrix = EmbeddedScoringMatrix.BLOSUM62;
 	
 	@Parameter(names = "-type", description = "type of sequences. Possible options: DNA, RNA, PROTEINS", converter = AlphabetTypeConverter.class)
 	private AlphabetType alphabetType = AlphabetType.PROTEINS;
@@ -117,8 +122,12 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 * @return
 	 */
-	public String getScoringMatrix() {
-		return scoringMatrix;
+	public String getScoringMatrixFilePath() {
+		return scoringMatrixFilePath;
+	}
+	
+	public EmbeddedScoringMatrix getEmbeddedScoringMatrix(){
+		return this.embeddedScoringMatrix;
 	}
 
 	public String getInputFile() {
@@ -191,8 +200,12 @@ public class SalsaParameters implements Serializable {
 		this.gamma = gamma;
 	}
 
-	public void setScoringMatrix(String scoringMatrix) {
-		this.scoringMatrix = scoringMatrix;
+	public void setScoringMatrixFilePath(String scoringMatrixFilePath) {
+		this.scoringMatrixFilePath = scoringMatrixFilePath;
+	}
+	
+	public void setEmbeddedScoringMatrix(EmbeddedScoringMatrix embeddedScoringMatrix){
+		this.embeddedScoringMatrix = embeddedScoringMatrix;
 	}
 
 	@XmlTransient

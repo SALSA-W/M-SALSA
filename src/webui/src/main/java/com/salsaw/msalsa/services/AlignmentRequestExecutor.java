@@ -243,7 +243,9 @@ public class AlignmentRequestExecutor implements Runnable {
 				List<String> filesToCompress = new ArrayList<String>();
 				filesToCompress.add(salsaWebParameters.getInputFile());
 				filesToCompress.add(salsaWebParameters.getOutputFile());
-				filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
+				
+				//TODO add next line when MSALSA parameters are loadable
+				//filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
 				if (salsaWebParameters.getGeneratePhylogeneticTree() == true){
 					filesToCompress.add(salsaWebParameters.getPhylogeneticTreeFile());
 				}
@@ -281,6 +283,7 @@ public class AlignmentRequestExecutor implements Runnable {
 			webApplicationUri = webApplicationUri.replace("localhost", ip.getHostAddress());
 		}
 
+		// TODO - check with DNS on production
 		return webApplicationUri +  "/" + AlignmentResultServlet.class.getSimpleName() + "?"
 				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId;
 	}

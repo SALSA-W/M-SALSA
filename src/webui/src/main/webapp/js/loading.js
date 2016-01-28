@@ -16,19 +16,18 @@
 
 $(document).ready(function() {
 	var processCheckerUrl = 'AlignmentChecker?id=' + getUrlParameter('id');
-	
 	(function poll() {
 		$.ajax({
 			url : processCheckerUrl,
 			type: "GET",			
 			statusCode: {
-			      200: function (responseText) {
-			    	// TODO - redirect to correct page				
+			      200: function (responseText) {		
 			    	 var redirectUrl = 'AlignmentResultServlet?id=' + getUrlParameter('id');
 			    	 window.location.href = redirectUrl;
 			      },
 			      
 			      202: function(){
+			    	  // TODO - manage incremental polling time
 			    	  // Polling: http://stackoverflow.com/questions/6835835/jquery-simple-polling-example
 			    	  setTimeout(function() {poll()}, 5000);
 			      },

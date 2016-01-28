@@ -131,22 +131,16 @@ public final class SubstitutionMatrix {
 	public static final SubstitutionMatrix getSubstitutionMatrix(MatrixSerie matrixSerie, float pid, float GEP) throws SALSAException, IOException {		
 		switch (matrixSerie) {
 		case BLOSUM:
-			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM80, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.3) return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM45, new Alphabet(AlphabetType.PROTEINS), GEP);
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM30, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.8) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM80, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.6) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.3) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM45, new Alphabet(AlphabetType.PROTEINS), GEP);
+			return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
 
 		case PAM:
-			if (pid > 0.8) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM20, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.6) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM60, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.4) return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM120, new Alphabet(AlphabetType.PROTEINS), GEP);
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.PAM350, new Alphabet(AlphabetType.PROTEINS), GEP);
-			
-		case BLOSUM62:
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
-			
-		case GONNET:
-			return loadEmbeddedMatirx(EmbeddedScoringMatrix.Gonnet, null, GEP);
+			if (pid > 0.8) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM20, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.6) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM60, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.4) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM120, new Alphabet(AlphabetType.PROTEINS), GEP);
+			return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM350, new Alphabet(AlphabetType.PROTEINS), GEP);
 
 		default:
 			//MatrixSerie is not BLOSUM and it is not PAM
@@ -161,7 +155,7 @@ public final class SubstitutionMatrix {
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
-	private static final SubstitutionMatrix loadEmbeddedMatirx(EmbeddedScoringMatrix scoringMatrix, Alphabet alphabet, float GEP)
+	private static final SubstitutionMatrix loadEmbeddedMatrix(EmbeddedScoringMatrix scoringMatrix, Alphabet alphabet, float GEP)
 			throws IOException, SALSAException {
 		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrix, null);
 

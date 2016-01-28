@@ -29,38 +29,17 @@ const WhiteSpace: string = " ";
 const HTMLNewLine: string = "<br>";
 const SequenceStart: string = ">";
 
-class SequenceError {
-    public Line: number;
-    public Message: string;
-
-    constructor(line: number, message: string) {
-        this.Line = line;
-        this.Message = message;
-    }
-}
-
-class Sequence {
-    public Name: string;
-    public Content: string;
-
-    constructor(name: string, content: string) {
-        this.Name = name;
-        this.Content = content;
-    }
-}
-
 class ProteinValidator {
 
-    public static Validate(input: string) : string {
+    public static Validate(input: string): string {
         let sequenceName: string;
         let start: number;
         let line: number = 1;
-        let sequences: Array<Sequence> = [];
-        let errors: Array<SequenceError> = [];
+        let errors: Array<string> = [];
         let htmlContent: string = EmptyString;
 
         if (input[0] != SequenceStart) {
-            errors.push(new SequenceError(0, "Missing > at descprion beginning. Unable to manage first line."));
+            errors.push("Missing &gt at descprion beginning. Unable to manage first line.");
             sequenceName = "--- no name ---"
         }
         else {
@@ -70,13 +49,12 @@ class ProteinValidator {
             // Sequence start from next line
             start = nameLegth + 1;
             line++;
-            
-            htmlContent += ">" + sequenceName + HTMLNewLine;
+
+            htmlContent += "&gt" + sequenceName + HTMLNewLine;
         }
 
         for (var i = start, len = input.length; i < len; i++) {
             if (input[i] === SequenceStart) {
-                sequences.push(new Sequence(sequenceName, input.substring(start, i)));
                 // Search next sequence name and save it
                 let nameLegth = input.indexOf(NewLine, i);
                 sequenceName = input.substring(i + 1, nameLegth);
@@ -85,90 +63,49 @@ class ProteinValidator {
                 // Continue validation from start position
                 i = start;
                 line++;
-                
-                htmlContent += ">" + sequenceName + HTMLNewLine;
+
+                htmlContent += "&gt" + sequenceName + HTMLNewLine;
             }
             if (input[i] === NewLine) {
                 line++;
-                
+
                 htmlContent += HTMLNewLine;
             }
             else if (input[i] != WhiteSpace && aminoAcids.indexOf(input[i]) === -1) {
                 // Not found
-                let errorMessage = "Invalid character '" + input[i] + "'";
-                errorMessage += " in sequence '" + sequenceName;
-                errorMessage += "' at line " + line;
-                errors.push(new SequenceError(line, errorMessage));
+                let error = "Invalid character '" + input[i] + "'";
+                error += " in sequence '" + sequenceName;
+                error += "' at line " + line;
+                errors.push(error);
                
                 // Use bootstrap style
-                htmlContent += '<strong class="text-danger">' + input[i] + '</strong>';
+                htmlContent += '<strong class="bg-info">' + input[i] + '</strong>';
             }
             else {
                 htmlContent += input[i];
             }
         }
-        
-        // Add last sequence
-        sequences.push(new Sequence(sequenceName, input.substring(start, input.length)));
-        
+
         if (errors.length == 0) {
             return null;
         }
 
-        let result = '<div class="alert"><strong class="text-danger">Validation Errors!</strong>' + HTMLNewLine;
-        result += htmlContent;
-        result += '<div class="alert alert-danger">The errors are:'
-        errors.forEach((error) => result += HTMLNewLine + error);
-        // Alert Error div
-        result += "</div>";
-        // Alert div
-        result += "</div>";
-        
+        let result = "The errors are:";
+        errors.forEach((error) => result += "<p>" + error + "</p>");
+        result +=  "<p>" + htmlContent + "</p>";
         return result;
     }
 }
 
-
-// TEST CODE
-let inputProt = `>tr|A6QQ10|A6QQ10_BOVIN ACD protein 1(Fragment) OS=Bos taurus GN=ACD PE=2 SV=1
-    DVRRFPSSGEAGPRRTGKTRARGYLRSPAAGMASFGGLVLRPWIRELVLGSDALSSPRAG
-    QLLKVLQEAKAQSPSGAPDPPDAEAMLLVSDGTHSIRCLVTGEALNASDWEEKEFGFRGT
-    EGRILLLRDCKVSVQVAQGDTPAEFYLQVDRFALLPTEQPREQVTGCNEDPDVRKKLCDC
-    LEEHLSESTSSNTGLSLSQLLNEVEVDQEHQKALVRLAESCLILAGPDTAAPITPWAASR
-    CRATGEAVYTVPSLRLHISENDQQILSSLGPTQRVQGPERSPSHLALQDLSLSLISSPPS
-    SPSSSGTPAIPSHLLSKENSASVSLLPPLPLAAPDPVQKGSSQPLSTICSAHGSLPPGSP
-    HPSSIPNTPLLSCTPSLSRLGHAPSIHQAHVSRAQKPSLEFKELGLPPKTLHHSPRTRTT
-    KGALESòSCVWDPPERHRDGSAFQYEYRPPCPSLCAQVQAARLPPQLVAWALHFLMEPQPD
-    SELTQM
-    >tr|A6QQ10|A6QQ10_BOVIN ACD protein 2(Fragment) OS=Bos taurus GN=ACD PE=2 SV=1
-    DVRRFPSSGEAGPRRTGKTRARGYLRSPAAGMASFGGLVLRPWIRELVLGSDALSSPRAG
-    QLLKVLQEAKAQSPSGAPDPPDAEAMLLVSDGTHSIRCLVTGEALNASDWEEKEFGFRGT
-    EGRILLLRDCKVSVQVAQGDTPAEFYLQVDRFALLPTEQPREQVTGCNEDPDVRKKLCDC
-    LEEHLSESTSSNTGLSLSQLLNEVEVDQEHQKALVRLAESCLILAGPDTAAPITPWAASR
-    CRATGEAVYTVPSLRLHISENDQQILSSLGPTQRVQGPERSPSHLALQDLSLSLISSPPS
-    SPSSSGTPAIPSHLLSKENSASVSLLPPLPLAAPDPVQKGSSQPLSTICSAHGSLPPGSP
-    HPSSIPNTPLLSCTPSLSRLGHAPSIHQAHVSRAQKPSLEFKELGLPPKTLHHSPRTRTT
-    KGALES%SCVWDPPERHRDGSAFQYEYRPPCPSLCAQVQAARLPPQLVAWALHFLMEPQPD
-    SELTQM
-    >tr|A6QQ10|A6QQ10_BOVIN ACD protein 3(Fragment) OS=Bos taurus GN=ACD PE=2 SV=1
-    DVRRFPSSGEAGPRRTGKTRARGYLRSPAAGMASFGGLVLRPWIRELVLGSDALSSPRAG
-    QLLKVLQEAKAQSPSGAPDPPDAEAMLLVSDGTHSIRCLVTGEALNASDWEEKEFGFRGT
-    EGRILLLRDCKVSVQVAQGDTPAEFYLQVDRFALLPTEQPREQVTGCNEDPDVRKKLCDC
-    LEEHLSESTSSNTGLSLSQLLNEVEVDQEHQKALVRLAESCLILAGPDTAAPITPWAASR
-    CRATGEAVYTVPSLRLHISENDQQILSSLGPTQRVQGPERSPSHLALQDLSLSLISSPPS
-    SPSSSGTPAIPSHLLSKENSASVSLLPPLPLAAPDPVQKGSSQPLSTICSAHGSLPPGSP
-    HPSSIPNTPLLSCTPSLSRLGHAPSIHQAHVSRAQKPSLEFKELGLPPKTLHHSPRTRTT
-    KGALES?SCVWDPPERHRDGSAFQYEYRPPCPSLCAQVQAARLPPQLVAWALHFLMEPQPD
-    SELTQM
-    >tr|A6QQ10|A6QQ10_BOVIN ACD protein 4(Fragment) OS=Bos taurus GN=ACD PE=2 SV=1
-    DVRRFPSSGEAGPRRTGKTRARGYLRSPAAGMASFGGLVLRPWIRELVLGSDALSSPRAG
-    QLLKVLQEAKAQSPSGAPDPPDAEAMLLVSDGTHSIRCLVTGEALNASDWEEKEFGFRGT
-    EGRILLLRDCKVSVQVAQGDTPAEFYLQVDRFALLPTEQPREQVTGCNEDPDVRKKLCDC
-    LEEHLSESTSSNTGLSLSQLLNEVEVDQEHQKALVRLAESCLILAGPDTAAPITPWAASR
-    CRATGEAVYTVPSLRLHISENDQQILSSLGPTQRVQGPERSPSHLALQDLSLSLISSPPS
-    SPSSSGTPAIPSHLLSKENSASVSLLPPLPLAAPDPVQKGSSQPLSTICSAHGSLPPGSP
-    HPSSIPNTPLLSCTPSLSRLGHAPSIHQAHVSRAQKPSLEFKELGLPPKTLHHSPRTRTT
-    KGALES^SCVWDPPERHRDGSAFQYEYRPPCPSLCAQVQAARLPPQLVAWALHFLMEPQPD
-    SELTQM`;
-    
-let htmlValidationResults = ProteinValidator.Validate(inputProt);
+$("#inputText").bind('input propertychange', function() {
+    let inputSequences: string = $("#inputText").val();
+    if (inputSequences != null &&
+        inputSequences.trim() != EmptyString) {
+        let htmlValidationResults = ProteinValidator.Validate(inputSequences);
+        if (htmlValidationResults != null) {
+            // Set error content and show
+            $("#validation-errors-message").html(htmlValidationResults);
+            $('#validation-errors').show();
+        }
+    }
+});

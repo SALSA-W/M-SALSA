@@ -74,7 +74,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="inputFile">Input	UniProt proteins:</label>
+				<label class="control-label col-sm-2" for="newitem">Input	UniProt proteins:</label>
 				<div class="col-sm-10">
 				
 					<label for="newitem">Add UniProt proteins ID</label>
@@ -247,6 +247,8 @@
 		<script src="js/index.js" type="text/javascript"></script>
 		<script src="js/header.js" type="text/javascript"></script>
 		<script src="js/dynamicList.js" type="text/javascript"></script>
+		<!-- Load TypeScript compilation output -->
+		<script src="tcs.js/input_form_validation.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->
 </body>

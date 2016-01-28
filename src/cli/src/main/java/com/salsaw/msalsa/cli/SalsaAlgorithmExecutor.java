@@ -120,9 +120,9 @@ public class SalsaAlgorithmExecutor {
 		}
 		
 		SubstitutionMatrix matrix = null;
-		if (salsaParameters.getScoringMatrix() != null){
+		if (salsaParameters.getScoringMatrixFilePath() != null){
 			// Load user matrix from file
-			try(InputStream stream = new FileInputStream(salsaParameters.getScoringMatrix())) {
+			try(InputStream stream = new FileInputStream(salsaParameters.getScoringMatrixFilePath())) {
 				matrix = new SubstitutionMatrix(stream, new Alphabet(salsaParameters.getAlphabetType()), salsaParameters.getGEP());
 			}
 		}

@@ -34,6 +34,7 @@ public final class LocalSearch {
 	private final int gamma;
 	private final int minIterations;
 	private final float probabiltyOfSplit;
+        private final Random randomGenerator;
 
 	private final TerminalGAPsStrategy terminal;
 
@@ -47,6 +48,7 @@ public final class LocalSearch {
 		this.GAPS = alignment.getGAPS();
 		this.numberOfGAPS = GAPS.size();
 		this.terminal = align.getTerminalGAPStrategy();
+                this.randomGenerator = new Random();
 	}
 
 	// GET / SET
@@ -243,9 +245,8 @@ public final class LocalSearch {
 		int length = g.getLength();
 
 		if (length > 1) {
-
-			Random random = new Random();
-			int positionOfSplit = g.getBegin() + random.nextInt(length - 1);
+			int positionOfSplit = g.getBegin() + 
+                                this.randomGenerator.nextInt(length - 1);
 
 			// newGAP will not be moved
 			GAP newGAP = g.split(positionOfSplit, !left);

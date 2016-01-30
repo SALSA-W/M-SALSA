@@ -21,3 +21,4 @@ hs_err_pid*
 .target
 target/
 src/cli/logs/msalsa-error-2016-01-25.log
+typings

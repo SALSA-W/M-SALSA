@@ -1,0 +1,9 @@
+Install Typings inside NodeJS:
+# Install Typings CLI utility.
+npm install typings --global
+# Search for definitions.
+typings search tape
+#Install using file typings.json (from same folder)
+typings install
+
+For more informations see: https://github.com/typings/typings

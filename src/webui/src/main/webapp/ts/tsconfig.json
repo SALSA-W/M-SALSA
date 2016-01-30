@@ -1,11 +1,14 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
         "sourceMap": true,
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
-		"outDir": "../tcs.js"
-	}
+        "outDir": "../tcs.js"
+    },
+    "files": [
+        "typings/main.d.ts"
+    ]
 }

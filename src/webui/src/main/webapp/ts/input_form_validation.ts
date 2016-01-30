@@ -1,4 +1,4 @@
-/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/main/ambient/jquery/jquery.d.ts" />
 
 const aminoAcids: Array<string> = [
     "A",//Ala

@@ -36,6 +36,8 @@ class ConfigurationLoader {
 	private static final String KEY_MAIL_PASSWORD = "mail.password";
 	private static final String KEY_CLEAN_DAYS_VALIDITY = "clean.validitydays";
 	private static final String KEY_PUBLISHER = "author.publisher";
+	private static final String KEY_GOOGLE_ANALYTICS_PROPERTY_ID = "google.analytics.propertyID";
+
 	
 	ServerConfiguration ReadConfiguration(){		
 		Properties properties = new Properties();
@@ -53,7 +55,8 @@ class ConfigurationLoader {
 					properties.getProperty(KEY_MAIL_USERNAME),
 					properties.getProperty(KEY_MAIL_PASSWORD),
 					properties.getProperty(KEY_CLEAN_DAYS_VALIDITY),
-					properties.getProperty(KEY_PUBLISHER)
+					properties.getProperty(KEY_PUBLISHER),
+					properties.getProperty(KEY_GOOGLE_ANALYTICS_PROPERTY_ID)
 					);
 		} catch (IOException e) {
 			// TODO Better exception management

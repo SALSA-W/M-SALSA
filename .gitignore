@@ -20,3 +20,4 @@ hs_err_pid*
 .settings/
 .target
 target/
+src/cli/logs/msalsa-error-2016-01-25.log

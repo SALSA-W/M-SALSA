@@ -30,6 +30,7 @@ public class ServerConfiguration {
 	private final String mailPassword;
 	private final int cleanDaysValidityJob;
 	private final String sitePublisher;
+    private final String googleAnalyticsPropertyID;
 	
 	// CONSTRUCTOR
 	ServerConfiguration(
@@ -39,7 +40,8 @@ public class ServerConfiguration {
 			String mailUsername,
 			String mailPassword,
 			String cleanDaysValidityJob,
-			String sitePublisher){
+			String sitePublisher,
+                        String googlePropertyID){
 		
 		this.clustalW = new File(clustalWPath);
 		this.clustalO = new File(clustalOPath);		
@@ -48,6 +50,7 @@ public class ServerConfiguration {
 		this.mailPassword = mailPassword;
 		this.cleanDaysValidityJob = Integer.parseInt(cleanDaysValidityJob);
 		this.sitePublisher = sitePublisher;
+        this.googleAnalyticsPropertyID = googlePropertyID;
 	}
 	
 	// GET
@@ -78,4 +81,9 @@ public class ServerConfiguration {
 	public String getSitePublisher() {
 		return this.sitePublisher;
 	}
+        
+	public String getGoogleAnalyticsPropertyID() {
+		return this.googleAnalyticsPropertyID;
+	}
 }
+

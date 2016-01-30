@@ -15,9 +15,24 @@
 
 <%
 // Set publisher only if set in configuration file
-if (ConfigurationManager.getInstance().getServerConfiguration().getSitePublisher() != null){ %>
+if (ConfigurationManager.getInstance().getServerConfiguration().getSitePublisher().isEmpty() == false){ %>
 	<link rel="publisher" href="<%=ConfigurationManager.getInstance().getServerConfiguration().getSitePublisher()%>"/>
 <%}%>
+
+<%
+// Set publisher Google Analytics script only if ID present
+if (ConfigurationManager.getInstance().getServerConfiguration().getGoogleAnalyticsPropertyID().isEmpty() == false) { %>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		ga('create', '<%=ConfigurationManager.getInstance().getServerConfiguration().getGoogleAnalyticsPropertyID()%>', 'auto');
+		ga('send', 'pageview');
+	</script>
+<%} // end Google Analytics%>
+
 <%-- Bootstrap 3 --%>
 <%-- Latest compiled and minified CSS --%>
 <link rel="stylesheet" href="https://bootswatch.com/superhero/bootstrap.min.css">

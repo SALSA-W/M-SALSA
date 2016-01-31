@@ -1,0 +1,20 @@
+--- Install Node.js ----
+https://nodejs.org/en/download/stable/
+
+--- Install/Update TypeScript ---
+npm install -g typescript
+
+--- Install development IDE ---
+https://code.visualstudio.com/
+
+--- How to resolve TypeScript dependecies ---
+--  Install Typings inside NodeJS:
+# Install Typings CLI utility.
+npm install typings --global
+# Search for definitions.
+typings search tape
+-- Resolve dependencies
+#Install dependencies using file typings.json (from same folder)
+typings install
+
+For more informations see: https://github.com/typings/typings

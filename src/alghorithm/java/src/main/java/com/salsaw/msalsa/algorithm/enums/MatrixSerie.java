@@ -13,26 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.cli;
-
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.ParameterException;
-import com.salsaw.msalsa.algorithm.enums.AlphabetType;
+package com.salsaw.msalsa.algorithm.enums;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public class AlphabetTypeConverter implements IStringConverter<AlphabetType>{
+public enum MatrixSerie {
+	NONE("null"),
+	BLOSUM("BLOSUM"),
+	PAM("PAM"),
+    ;
 
-	@Override
-	public AlphabetType convert(String value) {
-		AlphabetType convertedValue = AlphabetType.fromString(value);
-   	 
-        if(convertedValue == null) {
-            throw new ParameterException(TerminalGAPsStrategyConverter.composeInvalidStringError(AlphabetType.class, value));
+    private final String text;
+
+    MatrixSerie(final String text) {
+        this.text = text;
+    }
+
+    @Override
+    public final String toString() {
+        return text;
+    }
+    
+    public static final MatrixSerie fromString(String matrixSerieString) {
+    	 
+        for(MatrixSerie matrixSerie : MatrixSerie.values()) {
+            if(matrixSerie.toString().equalsIgnoreCase(matrixSerieString)) {
+                return matrixSerie;
+            }
         }
-        return convertedValue;
-	}
-
+        
+        return null;
+    }
 }

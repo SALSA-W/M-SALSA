@@ -13,37 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.algorithm;
+package com.salsaw.msalsa.algorithm.enums;
 
 /**
+ * A terminal GAP is a GAP in the beginning or in the end of a sequence. Usually, the penalties for a
+ * terminal GAP is different from the others.
+ * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-public enum MatrixSerie {
-	NONE("null"),
-	BLOSUM("BLOSUM"),
-	PAM("PAM"),
-    ;
-
-    private final String text;
-
-    MatrixSerie(final String text) {
-        this.text = text;
-    }
-
-    @Override
-    public final String toString() {
-        return text;
-    }
-    
-    public static final MatrixSerie fromString(String matrixSerieString) {
-    	 
-        for(MatrixSerie matrixSerie : MatrixSerie.values()) {
-            if(matrixSerie.toString().equalsIgnoreCase(matrixSerieString)) {
-                return matrixSerie;
+public enum TerminalGAPsStrategy {
+	/**
+	 * as other GAPs, a terminal GAP has both GOP and GEP
+	 */
+	BOTH_PENALTIES,
+	/**
+	 * there is no penalty for opening a terminal GAP, only for extending it
+	 */
+	ONLY_GEP;
+	
+    public static final TerminalGAPsStrategy fromString(String strategy) {
+ 
+        for(TerminalGAPsStrategy terminalGAPsStrategy : TerminalGAPsStrategy.values()) {
+            if(terminalGAPsStrategy.toString().equalsIgnoreCase(strategy)) {
+                return terminalGAPsStrategy;
             }
         }
-        
+ 
         return null;
     }
 }

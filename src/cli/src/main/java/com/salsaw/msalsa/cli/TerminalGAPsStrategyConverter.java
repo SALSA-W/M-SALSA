@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
-import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
+import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
 
 public class TerminalGAPsStrategyConverter implements IStringConverter<TerminalGAPsStrategy> {
 	 

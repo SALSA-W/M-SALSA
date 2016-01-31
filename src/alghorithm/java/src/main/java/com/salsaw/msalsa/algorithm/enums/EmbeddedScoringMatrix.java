@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.salsaw.msalsa.algorithm;
+package com.salsaw.msalsa.algorithm.enums;
 
 /**
  * See {@link https://www.ddbj.nig.ac.jp/search/help/clustalwhelp-e.html} for documentation

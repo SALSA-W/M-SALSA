@@ -1,4 +1,4 @@
-package com.salsaw.msalsa.algorithm;
+package com.salsaw.msalsa.algorithm.enums;
 
 public enum AlphabetType {
 	DNA("DNA"),

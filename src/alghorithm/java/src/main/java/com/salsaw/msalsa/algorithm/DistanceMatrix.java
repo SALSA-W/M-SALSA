@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Scanner;
 
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**

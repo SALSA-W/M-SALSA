@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.beust.jcommander.Parameter;
-import com.salsaw.msalsa.algorithm.AlphabetType;
-import com.salsaw.msalsa.algorithm.EmbeddedScoringMatrix;
-import com.salsaw.msalsa.algorithm.MatrixSerie;
-import com.salsaw.msalsa.algorithm.TerminalGAPsStrategy;
+import com.salsaw.msalsa.algorithm.enums.AlphabetType;
+import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
+import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
 import com.salsaw.msalsa.clustal.ClustalType;
 
 @XmlRootElement

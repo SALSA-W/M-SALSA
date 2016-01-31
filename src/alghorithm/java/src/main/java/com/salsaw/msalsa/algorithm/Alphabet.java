@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.salsaw.msalsa.algorithm.enums.AlphabetType;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**

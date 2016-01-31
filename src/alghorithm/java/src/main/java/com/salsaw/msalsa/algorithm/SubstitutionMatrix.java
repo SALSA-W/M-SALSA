@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.salsaw.msalsa.algorithm.enums.AlphabetType;
+import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**

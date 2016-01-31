@@ -28,11 +28,11 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.salsaw.msalsa.algorithm.Alignment;
 import com.salsaw.msalsa.algorithm.Alphabet;
-import com.salsaw.msalsa.algorithm.AlphabetType;
 import com.salsaw.msalsa.algorithm.Constants;
 import com.salsaw.msalsa.algorithm.DistanceMatrix;
 import com.salsaw.msalsa.algorithm.LocalSearch;
 import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
+import com.salsaw.msalsa.algorithm.enums.AlphabetType;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
 import com.salsaw.msalsa.clustal.ClustalFileMapper;

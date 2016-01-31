@@ -23,6 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
+import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**

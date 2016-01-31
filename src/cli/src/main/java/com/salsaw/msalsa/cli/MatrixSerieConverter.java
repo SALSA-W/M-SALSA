@@ -17,7 +17,7 @@ package com.salsaw.msalsa.cli;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
-import com.salsaw.msalsa.algorithm.MatrixSerie;
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin

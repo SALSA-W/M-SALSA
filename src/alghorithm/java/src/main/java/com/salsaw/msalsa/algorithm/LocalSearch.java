@@ -18,6 +18,7 @@ package com.salsaw.msalsa.algorithm;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 
 /**

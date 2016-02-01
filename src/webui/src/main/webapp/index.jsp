@@ -1,7 +1,6 @@
-<%@page import="com.salsaw.msalsa.algorithm.MatrixSerie"%>
 <%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
 <%@page import="com.salsaw.msalsa.clustal.ClustalType"%>
-<%@page import="com.salsaw.msalsa.algorithm.TerminalGAPsStrategy"%>
+<%@page import="com.salsaw.msalsa.algorithm.enums.*"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
@@ -23,7 +22,9 @@
 	<c:set var="matrixSeries" value="<%=MatrixSerie.values()%>" />
 	<c:set var="clustalTypes" value="<%=ClustalType.values()%>" />
 	<c:set var="terminalGAPsStrategies"
-		value="<%=TerminalGAPsStrategy.values()%>" />
+		value="<%=TerminalGAPsStrategy.values()%>" />		
+	<c:set var="embeddedScoringMatrices"
+		value="<%=EmbeddedScoringMatrix.values()%>" />		
 
 	<div class="container">
 		<jsp:include page="navbar.jsp" />

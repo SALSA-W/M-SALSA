@@ -40,16 +40,16 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 public class Alphabet {
 	
 	// CONSTANTS
-	private static final char[] AlphabetDNA = new char[] {'A', 'T', 'C', 'G'};
-	private static final char[] AlphabetRNA = new char[] {'A', 'U', 'C', 'G'};
-	private static final char[] AlphabetPROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
+	private static final char[] ALPHABET_DNA = new char[] {'A', 'T', 'C', 'G'};
+	private static final char[] ALPHABET_RNA = new char[] {'A', 'U', 'C', 'G'};
+	private static final char[] ALPHABET_PROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
 	public static final char GAP_SYMBOL = '-';
 	
 	// FIELDS
 	private final int numberOfCharacters;
 	private final char[] alphabet;	
-	private final Map<Integer, Character> symbolMapIntKey = new HashMap<Integer, Character>();
-	private final Map<Character, Integer> symbolMapCharKey = new HashMap<Character, Integer>();
+	private final Map<Integer, Character> symbolMapIntKey = new HashMap<>();
+	private final Map<Character, Integer> symbolMapCharKey = new HashMap<>();
 
 	// CONSTRUCTOR
 	
@@ -75,24 +75,24 @@ public class Alphabet {
 		this(getEmbeddedAlphabetArray(type));
 	}
 	
-	private static final char[] getEmbeddedAlphabetArray(AlphabetType type) throws SALSAException{
+	private static char[] getEmbeddedAlphabetArray(AlphabetType type) throws SALSAException{
 		switch (type) {
 		case DNA:
-			return AlphabetDNA;
+			return ALPHABET_DNA;
 		case PROTEINS:
-			return AlphabetPROTEINS;
+			return ALPHABET_PROTEINS;
 		case RNA:
-			return AlphabetRNA;
+			return ALPHABET_RNA;
 		default:
 			throw new SALSAException(
 					"Error: the specified type of alphabet is not supported. Supported types are: PROTEINS, DNA or RNA");
 		}
 	}
 	
-	private static final char[] calculateAlphabetArray(String matrixInputLine) throws SALSAException{
+	private static char[] calculateAlphabetArray(String matrixInputLine) throws SALSAException{
 		matrixInputLine = matrixInputLine.trim();
 
-		List<Character> alphabetsSymbols = new ArrayList<Character>();		
+		List<Character> alphabetsSymbols = new ArrayList<>();		
 		
 		// Use scanner to avoid probles due to wrong spaces number
 		try(Scanner scanner = new Scanner(matrixInputLine))
@@ -110,7 +110,7 @@ public class Alphabet {
 		
 		char[] alphabet = new char[alphabetsSymbols.size()];
 		for (int i = 0; i < alphabetsSymbols.size(); i++) {
-			alphabet[i] = alphabetsSymbols.get(i).charValue();
+			alphabet[i] = alphabetsSymbols.get(i);
 		}
 		
 		return alphabet;	
@@ -147,7 +147,7 @@ public class Alphabet {
 		if(value == null){
 			throw new SALSAException("Alphabet doesn't contain character \'" + c + "\'.");
 		}
-		return value.intValue();		
+		return value;		
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class Alphabet {
 		if(value == null){
 			throw new SALSAException("Error while saving the alignment");
 		}
-		return value.charValue();
+		return value;
 		
 	}
 

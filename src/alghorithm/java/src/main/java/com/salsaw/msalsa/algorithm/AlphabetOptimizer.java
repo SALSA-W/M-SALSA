@@ -58,7 +58,7 @@ public final class AlphabetOptimizer {
 	 */
 	public final boolean tryOptimize() throws SALSAException {		
 		// Try to optimize alphabet size	
-		Set<Integer> usedAlphabetChars = new  HashSet<Integer>();
+		Set<Integer> usedAlphabetChars = new  HashSet<>();
 		for (int alignElement : this.alignMatrix){
 			usedAlphabetChars.add(alignElement);			
 		}
@@ -73,14 +73,14 @@ public final class AlphabetOptimizer {
 			int gapPosition = this.alphabet.charToInt(Alphabet.GAP_SYMBOL);
 			for (Integer val : usedAlphabetChars) {
 				if (val != gapPosition){
-					optimizedAlphabetArray[i++] = this.alphabet.intToChar(val);;
+					optimizedAlphabetArray[i++] = this.alphabet.intToChar(val);
 				}
 			}
 			
 			Alphabet optimizedAlphabet = new Alphabet(optimizedAlphabetArray);
 
 			// Create map to convert matrix from old alphabet to new one
-			Map<Integer, Integer> oldToNewConversionMap = new HashMap<Integer,Integer>();
+			Map<Integer, Integer> oldToNewConversionMap = new HashMap<>();
 			oldToNewConversionMap.put(gapPosition, optimizedAlphabet.charToInt(Alphabet.GAP_SYMBOL));
 			for (char optimizedAlphabetSymbol : optimizedAlphabetArray) {
 				int oldAlphabetIndex = this.alphabet.charToInt(optimizedAlphabetSymbol);

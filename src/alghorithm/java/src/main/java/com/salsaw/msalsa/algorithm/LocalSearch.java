@@ -101,7 +101,7 @@ public final class LocalSearch {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private final boolean move(int GAPPosition, boolean left)
+	private boolean move(final int GAPPosition, final boolean left)
 			throws SALSAException {
 		return move(GAPPosition, left, false);
 	}
@@ -119,7 +119,7 @@ public final class LocalSearch {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private final boolean move(int GAPPosition, boolean left, boolean split)
+	private boolean move(final int GAPPosition, final boolean left, final boolean split)
 			throws SALSAException {
 		GAP g = this.GAPS.get(GAPPosition);
 
@@ -240,7 +240,7 @@ public final class LocalSearch {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private final boolean splitAndMove(int GAPPosition, boolean left)
+	private boolean splitAndMove(final int GAPPosition, final boolean left)
 			throws SALSAException {
 		GAP g = this.GAPS.get(GAPPosition);
 		int length = g.getLength();

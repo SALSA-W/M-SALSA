@@ -190,10 +190,12 @@ public final class GAP {
 	 * one that is returned. Variable leftNew specifies if the new GAP is the
 	 * one on the left.
 	 * 
+	 * @param column
+	 * @param leftNew
 	 * @return
 	 * @throws SALSAException
 	 * */
-	public final GAP split(int column, boolean leftNew) throws SALSAException {
+	public final GAP split(final int column, final boolean leftNew) throws SALSAException {
 		if (column < begin || column >= end) {
 			throw new SALSAException(
 					"Error while splitting a GAP: the specified point is not inside the GAP.");

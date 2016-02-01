@@ -17,7 +17,6 @@ package com.salsaw.msalsa.algorithm;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -25,6 +24,7 @@ import com.salsaw.msalsa.algorithm.enums.AlphabetType;
 import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
 import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import java.util.EnumMap;
 
 /**
  * It represent the substitution matrix. The role is to return the value of
@@ -53,7 +53,7 @@ public final class SubstitutionMatrix {
 
 	private final int[] matrix;
 	
-	private final static Map<EmbeddedScoringMatrix, SubstitutionMatrix> substitutionMatrixCache = new HashMap<EmbeddedScoringMatrix, SubstitutionMatrix>();
+	private static final Map<EmbeddedScoringMatrix, SubstitutionMatrix> SUBSTITUTION_MATRIX_CACHE = new EnumMap<>(EmbeddedScoringMatrix.class);
 
 	// CONSTRUCTOR
 	
@@ -93,33 +93,33 @@ public final class SubstitutionMatrix {
 			// Read first line with the alphabet
 			Alphabet recognizedAlphabet = new Alphabet(line);
 			
-			int alphabetLength;
+			int alphabetLengthProcessing;
 			if (expectedAlphabet != null){
 				// Check if expected alphabet and one load from stream corresponds
-				alphabetLength = expectedAlphabet.getNumberOfCharacters();
-				if (alphabetLength != recognizedAlphabet.dimension()) {
+				alphabetLengthProcessing = expectedAlphabet.getNumberOfCharacters();
+				if (alphabetLengthProcessing != recognizedAlphabet.dimension()) {
 					//The two alphabets are different
 					throw new SALSAException("Error: substitution matrix file format is not supported");
 				}
 				else { //Find out if the order of characters is the same in the two alphabets
-					for (int i = 0; i < alphabetLength; i++) {
+					for (int i = 0; i < alphabetLengthProcessing; i++) {
 						if (expectedAlphabet.intToChar(i) != recognizedAlphabet.intToChar(i))
 							throw new SALSAException("Error: substitution matrix file format is not supported");
 					}
 				}
 				this.alphabet = expectedAlphabet;
 			} else {
-				alphabetLength = recognizedAlphabet.getNumberOfCharacters();
+				alphabetLengthProcessing = recognizedAlphabet.getNumberOfCharacters();
 				this.alphabet = recognizedAlphabet;
 			}				
 			
-			this.matrix = new int[alphabetLength * alphabetLength];			
-			this.alphabetLength = alphabetLength;
+			this.matrix = new int[alphabetLengthProcessing * alphabetLengthProcessing];			
+			this.alphabetLength = alphabetLengthProcessing;
 			
 			// Read the values for the matrix value (the matrix is alphabet x alphabet)
-			for (int i=0; i<alphabetLength;i++){
-				for (int j=0; j<alphabetLength; j++){
-					this.matrix[i*alphabetLength+j] = scanner.nextInt();
+			for (int i=0; i<alphabetLengthProcessing;i++){
+				for (int j=0; j<alphabetLengthProcessing; j++){
+					this.matrix[i*alphabetLengthProcessing+j] = scanner.nextInt();
 				}
 			}
 		}			
@@ -175,13 +175,15 @@ public final class SubstitutionMatrix {
 	/**
 	 * Load well-known matrix from embedded resources
 	 * 
+	 * @param scoringMatrix
+	 * @param GEP
 	 * @return
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
 	public static final SubstitutionMatrix getSubstitutionMatrix(EmbeddedScoringMatrix scoringMatrix, float GEP)
 			throws IOException, SALSAException {
-		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrix, null);
+		SubstitutionMatrix cachedSubstitutionMatrix = SUBSTITUTION_MATRIX_CACHE.getOrDefault(scoringMatrix, null);
 
 		if (cachedSubstitutionMatrix == null) {
 			Alphabet alphabet;
@@ -212,7 +214,7 @@ public final class SubstitutionMatrix {
 			// Data isn't present in the cache - load from file system
 			try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrix.toString())) {
 				cachedSubstitutionMatrix = new SubstitutionMatrix(stream, alphabet, GEP);
-				substitutionMatrixCache.put(scoringMatrix, cachedSubstitutionMatrix);
+				SUBSTITUTION_MATRIX_CACHE.put(scoringMatrix, cachedSubstitutionMatrix);
 			}
 		}
 		

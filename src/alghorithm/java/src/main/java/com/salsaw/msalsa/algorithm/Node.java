@@ -276,7 +276,7 @@ public final class Node {
 	 * 
 	 * @throws SALSAException
 	 */
-	private final void invertNode(final Node newParent, final float newDistance)
+	private void invertNode(final Node newParent, final float newDistance)
 			throws SALSAException {
 		Node oldParent = this.parent;
 		float oldDistance = this.distance;
@@ -305,7 +305,7 @@ public final class Node {
 	 * 
 	 * @return
 	 */
-	private final int calculateDescendantLeaves() {
+	private int calculateDescendantLeaves() {
 		this.descendantLeaves = 0;
 		if (this.left != null) {
 			this.descendantLeaves = this.left.calculateDescendantLeaves();

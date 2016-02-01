@@ -61,17 +61,17 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-pSplit", description = "probability of split")
 	private float probabilityOfSplit = 0.1f;
 	
-	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs. Possible options: BOTH_PENALTIES, ONLY_GEP" , converter = TerminalGAPsStrategyConverter.class)
+	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs.")
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
 	
-	@Parameter(names = "-matrixSerie", description = "matrix serie. Possible options: BLOSUM, PAM, BLOSUM62, GONNET", converter = MatrixSerieConverter.class)
+	@Parameter(names = "-matrixSerie", description = "matrix serie to use. The specific matrix will be set base on distance matrix data.")
 	private MatrixSerie matrixSerie = MatrixSerie.NONE;
 	
 	// TODO - set all parameters
-	@Parameter(names = "-scoringMatrix", description = "scoring matrix to use. Possible options: BLOSUM, PAM, BLOSUM62, GONNET")
+	@Parameter(names = "-scoringMatrix", description = "scoring matrix to use")
 	private EmbeddedScoringMatrix embeddedScoringMatrix = EmbeddedScoringMatrix.BLOSUM62;
 	
-	@Parameter(names = "-type", description = "type of sequences. Possible options: DNA, RNA, PROTEINS", converter = AlphabetTypeConverter.class)
+	@Parameter(names = "-type", description = "type of sequences in input file")
 	private AlphabetType alphabetType = AlphabetType.PROTEINS;
 	
 	@Parameter(names = "-distanceMatrix", description = "distance matrix file")
@@ -80,7 +80,7 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
 	private String clustalPath;
 		
-	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega). Possible options: CLUSTAL_W, CLUSTAL_O")
+	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega).")
 	private ClustalType clustalType = ClustalType.CLUSTAL_O;
 	
 	@Parameter(names = "-generatePhTree", description = "define if the phylogenetic neighbour-joining tree file must be generated")

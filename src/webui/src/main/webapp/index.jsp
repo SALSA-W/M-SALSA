@@ -142,7 +142,21 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="terminalGAPsStrategy">Scoring
+								<label class="control-label col-sm-2" for="embeddedScoringMatrix">Scoring
+									Matrix:</label>
+								<div class="col-sm-10">
+									<select id="embeddedScoringMatrix" name="embeddedScoringMatrix"
+										class="form-control">
+										<c:forEach items="${embeddedScoringMatrices}" var="embeddedScoringMatrix">
+											<option value="${embeddedScoringMatrix}"
+												${salsaParameters.embeddedScoringMatrix == embeddedScoringMatrix ? 'selected' : ''}>${embeddedScoringMatrix}</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2" for="matrixSerie">Scoring
 									Matrix Serie:</label>
 								<div class="col-sm-10">
 									<select id="matrixSerie" name="matrixSerie"
@@ -153,7 +167,8 @@
 										</c:forEach>
 									</select>
 								</div>
-							</div>
+							</div>	
+
 
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="minIterations">Min

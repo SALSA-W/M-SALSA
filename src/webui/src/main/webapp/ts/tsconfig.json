@@ -6,9 +6,10 @@
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
-        "outDir": "../tcs.js"
+        "outDir": "../tcs.js",
+        "rootDir": "src"
     },
-    "files": [
-        "typings/main.d.ts"
+    "exclude": [
+        "typings"
     ]
 }

@@ -14,7 +14,12 @@ npm install typings --global
 # Search for definitions.
 typings search tape
 -- Resolve dependencies
-#Install dependencies using file typings.json (from same folder)
+# Install dependencies using file typings.json (from same folder)
 typings install
 
 For more informations see: https://github.com/typings/typings
+
+--- Build ---
+# Execute in command line the command
+tsc
+# the settings of compiler are set in tsconfig.json

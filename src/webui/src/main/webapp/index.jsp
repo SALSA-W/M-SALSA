@@ -262,8 +262,8 @@
 		<jsp:include page="standard-js.jsp" />
 		<script src="js/index.js" type="text/javascript"></script>
 		<script src="js/header.js" type="text/javascript"></script>
-		<script src="js/dynamicList.js" type="text/javascript"></script>
 		<!-- Load TypeScript compilation output -->
+		<script src="tcs.js/dynamicList.js" type="text/javascript"></script>
 		<script src="tcs.js/input_form_validation.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->

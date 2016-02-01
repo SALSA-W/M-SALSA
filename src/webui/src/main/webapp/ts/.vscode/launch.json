@@ -5,7 +5,7 @@
             "name": "Launch TypeScript",
             "type": "node",
             "request": "launch",
-            "program": "input_form_validation.ts",
+            "program": "src/input_form_validation.ts",
             "sourceMaps": true,
             "outDir": "../tcs.js"
         }

@@ -56,7 +56,7 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
  * characters to their classical representation.
  * </p>
  * </li>
- * <ul>
+ * </ul>
  * </p>
  * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -139,7 +139,7 @@ public final class Alignment {
 		}
 		this.alphabet = this.substitution.getAlphabet();
 		this.alignMatrix = new int[this.numberOfSequences * this.length];
-		this.GAPS = new ArrayList<GAP>();
+		this.GAPS = new ArrayList<>();
 
 		createWeights(treeFileName);
 		preprocessing(sequences);
@@ -172,7 +172,7 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private final float getIdentityScore(int firstRow, int secondRow) throws SALSAException{
+	private float getIdentityScore(final int firstRow, final int secondRow) throws SALSAException{
 		if (firstRow < 0 || 
 			firstRow >= numberOfSequences || 
 			secondRow < 0 || 
@@ -211,7 +211,7 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException 
 	 */
-	private final float getAverageIdentityScore() throws SALSAException{
+	private float getAverageIdentityScore() throws SALSAException{
 		float sum = 0.0f;
 
 		for (int i = 0; i < numberOfSequences - 1; i++){
@@ -389,7 +389,7 @@ public final class Alignment {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	private final void createWeights(String fileName) throws SALSAException,
+	private void createWeights(String fileName) throws SALSAException,
 			FileNotFoundException, IOException {
 		Tree t = new Tree(fileName, this.numberOfSequences);
 
@@ -406,10 +406,10 @@ public final class Alignment {
 	 * @return
 	 * @throws IOException
 	 */
-	private final ArrayList<String> readInputSequences(String filePath)
+	private ArrayList<String> readInputSequences(String filePath)
 			throws IOException {
-		ArrayList<String> sequences = new ArrayList<String>();
-		ArrayList<String> sequencesHeaders = new ArrayList<String>();
+		ArrayList<String> sequences = new ArrayList<>();
+		ArrayList<String> sequencesHeaders = new ArrayList<>();
 
 		try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
 			String line;
@@ -465,7 +465,7 @@ public final class Alignment {
 	 * @param seq
 	 * @throws SALSAException
 	 */
-	private final void preprocessing(ArrayList<String> seq)
+	private void preprocessing(ArrayList<String> seq)
 			throws SALSAException {
 		// If it is NULL, there are no GAPs opened
 		GAP g = null;
@@ -511,7 +511,7 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private final int[] convert(String s) throws SALSAException {
+	private int[] convert(String s) throws SALSAException {
 		int[] sequenceOfNumbers = new int[this.length];
 
 		for (int c = 0; c < this.length; c++) {
@@ -521,7 +521,7 @@ public final class Alignment {
 		return sequenceOfNumbers;
 	}
 
-	private final void createCounters() {
+	private void createCounters() {
 		this.countersMatrix = new float[(this.alphabet.dimension() + 1)
 				* this.length];
 
@@ -549,7 +549,7 @@ public final class Alignment {
 	 * @param numberOfGAPSr2
 	 * @return
 	 */
-	private final float pairwise(int row1, int row2, int numberOfGAPSr1,
+	private float pairwise(int row1, int row2, int numberOfGAPSr1,
 			int numberOfGAPSr2) {
 		float value = 0;
 		int alpha, beta;
@@ -573,7 +573,7 @@ public final class Alignment {
 	 * @param newCharacter
 	 * @return
 	 */
-	private final float changeCell(int row, int column, int newCharacter) {
+	private float changeCell(int row, int column, int newCharacter) {
 		// align
 		int oldCharacter = this.alignMatrix[row * this.length + column];
 		// counters
@@ -604,7 +604,7 @@ public final class Alignment {
 	 * @param column
 	 * @param newCharacter
 	 */
-	private final void restoreCell(int row, int column, int newCharacter) {
+	private void restoreCell(int row, int column, int newCharacter) {
 		// align
 		int oldCharacter = this.alignMatrix[row * this.length + column];
 		// counters

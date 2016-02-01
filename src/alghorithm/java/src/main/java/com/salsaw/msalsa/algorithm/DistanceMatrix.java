@@ -74,6 +74,6 @@ public final class DistanceMatrix {
 		}
 
 		pid /= this.numberOfSequences * (this.numberOfSequences - 1) / 2;
-		return SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, GEP);
+		return SubstitutionMatrix.getSubstitutionMatrix(SubstitutionMatrix.getEmbeddedSubstitutionMatrix(matrixSerie, pid), GEP);
 	}
 }

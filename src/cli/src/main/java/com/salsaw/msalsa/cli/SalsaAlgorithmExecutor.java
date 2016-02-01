@@ -33,6 +33,8 @@ import com.salsaw.msalsa.algorithm.DistanceMatrix;
 import com.salsaw.msalsa.algorithm.LocalSearch;
 import com.salsaw.msalsa.algorithm.SubstitutionMatrix;
 import com.salsaw.msalsa.algorithm.enums.AlphabetType;
+import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
+import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
 import com.salsaw.msalsa.clustal.ClustalFileMapper;
@@ -76,6 +78,11 @@ public class SalsaAlgorithmExecutor {
 			if (clustalProcessName.equalsIgnoreCase(expectedClustalProcessName) == false){
 				throw new SALSAParameterException("The clusal path passed reference a process called " + clustalProcessName + ". The expected one is " + expectedClustalProcessName);
 			}			
+		}
+		
+		if (salsaParameters.getMatrixSerie() == MatrixSerie.NONE &&
+			salsaParameters.getEmbeddedScoringMatrix() == EmbeddedScoringMatrix.NONE){
+			throw new SALSAParameterException("A matrix serie or a scoring matrix must be set");
 		}
 		
 		// INIT PARAMTERS
@@ -131,7 +138,8 @@ public class SalsaAlgorithmExecutor {
 				throw new SALSAException("Error: if the type of residues is different from "+ AlphabetType.PROTEINS.toString() +" it is required to specify the substitutionMatrix.");
 			}
 			
-			if (distanceMatrixFilePath != null){
+			if (distanceMatrixFilePath != null &&
+				salsaParameters.getMatrixSerie() != MatrixSerie.NONE){
 				try(InputStream stream = new FileInputStream(distanceMatrixFilePath)) {
 					DistanceMatrix dm = new DistanceMatrix(stream);
 					matrix = dm.createSubstitutionMatrix(salsaParameters.getMatrixSerie(), salsaParameters.getGEP());
@@ -145,7 +153,7 @@ public class SalsaAlgorithmExecutor {
 					matrix, salsaParameters.getGOP(), salsaParameters.getTerminalGAPsStrategy());
 		} else {
 			alignment = new Alignment(alignmentFilePath, phylogeneticTreeFilePath, 
-					salsaParameters.getMatrixSerie(), salsaParameters.getGEP(), salsaParameters.getGOP(), salsaParameters.getTerminalGAPsStrategy());
+					salsaParameters.getEmbeddedScoringMatrix(), salsaParameters.getGEP(), salsaParameters.getGOP(), salsaParameters.getTerminalGAPsStrategy());
 		}			
 
 		LocalSearch localSearch = new LocalSearch(alignment, salsaParameters.getGamma(),

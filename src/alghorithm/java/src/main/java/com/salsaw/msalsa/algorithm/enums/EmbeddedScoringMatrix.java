@@ -23,6 +23,7 @@ package com.salsaw.msalsa.algorithm.enums;
  *
  */
 public enum EmbeddedScoringMatrix {
+	NONE,
 	// Proteins
 	/**
 	 * Gonnet -These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series.

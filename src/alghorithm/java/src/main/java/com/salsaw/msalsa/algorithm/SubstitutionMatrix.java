@@ -38,6 +38,9 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
  *
  */
 public final class SubstitutionMatrix {
+	// CONSTANTS 
+	private static Alphabet ALPHABET_PROTEINS;
+	private static Alphabet ALPHABET_DNA;
 
 	// FIELDS
 	private final int alphabetLength;
@@ -53,13 +56,26 @@ public final class SubstitutionMatrix {
 	private final static Map<EmbeddedScoringMatrix, SubstitutionMatrix> substitutionMatrixCache = new HashMap<EmbeddedScoringMatrix, SubstitutionMatrix>();
 
 	// CONSTRUCTOR
-
-	// GET/SET
-	public final Alphabet getAlphabet() {
-		return this.alphabet;
-	}	
 	
-
+	// Static initialization
+	static {
+		try {
+			ALPHABET_PROTEINS = new Alphabet(AlphabetType.PROTEINS);
+			ALPHABET_DNA = new Alphabet(AlphabetType.DNA);
+		} catch (SALSAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public SubstitutionMatrix(SubstitutionMatrix substitutionMatrix, float gep)
+			throws SALSAException, IOException {
+		this.GEP = gep;
+		this.matrix = substitutionMatrix.matrix;
+		this.alphabet = substitutionMatrix.alphabet;
+		this.alphabetLength = this.alphabet.dimension();
+	}
+	
 	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet expectedAlphabet, float gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;		
@@ -108,6 +124,11 @@ public final class SubstitutionMatrix {
 			}
 		}			
 	}
+	
+	// GET/SET
+	public final Alphabet getAlphabet() {
+		return this.alphabet;
+	}
 
 	/**
 	 * Calculate the score between two characters (converted in integers)
@@ -131,23 +152,23 @@ public final class SubstitutionMatrix {
 		return matrix[a * alphabetLength + b];
 	}
 	
-	public static final SubstitutionMatrix getSubstitutionMatrix(MatrixSerie matrixSerie, float pid, float GEP) throws SALSAException, IOException {		
+	public static final EmbeddedScoringMatrix getEmbeddedSubstitutionMatrix(MatrixSerie matrixSerie, float pid) throws SALSAException, IOException {		
 		switch (matrixSerie) {
 		case BLOSUM:
-			if (pid > 0.8) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM80, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.6) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.3) return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM45, new Alphabet(AlphabetType.PROTEINS), GEP);
-			return loadEmbeddedMatrix(EmbeddedScoringMatrix.BLOSUM62, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.8) return EmbeddedScoringMatrix.BLOSUM80;
+			if (pid > 0.6) return EmbeddedScoringMatrix.BLOSUM62;
+			if (pid > 0.3) return EmbeddedScoringMatrix.BLOSUM45;
+			return EmbeddedScoringMatrix.BLOSUM62;
 
 		case PAM:
-			if (pid > 0.8) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM20, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.6) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM60, new Alphabet(AlphabetType.PROTEINS), GEP);
-			if (pid > 0.4) return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM120, new Alphabet(AlphabetType.PROTEINS), GEP);
-			return loadEmbeddedMatrix(EmbeddedScoringMatrix.PAM350, new Alphabet(AlphabetType.PROTEINS), GEP);
+			if (pid > 0.8) return EmbeddedScoringMatrix.PAM20;
+			if (pid > 0.6) return EmbeddedScoringMatrix.PAM60;
+			if (pid > 0.4) return EmbeddedScoringMatrix.PAM120;
+			return EmbeddedScoringMatrix.PAM350;
 
 		default:
 			//MatrixSerie is not BLOSUM and it is not PAM
-			return null;
+			throw new SALSAException("The " + matrixSerie + " isn't managed");
 		}		
 	}
 
@@ -158,16 +179,46 @@ public final class SubstitutionMatrix {
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
-	private static final SubstitutionMatrix loadEmbeddedMatrix(EmbeddedScoringMatrix scoringMatrix, Alphabet alphabet, float GEP)
+	public static final SubstitutionMatrix getSubstitutionMatrix(EmbeddedScoringMatrix scoringMatrix, float GEP)
 			throws IOException, SALSAException {
 		SubstitutionMatrix cachedSubstitutionMatrix = substitutionMatrixCache.getOrDefault(scoringMatrix, null);
 
 		if (cachedSubstitutionMatrix == null) {
+			Alphabet alphabet;
+			switch (scoringMatrix) {
+			case BLOSUM30:
+			case BLOSUM45:
+			case BLOSUM50:
+			case BLOSUM62:
+			case BLOSUM80:
+			case PAM20:
+			case PAM60:
+			case PAM120:
+			case PAM350:
+				alphabet = ALPHABET_PROTEINS;
+				break;
+				
+			case IUB:
+			case ClustalW:
+				alphabet = ALPHABET_DNA;
+				break;
+								
+			default:
+				// Gonnet - BLOSUM50 - PAM250
+				alphabet = null;
+				break;
+			}		
+			
 			// Data isn't present in the cache - load from file system
 			try (InputStream stream = App.class.getResourceAsStream("/matrix/" + scoringMatrix.toString())) {
 				cachedSubstitutionMatrix = new SubstitutionMatrix(stream, alphabet, GEP);
 				substitutionMatrixCache.put(scoringMatrix, cachedSubstitutionMatrix);
 			}
+		}
+		
+		if (cachedSubstitutionMatrix.GEP != GEP){
+			// TODO - evaluate if set GEP as alignment property and pass to score method of SubstitutionMatrix
+			cachedSubstitutionMatrix = new SubstitutionMatrix(cachedSubstitutionMatrix, GEP);
 		}
 
 		return cachedSubstitutionMatrix;

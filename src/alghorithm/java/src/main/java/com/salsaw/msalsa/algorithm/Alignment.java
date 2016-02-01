@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
 import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
@@ -93,33 +94,50 @@ public final class Alignment {
 	public Alignment(final String inputFilePath, final String treeFileName,
 			final SubstitutionMatrix s, final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
-		this(inputFilePath, treeFileName, s, gop, tgs, MatrixSerie.NONE, null);
+		this(inputFilePath, treeFileName, s, gop, tgs, EmbeddedScoringMatrix.NONE, MatrixSerie.NONE, null);
 	}
 	
 	public Alignment(final String inputFilePath, final String treeFileName,
 			final MatrixSerie matrixSerie, final float gep, 
 			final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {		
-		this(inputFilePath, treeFileName, null, gop, tgs, matrixSerie, gep);			
+		this(inputFilePath, treeFileName, null, gop, tgs, EmbeddedScoringMatrix.NONE , matrixSerie, gep);			
 	}
+	
+	public Alignment(final String inputFilePath, final String treeFileName,
+			final EmbeddedScoringMatrix scoringMatrix, final float gep, 
+			final float gop, final TerminalGAPsStrategy tgs)
+			throws IOException, SALSAException {		
+		this(inputFilePath, treeFileName, null, gop, tgs, scoringMatrix, MatrixSerie.NONE, gep);			
+	}	
 	
 	private Alignment(final String inputFilePath, final String treeFileName,
 			final SubstitutionMatrix substitutionMatrix, final float gop, 
-			final TerminalGAPsStrategy tgs, final MatrixSerie matrixSerie, final Float gep)
-			throws IOException, SALSAException {
-		
-		if (substitutionMatrix == null){
-			// Create SubstitutionMatrix from data
-			float pid = getAverageIdentityScore();
-			this.substitution = SubstitutionMatrix.getSubstitutionMatrix(matrixSerie, pid, gep);
-		}else{
-			this.substitution = substitutionMatrix;
-		}
-		
+			final TerminalGAPsStrategy tgs, final EmbeddedScoringMatrix scoringMatrix, final MatrixSerie matrixSerie, final Float gep)
+			throws IOException, SALSAException {		
 		this.GOP = gop;
 		this.terminal = tgs;
-		this.alphabet = this.substitution.getAlphabet();
 		ArrayList<String> sequences = readInputSequences(inputFilePath);
+
+		if (substitutionMatrix == null) {
+			// Create SubstitutionMatrix from input data
+			if (matrixSerie == MatrixSerie.NONE && scoringMatrix == EmbeddedScoringMatrix.NONE) {
+				throw new SALSAException("Missing data to generate scoringMatrix");
+			}
+			if (matrixSerie != MatrixSerie.NONE && scoringMatrix != EmbeddedScoringMatrix.NONE) {
+				throw new SALSAException("Invalid input data for generate scoringMatrix");
+			}
+			if (matrixSerie != MatrixSerie.NONE) {				
+				float pid = getAverageIdentityScore();
+				this.substitution = SubstitutionMatrix
+						.getSubstitutionMatrix(SubstitutionMatrix.getEmbeddedSubstitutionMatrix(matrixSerie, pid), gep);
+			} else {
+				this.substitution = SubstitutionMatrix.getSubstitutionMatrix(scoringMatrix, gep);
+			}
+		} else {
+			this.substitution = substitutionMatrix;
+		}
+		this.alphabet = this.substitution.getAlphabet();
 		this.alignMatrix = new int[this.numberOfSequences * this.length];
 		this.GAPS = new ArrayList<GAP>();
 

@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 
@@ -58,7 +57,7 @@ public class MainController extends HttpServlet {
 			salsaParameters.setGeneratePhylogeneticTree(true);
 			salsaParameters.setClustalType(ClustalType.CLUSTAL_O);
 
-			request.setAttribute("salsaParameters", salsaParameters);
+			request.setAttribute("salsaParameters", salsaParameters);		
 			
 			// Redirect the request to index
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");

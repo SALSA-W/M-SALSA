@@ -3,6 +3,8 @@ Multiple sequence alignment (MSA) is an important problem of bioinformatics.
 Its purpose is to find relationships among residues of biological sequences connected by an evolutionary, structural or functional relationship. 
 **M-SALSA (Multiple Sequence Alignment by Local Search Algorithm)** is a stochastic local search algorithm for solving MSA.
 
+For more informations go to site: [http://salsa-w.github.io/M-SALSA]. 
+
 #License
 Copyright 2015 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
 
@@ -22,5 +24,3 @@ limitations under the License.
 
 #Build
 [![Build Status](https://travis-ci.org/SALSA-W/M-SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/M-SALSA)
-
-[![Coverity Scan Badge](https://scan.coverity.com/projects/4124/badge.svg)](https://scan.coverity.com/projects/4124)

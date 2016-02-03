@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -38,6 +39,8 @@ import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.StringConverter;
 
+import com.salsaw.msalsa.algorithm.Constants;
+import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
@@ -49,6 +52,7 @@ import com.salsaw.msalsa.utils.UniProtSequenceManager;
 @WebServlet("/AlignmentRequestServlet")
 @MultipartConfig
 public class AlignmentRequestServlet extends HttpServlet {
+	private static final String MANUAL_INPUT_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "_input.fasta";
 	private static final long serialVersionUID = 1L;
 
 	class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
@@ -106,9 +110,10 @@ public class AlignmentRequestServlet extends HttpServlet {
 			Part filePart = request.getPart("inputFile");
 			String fileName = filePart.getSubmittedFileName();
 			if (salsaWebParameters.getUniProtIds() == null &&
-				fileName.isEmpty() == true){
+				fileName.isEmpty() == true &&
+				salsaWebParameters.getManualInputSequence() == null){
 				throw new ServletException("Missing input data");
-			}					
+			}
 			
 			File requestProcessFolder = AlignmentRequestManager.getInstance()
 					.getServerAligmentFolder(newRequest.getId()).toFile();
@@ -126,6 +131,11 @@ public class AlignmentRequestServlet extends HttpServlet {
 					Files.copy(inputAlignmentFileContet, inputFilePath);
 					salsaWebParameters.setInputFile(inputFilePath.toString());
 				}
+			} else if (salsaWebParameters.getManualInputSequence() != null){
+				// Generate file from manual input sequence
+				Path inputFilePath = Paths.get(requestProcessFolder.toString(), MANUAL_INPUT_FILE_NAME);
+				Files.write(inputFilePath, salsaWebParameters.getManualInputSequence().getBytes());
+				salsaWebParameters.setInputFile(inputFilePath.toString());
 			}
 			
 			String webApplicationUri = request.getRequestURL().toString().substring(0,

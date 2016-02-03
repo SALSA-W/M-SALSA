@@ -32,13 +32,10 @@ public class SalsaWebParameters extends SalsaParameters {
 	private String salsaParametersFile;
 	private String userJobTitle;
 	private String[] uniProtIds;
-
+	private String manualInputSequence;
+	
 	public String getRecipientEmail() {
 		return this.recipientEmail;
-	}
-
-	public void setRecipientEmail(String recipientEmail) {
-		this.recipientEmail = recipientEmail;
 	}
 	
 	public String getSalsaParametersFile() {
@@ -49,10 +46,6 @@ public class SalsaWebParameters extends SalsaParameters {
 		return this.uniProtIds;
 	}
 	
-	public void setSalsaParametersFile(String salsaParametersFile) {
-		this.salsaParametersFile = salsaParametersFile;
-	}		
-	
 	/**
 	 * Used as e-mail subject
 	 * 
@@ -62,11 +55,27 @@ public class SalsaWebParameters extends SalsaParameters {
 		return this.userJobTitle;
 	}
 	
+	public String getManualInputSequence() {
+		return this.manualInputSequence;
+	}
+	
+	public void setSalsaParametersFile(String salsaParametersFile) {
+		this.salsaParametersFile = salsaParametersFile;
+	}		
+	
 	public void setUserJobTitle(String userJobTitle) {
 		this.userJobTitle = userJobTitle;
 	}	
 	
 	public void setUniProtIds(String[] uniProtIds) {
 		this.uniProtIds = uniProtIds;
+	}
+	
+	public void setRecipientEmail(String recipientEmail) {
+		this.recipientEmail = recipientEmail;
+	}
+	
+	public void setManualInputSequence(String manualInputSequence) {
+		this.manualInputSequence = manualInputSequence;
 	}
 }

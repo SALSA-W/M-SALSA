@@ -53,11 +53,21 @@
 			enctype="multipart/form-data" data-parsley-validate>
 
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="inputText">Text
+				<label class="control-label col-sm-2" for="manualInputSequence">Text
 					to align:</label>
 				<div class="col-sm-10">
-					<textarea class="form-control" rows="5" id="inputText"
-						name="inputText" required data-parsley-errors-messages-disabled></textarea>
+					<textarea class="form-control" rows="5" id="manualInputSequence"
+						name="manualInputSequence" required data-parsley-errors-messages-disabled
+						placeholder="The input must be in FASTA/Pearson format.
+Example:
+>Protein_1_description
+MQDRVKRPMNAFIVWSRDQRRKMALENPRMRNSEISKQLGYQWKMLTEAEKWPFFQEAQKLQAMHREKYPNYKYRPRRKAKMLPK
+>Protein_2_description
+MHIKKPLNAFMLYMKEMRANVVAESTLKESAAINQILGRRWHALSREEQAKYYELARKERQLHMQLYPGWSARDNYGKKKKRKREK
+>Protein_3_description
+MKKLKKHPDFPKKPLTPYFRFFMEKRAKYAKLHPEMSNLDLTKILSKKYKELPEKKKMKYIQDFQREKQEFERNLARFREDHPDLIQNAKK
+>Protein_4_description
+GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPPKGE"></textarea>
 				</div>
 			</div>
 
@@ -75,7 +85,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="newitem">Input	UniProt proteins:</label>
+				<label class="control-label col-sm-2" for="newitem">Input UniProt proteins:</label>
 				<div class="col-sm-10">
 				
 					<label for="newitem">Add UniProt proteins ID</label>

@@ -1,0 +1,25 @@
+#include "Solution.h"
+#include "Alignment.h"
+
+class EvolutionaryAlgorithm{
+public:
+	EvolutionaryAlgorithm(string* files);
+
+	//TODO scrivere metodo createGroups() ????
+	Solution* select();
+	void crossover(Solution* parents);
+	void applyMutations();
+	Solution* run();
+
+	~EvolutionaryAlgorithm();
+private:
+	//TODO mettere qui probabilità di mutazioni e/o sigma ????
+	
+	int numberOfSolutions;
+	int numberOfSolutionsAfterSelection;
+
+	Solution* population;
+	//TODO togliere???
+	//Solution* bestSoFar;
+	Alignment* initialAlignments;
+};

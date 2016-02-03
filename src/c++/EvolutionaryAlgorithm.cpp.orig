@@ -1,0 +1,36 @@
+#include "EvolutionaryAlgorithm.h"
+
+EvolutionaryAlgorithm::EvolutionaryAlgorithm(string* files){
+	//Per ogni file va a creare l'allineamento corrispondente
+		//Deve creare anche le corrette matrici di sostituzione => PROBLEMA:
+			//CAMBIA a seconda dei valore in soluzione....
+	//Crea la popolazione iniziale
+	population = new Solution[numberOfSolutions];
+}
+
+Solution * EvolutionaryAlgorithm::select(){
+	//Richiama la fitness() per ogni soluzione e restituisce la lista delle migliori
+	//Dovrebbe salvare le soluzioni in bestSoFar
+	return nullptr;
+}
+
+void EvolutionaryAlgorithm::crossover(Solution * parents){
+	//Decide quali soluzioni usare per il crossover e chiama il metodo corrispondente di Solution
+}
+
+void EvolutionaryAlgorithm::applyMutations(){
+	//Per ogni soluzione chiama mutations()
+}
+
+Solution * EvolutionaryAlgorithm::run(){
+	//TODO Fino a condizione di fine raggiunta:
+		Solution* selected = select();
+		crossover(selected);
+		applyMutations();
+
+	return nullptr;
+}
+
+EvolutionaryAlgorithm::~EvolutionaryAlgorithm(){
+	//TODO
+}

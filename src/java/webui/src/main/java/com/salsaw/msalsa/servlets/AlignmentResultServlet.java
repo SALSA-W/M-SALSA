@@ -35,6 +35,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
 
@@ -44,40 +47,52 @@ import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
  */
 @WebServlet("/AlignmentResultServlet")
 public class AlignmentResultServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
+	// CONSTANTS	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2516441712372871271L;
 	private static final int BUFSIZE = 4096;
 	public static final String FILE_TYPE_DOWNLOAD_ATTRIBUTE = "fileToDownload";
-	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";
+	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";	
+	static final Logger logger = LogManager.getLogger(AlignmentResultServlet.class);
 
 	/**
+	 * @throws IOException 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
-		if (idRequest == null){
-			// The input data are invalid
-			return;
-		}
-			
-		AlignmentResult alignmentResult = new AlignmentResult(idRequest);
-		
-		boolean phylogeneticTreeDataAvailable = false;
-		if (alignmentResult.getPhylogeneticTreeFilePath() != null) {
-			phylogeneticTreeDataAvailable = true;
-			String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
-			request.setAttribute("newickTree", newickTree);
-		}	
-		request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
-		
-		String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(alignmentResult.getAligmentFilePath())));
-		request.setAttribute("aligmentFileContent", aligmentFileContent);
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		try {
+			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+			if (idRequest == null){
+				// The input data are invalid
+				return;
+			}
 				
-		// Redirect the request to index and add info to request
-		request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
-		RequestDispatcher requestDispatcher =
-			    request.getRequestDispatcher("results.jsp");
-		requestDispatcher.forward(request, response);
+			AlignmentResult alignmentResult = new AlignmentResult(idRequest);
+			
+			boolean phylogeneticTreeDataAvailable = false;
+			if (alignmentResult.getPhylogeneticTreeFilePath() != null) {
+				phylogeneticTreeDataAvailable = true;
+				String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
+				request.setAttribute("newickTree", newickTree);
+			}	
+			request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
+			
+			String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(alignmentResult.getAligmentFilePath())));
+			request.setAttribute("aligmentFileContent", aligmentFileContent);
+					
+			// Redirect the request to index and add info to request
+			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
+			RequestDispatcher requestDispatcher =
+				    request.getRequestDispatcher("results.jsp");
+			requestDispatcher.forward(request, response);
+		} catch (Exception e) {
+			logger.error(e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		} 		
 	}	
 	
 	private String getPhylogeneticTreeFileContent(

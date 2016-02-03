@@ -97,8 +97,6 @@ public class CleanFolderListener implements ServletContextListener {
 
 			} catch (Exception e) {
 				logger.error("error during clean task", e);
-				// TODO - remove after log set
-				e.printStackTrace();
 			}
 		};
 

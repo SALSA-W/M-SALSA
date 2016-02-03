@@ -21,35 +21,44 @@ import com.salsaw.msalsa.services.AlignmentRequestManager;
  */
 @WebServlet("/alignment-status")
 public class AlignmentStatusServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	public static final String ID_PARAMETER = "id";
-	
+	// CONSTANTS
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8769462891168921812L;
+	public static final String ID_PARAMETER = "id";	
 	static final Logger logger = LogManager.getLogger(AlignmentStatusServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		UUID idRequest = readAndValidateProcessId(request, response);
-		if (idRequest == null) {
-			// The input data are invalid
-			return;
-		}
+		try {
+			UUID idRequest = readAndValidateProcessId(request, response);
+			if (idRequest == null) {
+				// The input data are invalid
+				return;
+			}
 
-		if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
-			// Redirect the request to loading
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/loading.jsp");
-			requestDispatcher.forward(request, response);
-		} else {
+			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
+				// Redirect the request to loading
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/loading.jsp");
+				requestDispatcher.forward(request, response);
+			} else {
 
-			String aligmentResultServlet = "/" + AlignmentResultServlet.class.getSimpleName() + "?" + ID_PARAMETER
-					+ URLEncoder.encode(idRequest.toString(), "UTF-8");
-			// Redirect the request to result servlet
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
-			requestDispatcher.forward(request, response);
-		}
+				String aligmentResultServlet = "/" + AlignmentResultServlet.class.getSimpleName() + "?" + ID_PARAMETER
+						+ URLEncoder.encode(idRequest.toString(), "UTF-8");
+				// Redirect the request to result servlet
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
+				requestDispatcher.forward(request, response);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		} 
 	}
 
 	public static UUID readAndValidateProcessId(HttpServletRequest request, HttpServletResponse response)

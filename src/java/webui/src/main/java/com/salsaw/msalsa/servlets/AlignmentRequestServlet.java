@@ -19,11 +19,9 @@ package com.salsaw.msalsa.servlets;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -38,13 +36,13 @@ import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.StringConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.salsaw.msalsa.algorithm.Constants;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
-import com.salsaw.msalsa.utils.UniProtSequenceManager;
 
 /**
  * Servlet implementation class AlignmentRequestServlet
@@ -52,8 +50,13 @@ import com.salsaw.msalsa.utils.UniProtSequenceManager;
 @WebServlet("/AlignmentRequestServlet")
 @MultipartConfig
 public class AlignmentRequestServlet extends HttpServlet {
+	// CONSTANTS
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3311616762625447414L;
 	private static final String MANUAL_INPUT_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "_input.fasta";
-	private static final long serialVersionUID = 1L;
+	static final Logger logger = LogManager.getLogger(AlignmentRequestServlet.class);
 
 	class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
 		// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
@@ -83,8 +86,9 @@ public class AlignmentRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws IOException {
 		SalsaWebParameters salsaWebParameters = new SalsaWebParameters();
 		try {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
@@ -145,14 +149,10 @@ public class AlignmentRequestServlet extends HttpServlet {
 
 			// Redirect the request to index
 			response.sendRedirect("loading.jsp?id=" + newRequest.getId());
-
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {
+			logger.error(e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		} 
 	}
 
 }

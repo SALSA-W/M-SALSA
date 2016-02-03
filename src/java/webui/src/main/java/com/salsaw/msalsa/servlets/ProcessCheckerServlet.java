@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.salsaw.msalsa.services.AlignmentRequestManager;
 
 /**
@@ -33,23 +36,35 @@ import com.salsaw.msalsa.services.AlignmentRequestManager;
  */
 @WebServlet(description = "Check if the aligment proccess has been completed", urlPatterns = { "/AlignmentChecker" })
 public class ProcessCheckerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;      
+	
+	// CONSTANTS
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 141634481134455210L;
+	static final Logger logger = LogManager.getLogger(AlignmentResultServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		// For response code logic see http://www.restapitutorial.com/httpstatuscodes.html		
-		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);		
-		if (idRequest == null){
-			// The input data are invalid
-			return;
-		}
-	
-		if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false){
-			response.setStatus(HttpServletResponse.SC_ACCEPTED);
-		}else{
-			response.setStatus(HttpServletResponse.SC_OK);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			// For response code logic see
+			// http://www.restapitutorial.com/httpstatuscodes.html
+			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+			if (idRequest == null) {
+				// The input data are invalid
+				return;
+			}
+
+			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
+				response.setStatus(HttpServletResponse.SC_ACCEPTED);
+			} else {
+				response.setStatus(HttpServletResponse.SC_OK);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
 }

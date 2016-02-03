@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 
@@ -31,28 +35,37 @@ import com.salsaw.msalsa.datamodel.SalsaWebParameters;
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
-@WebServlet(urlPatterns = {"/index"})
+@WebServlet(urlPatterns = { "/index" })
 public class MainController extends HttpServlet {
 
+	// CONSTANTS
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1866345734111872791L;
+	static final Logger logger = LogManager.getLogger(MainController.class);
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Initialize the alignment request status and add to request		
-		SalsaWebParameters salsaParameters = new SalsaWebParameters();
-		salsaParameters.setGeneratePhylogeneticTree(true);
-		salsaParameters.setClustalType(ClustalType.CLUSTAL_O);
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			// Initialize the alignment request status and add to request
+			SalsaWebParameters salsaParameters = new SalsaWebParameters();
+			salsaParameters.setGeneratePhylogeneticTree(true);
+			salsaParameters.setClustalType(ClustalType.CLUSTAL_O);
+
+			request.setAttribute("salsaParameters", salsaParameters);
 			
-		request.setAttribute("salsaParameters", salsaParameters);
-		
-		// Redirect the request to index
-		RequestDispatcher requestDispatcher =
-			    request.getRequestDispatcher("/index.jsp");
-		requestDispatcher.forward(request, response);
+			// Redirect the request to index
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
+			requestDispatcher.forward(request, response);
+		} catch (Exception e) {
+			logger.error(e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 }

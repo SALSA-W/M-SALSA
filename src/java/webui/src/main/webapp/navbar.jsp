@@ -12,7 +12,7 @@
 		</div>
 		<div id="navbar-main" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="">Documentation</a></li>
+				<li><a href="http://salsa-w.github.io/M-SALSA/">Documentation</a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">

@@ -133,8 +133,8 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>src/alghorithm/java</module>
-		<module>src/cli</module>
-		<module>src/webui</module>
+		<module>src/java/alghorithm</module>
+		<module>src/java/cli</module>
+		<module>src/java/webui</module>
 	</modules>
 </project>

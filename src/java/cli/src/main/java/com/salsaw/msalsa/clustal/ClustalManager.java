@@ -15,10 +15,15 @@
  */
 package com.salsaw.msalsa.clustal;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
+import com.salsaw.msalsa.algorithm.Constants;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import com.salsaw.msalsa.cli.exceptions.SALSAClustalException;
 
 public abstract class ClustalManager {
 
@@ -66,10 +71,42 @@ public abstract class ClustalManager {
 	}
 	
 	/**
+	 * Check if process has content in error stream.
+	 * Throw {@link SALSAClustalException} if errors are present.
+	 * 
+	 * @throws IOException 
+	 * @throws SALSAException Contains the messages print from the error stream
+	 */
+	public static final void manageClustalProcessError(Process process, String clustalName) throws SALSAClustalException, IOException{		 	
+		// Get the error stream of the process and print it
+		StringBuilder errorMessage = new StringBuilder("Failed call to ");	
+		errorMessage.append(clustalName);
+		errorMessage.append(Constants.NEW_LINE);
+		
+		boolean errorsArePresent = false;
+		try (InputStream errorStream = process.getErrorStream()) {
+			try (InputStreamReader isError = new InputStreamReader(errorStream)) {
+				try (BufferedReader brError = new BufferedReader(isError)) {
+					String errorLine;
+					while ((errorLine = brError.readLine()) != null) {
+						errorMessage.append(errorLine).append(Constants.NEW_LINE);
+						errorsArePresent = true;
+					}
+				}
+			}
+		}
+		
+		if (errorsArePresent){
+			throw new SALSAClustalException(errorMessage.toString());
+		}
+	}
+	
+	/**
 	 * Factory method
+	 * 
 	 * @throws SALSAException 
 	 */
-	public static final ClustalManager CreateClustalManager(ClustalType clustalType) throws SALSAException{		
+	public static final ClustalManager createClustalManager(ClustalType clustalType) throws SALSAException{		
 		switch (clustalType) {
 		case CLUSTAL_W:
 			return new ClustalWManager();

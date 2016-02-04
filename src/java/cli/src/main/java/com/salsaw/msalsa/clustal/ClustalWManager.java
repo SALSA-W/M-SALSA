@@ -30,9 +30,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.salsaw.msalsa.algorithm.Constants;
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.App;
+import com.salsaw.msalsa.cli.exceptions.SALSAClustalException;
 
 public class ClustalWManager extends ClustalManager {
 	// CONSTANTS	
@@ -137,86 +137,75 @@ public class ClustalWManager extends ClustalManager {
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
 	}
 
-	private final void callClustalWProcess(List<String> clustalProcessCommands,
-			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{
+	private final void callClustalWProcess(List<String> clustalProcessCommands, ClustalFileMapper clustalFileMapper)
+			throws IOException, SALSAException, InterruptedException {
 		final Process process = Runtime.getRuntime().exec(composeProcessCall(clustalProcessCommands));
 
-		process.waitFor();
-		int processExitValue = process.exitValue();
-
 		try {
-			if (processExitValue == 0) {
-				// Success - read to get paths
-				try (InputStream is = process.getInputStream()) {
-					try (InputStreamReader isr = new InputStreamReader(is)) {
-						try (BufferedReader br = new BufferedReader(isr)) {
-							String line;
+			try (InputStream is = process.getInputStream()) {
+				try (InputStreamReader isr = new InputStreamReader(is)) {
+					try (BufferedReader br = new BufferedReader(isr)) {
+						String line;
 
-							Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+						Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 
-							while ((line = br.readLine()) != null) {
+						while ((line = br.readLine()) != null) {
 
-								if (App.IS_DEBUG == true) {
-									logger.debug(line);
+							if (App.IS_DEBUG == true) {
+								// Print clustal output only on debug
+								logger.debug(line);
+							}
+
+							if (line.indexOf("Phylogenetic tree file created:") >= 0) {
+								// Read the path of Phylogenetic tree file
+								// created from output
+								// http://stackoverflow.com/a/4006273
+								Matcher matcher = pattern.matcher(line);
+								if (matcher.find() == false) {
+									throw new SALSAException("Unable to read the path of phylognetic tree file");
 								}
+								clustalFileMapper.setPhylogeneticTreeFile(matcher.group(1));
+							}
 
-								if (line.indexOf("Phylogenetic tree file created:") >= 0) {
-									// Read the path of Phylogenetic tree file
-									// created from output
-									// http://stackoverflow.com/a/4006273
-									Matcher matcher = pattern.matcher(line);
-									if (matcher.find() == false) {
-										throw new SALSAException("Unable to read the path of phylognetic tree file");
-									}
-									clustalFileMapper.setPhylogeneticTreeFile(matcher.group(1));
+							if (line.indexOf("Guide tree file created:") >= 0) {
+								Matcher matcher = pattern.matcher(line);
+								if (matcher.find() == false) {
+									throw new SALSAException("Unable to read the path of guide tree file");
 								}
+								clustalFileMapper.setGuideTreeFilePath(matcher.group(1));
+							}
 
-								if (line.indexOf("Guide tree file created:") >= 0) {
-									Matcher matcher = pattern.matcher(line);
-									if (matcher.find() == false) {
-										throw new SALSAException("Unable to read the path of guide tree file");
-									}
-									clustalFileMapper.setGuideTreeFilePath(matcher.group(1));
+							if (line.indexOf("Fasta-Alignment file created") >= 0) {
+								Matcher matcher = pattern.matcher(line);
+								if (matcher.find() == false) {
+									throw new SALSAException("Unable to read the path of alignment file");
 								}
+								clustalFileMapper.setAlignmentFilePath(matcher.group(1));
+							}
 
-								if (line.indexOf("Fasta-Alignment file created") >= 0) {
-									Matcher matcher = pattern.matcher(line);
-									if (matcher.find() == false) {
-										throw new SALSAException("Unable to read the path of alignment file");
-									}
-									clustalFileMapper.setAlignmentFilePath(matcher.group(1));
+							if (line.indexOf("Distance matrix file created:") >= 0) {
+								Matcher matcher = pattern.matcher(line);
+								if (matcher.find() == false) {
+									throw new SALSAException("Unable to read the path of distance matrix file");
 								}
-
-								if (line.indexOf("Distance matrix file created:") >= 0) {
-									Matcher matcher = pattern.matcher(line);
-									if (matcher.find() == false) {
-										throw new SALSAException("Unable to read the path of distance matrix file");
-									}
-									clustalFileMapper.setDistanceMatrixFilePath(matcher.group(1));
-								}
+								clustalFileMapper.setDistanceMatrixFilePath(matcher.group(1));
 							}
 						}
 					}
 				}
-			} else {
-				// get the error stream of the process and print it
-				StringBuilder errorMessage = new StringBuilder("Failed ClustalW2 call");				
-				try (InputStream errorStream = process.getErrorStream()) {
-					try (InputStreamReader isError = new InputStreamReader(errorStream)) {
-						try (BufferedReader brError = new BufferedReader(isError)) {
-							String errorLine;
-							while ((errorLine = brError.readLine()) != null) {
-								errorMessage.append(errorLine).append(Constants.NEW_LINE);
-							}
-						}
-					}
-				}
+			}
+			
+			manageClustalProcessError(process, ClustalType.CLUSTAL_W_NAME);
 
-				throw new SALSAException(errorMessage.toString());
+			// The buffers must be consumed before wait or process will freeze
+			int exitValue  = process.waitFor();
+			if (exitValue != 0){
+				// The process has errors not read on error stream
+				throw new SALSAClustalException(ClustalType.CLUSTAL_W_NAME + " call failed");
 			}
 		} finally {
 			// Ensure to kill subprocesses
 			process.destroy();
-		}				
+		}
 	}
 }

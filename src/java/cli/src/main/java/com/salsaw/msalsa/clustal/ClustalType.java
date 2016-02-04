@@ -28,6 +28,8 @@ public enum ClustalType {
 	// CONSTANTS
 	private static final String CLUSTAL_W_PROCESS_NAME = "clustalw2";
 	private static final String CLUSTAL_O_PROCESS_NAME = "clustalo";
+	public static final String CLUSTAL_W_NAME = "ClustalW2";
+	public static final String CLUSTAL_O_NAME = "Clustal Omega";
 	
 	// GET / SET
 	public static final String getClustalProcessName(ClustalType clustalType)

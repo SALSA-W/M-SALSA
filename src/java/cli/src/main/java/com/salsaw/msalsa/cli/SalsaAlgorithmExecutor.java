@@ -111,7 +111,7 @@ public class SalsaAlgorithmExecutor {
 				salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));				
 			}
 			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
-			ClustalManager clustalManager = ClustalManager.CreateClustalManager(salsaParameters.getClustalType());		
+			ClustalManager clustalManager = ClustalManager.createClustalManager(salsaParameters.getClustalType());		
 			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
 			alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 			phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();

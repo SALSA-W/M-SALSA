@@ -5,29 +5,36 @@
 
 	<Properties>
 		<Property name="log-path">logs</Property>
+		<Property name="error-pattern-layout">[%-5level] %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</Property>
 	</Properties>
 	
 	<Appenders>
 		<Console name="console-log" target="SYSTEM_OUT">
 			<PatternLayout
-				pattern="[%-5level] %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n" />
+				pattern="%msg%n" />
 		</Console>
+		
+		<!-- Ensure to print error also in error stream -->
+		<Console name="console-error-log" target="SYSTEM_ERR">
+			<PatternLayout pattern="${error-pattern-layout}" />
+		</Console>		
 		
 		<RollingFile name="error-log" fileName="${log-path}/msalsa-error.log"
 			filePattern="${log-path}/msalsa-error-%d{yyyy-MM-dd}.log">
 			<PatternLayout header="${java:runtime} - ${java:vm} - ${java:os} - ${sys:line.separator}">
-				<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n
-				</pattern>
+				<pattern>${error-pattern-layout}</pattern>
 			</PatternLayout>
 			<Policies>
 				<TimeBasedTriggeringPolicy />
 			</Policies>
 		</RollingFile>
+		
 	</Appenders>
 	
 	<Loggers>
 		<Root level="debug" additivity="false">
 			<AppenderRef ref="error-log" level="error" />
+			<AppenderRef ref="console-error-log" level="warn" />
 			<AppenderRef ref="console-log" level="all" />
 		</Root>
 	</Loggers>

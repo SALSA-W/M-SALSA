@@ -27,11 +27,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import com.salsaw.msalsa.cli.App;
 
 public class ClustalWManager extends ClustalManager {
 	// CONSTANTS
+	
+	static final Logger logger = LogManager.getLogger(ClustalWManager.class);
+	
 	// flag settings
 	private static final String NEIGHBOUR_JOINING_TREE = "TREE";
 	/**
@@ -143,7 +149,10 @@ public class ClustalWManager extends ClustalManager {
 		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 
 		while ((line = br.readLine()) != null) {
-			System.out.println(line);
+			
+			if (App.IS_DEBUG == true) {
+				logger.debug(line);		
+			}
 
 			if (line.indexOf("Phylogenetic tree file created:") >= 0) {
 				// Read the path of Phylogenetic tree file created from output

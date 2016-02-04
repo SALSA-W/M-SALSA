@@ -25,11 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
+import com.salsaw.msalsa.cli.App;
 
 public class ClustalOmegaManager extends ClustalManager {
 	// CONSTANTS
+	static final Logger logger = LogManager.getLogger(ClustalOmegaManager.class);
 	
 	// keys of options
 	private static final String INPUT_FILE = "infile";	
@@ -139,11 +143,14 @@ public class ClustalOmegaManager extends ClustalManager {
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
-			
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
+		
+		if (App.IS_DEBUG == true) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				logger.debug(line);
+			}			
 		}
+		
 		process.waitFor();
 
 		if (process.exitValue() != 0) {

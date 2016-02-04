@@ -32,6 +32,9 @@ import com.salsaw.msalsa.cli.exceptions.SALSAParameterException;
 public class App {
 	
     private static final Logger logger = LogManager.getLogger(App.class);
+    // http://stackoverflow.com/a/3778768
+    public static final boolean IS_DEBUG = java.lang.management.ManagementFactory.getRuntimeMXBean().
+    	    getInputArguments().toString().indexOf("jdwp") >= 0;
     
 	public static void main(String[] args) {
 		SalsaParameters salsaParameters = new SalsaParameters();

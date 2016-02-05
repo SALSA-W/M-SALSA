@@ -45,21 +45,23 @@ It is also available a web application that gives an easier user experience. It 
 <h2>
 <a id="c-version" class="anchor" href="#c-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>c++ version</h2>
 
-<p>In order to use M-SALSA command line version on linux you must use this sintax:
-<code>./M-SALSA input_file output_file guide_tree_file [OPTIONS]</code>
-On windows the command is the same except you have to replace <code>./M-SALSA</code> with <code>M-SALSA.exe</code>:
-<code>M-SALSA.exe input_file output_file guide_tree_file [OPTIONS]</code></p>
+<p>In order to use M-SALSA command line version on linux you must use this sintax:<br>
+<code>./M-SALSA input_file output_file guide_tree_file [OPTIONS]</code><br>
+On windows the command is the same except you have to replace <code>./M-SALSA</code> with <code>M-SALSA.exe</code>:<br>
+<code>M-SALSA.exe input_file output_file guide_tree_file [OPTIONS]</code>  </p>
 
 <h3>
 <a id="mandatory-parameters" class="anchor" href="#mandatory-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mandatory parameters:</h3>
 
-<ul>
-<li>input_file:      path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>
-</li>
-<li>output_file:     path of the output file. This will be in FASTA format as well</li>
-<li>guide_tree_file: file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a>
-</li>
-</ul>
+<p></p><dl>
+<dt>input_file</dt>
+<dd>path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>
+</dd>
+<dt>output_file</dt>
+<dd>path of the output file. This will be in FASTA format as well</dd>
+<dt>guide_tree_file</dt>
+<dd>file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a>
+</dd>
 
 <hr>
 
@@ -81,6 +83,8 @@ On windows the command is the same except you have to replace <code>./M-SALSA</c
                1. ONLY_GEP: GOP=0 only for terminal GAPs (default)
                2. BOTH: both opening and extension penalty for terminal GAPs</li>
 </ul>
+
+<hr>
 
 <h3>
 <a id="substitution-matrix-choice" class="anchor" href="#substitution-matrix-choice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Substitution matrix choice:</h3>
@@ -113,6 +117,7 @@ limitations under the License.</p>
 
 <h1>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h1>
+</dl>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SALSA-W/M-SALSA">M-SALSA</a> is maintained by <a href="https://github.com/SALSA-W">SALSA-W</a>.</span>

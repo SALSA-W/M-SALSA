@@ -47,42 +47,37 @@ It is also available a web application that gives an easier user experience. It 
 
 <p>In order to use M-SALSA command line version on linux you must use this sintax:<br>
 <code>./M-SALSA input_file output_file guide_tree_file [OPTIONS]</code><br>
-On windows the command is the same except you have to replace <code>./M-SALSA</code> with <code>M-SALSA.exe</code>:<br>
+On windows the command is the same except you have to replace <em>./M-SALSA</em> with <em>M-SALSA.exe</em>:<br>
 <code>M-SALSA.exe input_file output_file guide_tree_file [OPTIONS]</code>  </p>
 
 <h3>
 <a id="mandatory-parameters" class="anchor" href="#mandatory-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mandatory parameters:</h3>
 
-<p></p><dl>
-<dt>input_file</dt>
-<dd>path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>
-</dd>
-<dt>output_file</dt>
-<dd>path of the output file. This will be in FASTA format as well</dd>
-<dt>guide_tree_file</dt>
-<dd>file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a>
-</dd>
+<dl>
+<dt>input_file:</dt>       <dd>path of a file containing the initial alignment. The file must be in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format)</dd>
+<dt>output_file:</dt>      <dd>path of the output file. This will be in FASTA format as well</dd>
+<dt>guide_tree_file:</dt>  <dd>file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in [Newicks format](https://en.wikipedia.org/wiki/Newick_format)</dd>
+</dl>
 
 <hr>
 
 <h3>
 <a id="optional-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Optional parameters:</h3>
 
-<ul>
-<li>-GOP:            GAP Opening Penalty (default 8)</li>
-<li>-GEP:            GAP Extension Penalty (default 5)</li>
-<li>-gamma:          dimension of the range of positions a GAP can move in during an iteration (default 30)</li>
-<li>-type:           type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)</li>
-<li>-scoringMatrix:  scoring matrix file (default BLOSUM62). For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a>
-</li>
-<li>-matrixSerie:    matrix serie. Possible options: BLOSUM or PAM (default BLOSUM)</li>
-<li>-distanceMatrix: distance matrix file</li>
-<li>-minIt:          minimum number of iterations (default 1000)</li>
-<li>-pSplit:         probability of split (default 0.1)</li>
-<li>-terminal:       the strategy to be used to manage terminal GAPs. Possible values:
-               1. ONLY_GEP: GOP=0 only for terminal GAPs (default)
-               2. BOTH: both opening and extension penalty for terminal GAPs</li>
-</ul>
+<dl>
+<dt>-GOP:</dt>            <dd>GAP Opening Penalty (default 8)</dd>
+<dt>-GEP:</dt>            <dd>GAP Extension Penalty (default 5)</dd>
+<dt>-gamma:</dt>          <dd>dimension of the range of positions a GAP can move in during an iteration (default 30)</dd>
+<dt>-type:</dt>           <dd>type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)</dd>
+<dt>-scoringMatrix:</dt>  <dd>scoring matrix file (default BLOSUM62). For more information on scoring matrix file format visit [M-SALSA wiki](https://github.com/SALSA-W/M-SALSA/wiki)</dd>
+<dt>-matrixSerie:</dt>    <dd>matrix serie. Possible options: BLOSUM or PAM (default BLOSUM)</dd>
+<dt>-distanceMatrix:</dt> <dd>distance matrix file</dd>
+<dt>-minIt:</dt>          <dd>minimum number of iterations (default 1000)</dd>
+<dt>-pSplit:</dt>         <dd>probability of split (default 0.1)</dd>
+<dt>-terminal:</dt>       <dd>the strategy to be used to manage terminal GAPs. Possible values:
+                   1. ONLY_GEP: GOP=0 only for terminal GAPs (default)
+                   2. BOTH: both opening and extension penalty for terminal GAPs</dd>
+</dl>
 
 <hr>
 
@@ -117,7 +112,6 @@ limitations under the License.</p>
 
 <h1>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h1>
-</dl>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SALSA-W/M-SALSA">M-SALSA</a> is maintained by <a href="https://github.com/SALSA-W">SALSA-W</a>.</span>

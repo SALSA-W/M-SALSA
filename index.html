@@ -65,18 +65,20 @@ On windows the command is the same except you have to replace <em>./M-SALSA</em>
 <a id="optional-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Optional parameters:</h3>
 
 <dl>
-<dt>-GOP:</dt>            <dd>GAP Opening Penalty (default 8)</dd>
-<dt>-GEP:</dt>            <dd>GAP Extension Penalty (default 5)</dd>
-<dt>-gamma:</dt>          <dd>dimension of the range of positions a GAP can move in during an iteration (default 30)</dd>
-<dt>-type:</dt>           <dd>type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)</dd>
-<dt>-scoringMatrix:</dt>  <dd>scoring matrix file (default BLOSUM62). For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a></dd>
-<dt>-matrixSerie:</dt>    <dd>matrix serie. Possible options: BLOSUM or PAM (default BLOSUM)</dd>
+<dt>-GOP:</dt>            <dd>GAP Opening Penalty (<i>default 8</i>)</dd>
+<dt>-GEP:</dt>            <dd>GAP Extension Penalty (<i>default 5</i>)</dd>
+<dt>-gamma:</dt>          <dd>dimension of the range of positions a GAP can move in during an iteration (<i>default 30</i>)</dd>
+<dt>-type:</dt>           <dd>type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS</i>)</dd>
+<dt>-scoringMatrix:</dt>  <dd>scoring matrix file (<i>default BLOSUM62</i>). For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a></dd>
+<dt>-matrixSerie:</dt>    <dd>matrix serie. Possible options: BLOSUM or PAM (<i>default BLOSUM</i>)</dd>
 <dt>-distanceMatrix:</dt> <dd>distance matrix file</dd>
-<dt>-minIt:</dt>          <dd>minimum number of iterations (default 1000)</dd>
-<dt>-pSplit:</dt>         <dd>probability of split (default 0.1)</dd>
+<dt>-minIt:</dt>          <dd>minimum number of iterations (<i>default 1000</i>)</dd>
+<dt>-pSplit:</dt>         <dd>probability of split (<i>default 0.1</i>)</dd>
 <dt>-terminal:</dt>       <dd>the strategy to be used to manage terminal GAPs. Possible values:
-                   1. ONLY_GEP: GOP=0 only for terminal GAPs (default)
-                   2. BOTH: both opening and extension penalty for terminal GAPs</dd>
+                          <ul>
+                              <li> ONLY_GEP: GOP=0 only for terminal GAPs (<i>default value</i>)</li>
+                              <li> BOTH: both opening and extension penalty for terminal GAPs</li>
+                          </ul></dd>
 </dl>
 
 <hr>

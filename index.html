@@ -19,8 +19,8 @@
     </section>
 
     <section class="main-content">
-      <h2>
-<a id="what-is-m-salsa" class="anchor" href="#what-is-m-salsa" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is M-SALSA?</h2>
+      <h1>
+<a id="what-is-m-salsa" class="anchor" href="#what-is-m-salsa" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is M-SALSA?</h1>
 
 <p><a href="https://en.wikipedia.org/wiki/Multiple_sequence_alignment">Multiple sequence alignment (MSA)</a> is an important problem in bioinformatics. Its purpose is to find relationships among residues of biological sequences connected by an evolutionary, structural or functional relationship.</p>
 
@@ -29,27 +29,71 @@
 <p>Two versions of M-SALSA are available: one implemented using c++ and the other using java.
 It is also available a web application that gives an easier user experience. It automatically calls an external program that calculates the initial alignment to be enhanced by M-SALSA. </p>
 
-<h2>
-<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h2>
+<h1>
+<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h1>
 
 <p>For install instructions visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a>.</p>
 
-<h2>
-<a id="contribution" class="anchor" href="#contribution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribution</h2>
+<h1>
+<a id="contribution" class="anchor" href="#contribution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribution</h1>
 
 <p>To report a bug or suggest an enhancement visit <a href="https://github.com/SALSA-W/M-SALSA/issues">M-SALSA issue tracker</a>.</p>
 
-<h2>
-<a id="command-line-usage" class="anchor" href="#command-line-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Command line usage</h2>
-
-<h3>
-<a id="c-version" class="anchor" href="#c-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>c++ version</h3>
-
-<h3>
-<a id="java-version" class="anchor" href="#java-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>java version</h3>
+<h1>
+<a id="command-line-usage" class="anchor" href="#command-line-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Command line usage</h1>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+<a id="c-version" class="anchor" href="#c-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>c++ version</h2>
+
+<p>In order to use M-SALSA command line version on linux you must use this sintax:
+<code>./M-SALSA input_file output_file guide_tree_file [OPTIONS]</code>
+On windows the command is the same except you have to replace <code>./M-SALSA</code> with <code>M-SALSA.exe</code>:
+<code>M-SALSA.exe input_file output_file guide_tree_file [OPTIONS]</code></p>
+
+<h3>
+<a id="mandatory-parameters" class="anchor" href="#mandatory-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mandatory parameters</h3>
+
+<ul>
+<li>input_file:      path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a>
+</li>
+<li>output_file:     path of the output file. This will be in FASTA format as well</li>
+<li>guide_tree_file: file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a>
+</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="optional-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Optional parameters:</h3>
+
+<ul>
+<li>-GOP:            GAP Opening Penalty (default 8)</li>
+<li>-GEP:            GAP Extension Penalty (default 5)</li>
+<li>-gamma:          dimension of the range of positions a GAP can move in during an iteration (default 30)</li>
+<li>-type:           type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS)</li>
+<li>-scoringMatrix:  scoring matrix file (default BLOSUM62). For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a>
+</li>
+<li>-matrixSerie:    matrix serie. Possible options: BLOSUM or PAM (default BLOSUM)</li>
+<li>-distanceMatrix: distance matrix file</li>
+<li>-minIt:          minimum number of iterations (default 1000)</li>
+<li>-pSplit:         probability of split (default 0.1)</li>
+<li>-terminal:       the strategy to be used to manage terminal GAPs. Possible values:
+               1. ONLY_GEP: GOP=0 only for terminal GAPs (default)
+               2. BOTH: both opening and extension penalty for terminal GAPs</li>
+</ul>
+
+<h3>
+<a id="substitution-matrix-choice" class="anchor" href="#substitution-matrix-choice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Substitution matrix choice:</h3>
+
+<p>If no optional parameters are provided M-SALSA default substitution matrix is BLOSUM62. In order to work, the file containing such a matrix should be placed in the folder where M-SALSA executable is. If user specifies the type parameter, the default matrix is chosen according to it. For PROTEINS the default matrix is still BLOSUM62, for DNA it is IUB, for RNA no default matrix exists. Therefore, if input consists on RNA sequences user must provide a substitution matrix.</p>
+
+<p>In case of PROTEINS type it is also possible to specify a distance matrix, a matrix containing the distance between each couple of sequences in the alignment. M-SALSA uses such a matrix to automatically infer the correct substitution matrix. The chosen matrix depends also an the matrixSerie parameter, that can be BLOSUM or PAM (if not specified it will use a BLOSUM matrix). As with the default substitution matrixes, this can work only if the substitution matrixes files provided with source code of M-SALSA are inside M-SALSA executable folder.</p>
+
+<h2>
+<a id="java-version" class="anchor" href="#java-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>java version</h2>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
 
 <p>Copyright 2015 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin</p>
 
@@ -67,8 +111,8 @@ limitations under the License.</p>
 
 <p><a href="https://raw.githubusercontent.com/SALSA-W/M-SALSA/master/LICENSE"><img src="http://img.shields.io/badge/license-APACHE2-blue.svg" alt="License"></a></p>
 
-<h2>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h2>
+<h1>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h1>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SALSA-W/M-SALSA">M-SALSA</a> is maintained by <a href="https://github.com/SALSA-W">SALSA-W</a>.</span>

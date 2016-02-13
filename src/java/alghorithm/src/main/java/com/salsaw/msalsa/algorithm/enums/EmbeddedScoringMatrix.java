@@ -16,8 +16,8 @@
 package com.salsaw.msalsa.algorithm.enums;
 
 /**
- * See {@link https://www.ddbj.nig.ac.jp/search/help/clustalwhelp-e.html} for documentation
- * For resource see {@link https://github.com/noporpoise/seq-align/tree/master/scoring}
+ * For documentation see @see <a href="https://www.ddbj.nig.ac.jp/search/help/clustalwhelp-e.html">clustal help</a>
+ * For resource see @see <a href="https://github.com/noporpoise/seq-align/tree/master/scoring">scoring matix source</a>
  * 
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *

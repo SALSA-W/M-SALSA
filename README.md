@@ -6,13 +6,9 @@ Its purpose is to find relationships among residues of biological sequences conn
 For more informations go to site: http://salsa-w.github.io/M-SALSA 
 
 # Documentation
-The documentaion is available at http://salsa-w.github.io/M-SALSA/apidocs
+The documentation is available at http://salsa-w.github.io/M-SALSA/apidocs
 
-To generate the documentaion use the Maven goal [javadoc:aggregate](https://maven.apache.org/plugins/maven-javadoc-plugin/aggregate-mojo.html).
-Example of Maven code:
-```mvn
-mvn javadoc:aggregate
-```
+More informations available on https://github.com/SALSA-W/M-SALSA/wiki/API-Docs
 
 # License
 Copyright 2015 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin

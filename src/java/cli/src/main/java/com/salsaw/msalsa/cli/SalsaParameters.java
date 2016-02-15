@@ -33,6 +33,17 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String GOP_DOCS = "GAP Opening Penalty";
+	public static final String GEP_DOCS = "GAP Extension Penalty";
+	public static final String GAMMA_DOCS = "dimension of the range of positions for a GAP during an iteration";
+	public static final String MIN_ITERATIONS_DOCS = "minimum number of iterations";
+	public static final String PROBABILITY_OF_SPLIT_DOCS = "probability of split";
+	public static final String TERMINAL_GAPS_STRATEGY_DOCS = "the strategy to be used to manage terminal GAPs";
+	public static final String MATRIX_SERIE_DOCS = "matrix serie to use. The specific scoring matrix will be set base on distance matrix data";
+	public static final String GENERATE_PHYLOGENETIC_TREE_DOCS = "define if the phylogenetic neighbour-joining tree file must be generated";
+	public static final String INPUT_TYPE_DOCS = "type of sequences in input file";
+	public static final String SCORING_MATRIX_DOCS = "distance matrix file";
+	public static final String EMBEDDED_SCORING_MATRIX_DOCS = "provided scoring matrix to use";
 
 	@Parameter(names = { "-inputFile" }, description = "The FASTA file to process", required = true)
 	private String inputFile;
@@ -43,38 +54,38 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = { "-phTreeFile" }, description = "The ph or dnd file that contains the phylogenetic tree", required = false)
 	private String phylogeneticTreeFile;
 
-	@Parameter(names = { "-GOP" }, description = "GAP Opening Penalty")
+	@Parameter(names = { "-GOP" }, description = GOP_DOCS)
 	private float GOP = 8;
 
-	@Parameter(names = "-GEP", description = "GAP Extension Penalty")
+	@Parameter(names = "-GEP", description = GEP_DOCS)
 	private float GEP = 5;
 
-	@Parameter(names = "-gamma", description = "dimension of the range of positions for a GAP during an iteration")
+	@Parameter(names = "-gamma", description = GAMMA_DOCS)
 	private int gamma = 30;
 
-	@Parameter(names = "-scoringMatrixPath", description = "scoring matrix file path")
+	@Parameter(names = "-scoringMatrixPath", description = "scoring matrix file path. For more information on scoring matrix file format visit M-SALSA wiki at https://github.com/SALSA-W/M-SALSA/wiki")
 	private String scoringMatrixFilePath;
 
-	@Parameter(names = "-minIt", description = "minimum number of iterations")
+	@Parameter(names = "-minIt", description = MIN_ITERATIONS_DOCS)
 	private int minIterations = 1000;
 
-	@Parameter(names = "-pSplit", description = "probability of split")
+	@Parameter(names = "-pSplit", description = PROBABILITY_OF_SPLIT_DOCS)
 	private float probabilityOfSplit = 0.1f;
 	
-	@Parameter(names = "-terminal", description = "the strategy to be used to manage terminal GAPs.")
+	@Parameter(names = "-terminal", description = TERMINAL_GAPS_STRATEGY_DOCS)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
 	
-	@Parameter(names = "-matrixSerie", description = "matrix serie to use. The specific matrix will be set base on distance matrix data.")
+	@Parameter(names = "-matrixSerie", description = MATRIX_SERIE_DOCS)
 	private MatrixSerie matrixSerie = MatrixSerie.NONE;
 	
 	// TODO - set all parameters
-	@Parameter(names = "-scoringMatrix", description = "scoring matrix to use")
+	@Parameter(names = "-scoringMatrix", description = EMBEDDED_SCORING_MATRIX_DOCS)
 	private EmbeddedScoringMatrix embeddedScoringMatrix = EmbeddedScoringMatrix.BLOSUM62;
 	
-	@Parameter(names = "-type", description = "type of sequences in input file")
+	@Parameter(names = "-type", description = INPUT_TYPE_DOCS)
 	private AlphabetType alphabetType = AlphabetType.PROTEINS;
 	
-	@Parameter(names = "-distanceMatrix", description = "distance matrix file")
+	@Parameter(names = "-distanceMatrix", description = SCORING_MATRIX_DOCS)
 	private String distanceMatrix;
 	
 	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
@@ -83,7 +94,7 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega).")
 	private ClustalType clustalType = ClustalType.CLUSTAL_O;
 	
-	@Parameter(names = "-generatePhTree", description = "define if the phylogenetic neighbour-joining tree file must be generated")
+	@Parameter(names = "-generatePhTree", description = GENERATE_PHYLOGENETIC_TREE_DOCS)
 	private boolean generatePhylogeneticTree = false;
 	
 	@Parameter(names = "-clustalWPath", description = "define path where clustalW program is intalled. Required for generate tree file")

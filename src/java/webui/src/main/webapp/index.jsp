@@ -1,3 +1,4 @@
+<%@page import="com.salsaw.msalsa.cli.SalsaParameters"%>
 <%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
 <%@page import="com.salsaw.msalsa.clustal.ClustalType"%>
 <%@page import="com.salsaw.msalsa.algorithm.enums.*"%>
@@ -99,6 +100,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 
 			<div class="panel-group" id="accordion" role="tablist"
 				aria-multiselectable="true">
+				
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingOne">
 						<h4 class="panel-title">
@@ -109,9 +111,9 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 						<small> The default settings will
 							fulfill the needs of most users and, for that reason, are not
 							shown.</small>
-					</div>
+					</div>					
 					<div id="collapseOne" class="panel-collapse collapse"
-						role="tabpanel" aria-labelledby="headingOne">
+						role="tabpanel" aria-labelledby="headingOne">					
 						<div class="panel-body">
 
 							<div class="form-group">
@@ -128,32 +130,34 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="GOP">GOP:</label>
+								<label class="control-label col-sm-2" for="GOP" title="<%=SalsaParameters.GOP_DOCS%>">GOP:</label>
 								<div class="col-sm-10">
 									<input type="number" step="any" class="form-control" id="GOP"
 										name="GOP" value="${fn:escapeXml(salsaParameters.GOP)}"
-										type="range" data-parsley-range="[0, 20]" />
+										type="range" data-parsley-range="[0, 20]" title="<%=SalsaParameters.GOP_DOCS%>"/>
 								</div>
 							</div>
+							
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="GEP">GEP:</label>
+								<label class="control-label col-sm-2" for="GEP" title="<%=SalsaParameters.GEP_DOCS%>">GEP:</label>
 								<div class="col-sm-10">
 									<input type="number" step="any" class="form-control" id="GEP"
 										name="GEP" value="${fn:escapeXml(salsaParameters.GEP)}"
-										type="range" data-parsley-range="[0, 20]">
+										type="range" data-parsley-range="[0, 20]" title="<%=SalsaParameters.GEP_DOCS%>">
 								</div>
 							</div>
+							
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="gamma">Gamma:</label>
+								<label class="control-label col-sm-2" for="gamma" title="<%=SalsaParameters.GAMMA_DOCS%>">Gamma:</label>
 								<div class="col-sm-10">
 									<input type="number" class="form-control" id="gamma"
-										name="gamma" value="${fn:escapeXml(salsaParameters.gamma)}">
+										name="gamma" value="${fn:escapeXml(salsaParameters.gamma)}" title="<%=SalsaParameters.GAMMA_DOCS%>">
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="embeddedScoringMatrix">Scoring
-									Matrix:</label>
+								<label class="control-label col-sm-2" for="embeddedScoringMatrix" 
+									title="<%=SalsaParameters.EMBEDDED_SCORING_MATRIX_DOCS%>">Scoring Matrix:</label>
 								<div class="col-sm-10">
 									<select id="embeddedScoringMatrix" name="embeddedScoringMatrix"
 										class="form-control">
@@ -166,7 +170,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="matrixSerie">Scoring
+								<label class="control-label col-sm-2" for="matrixSerie" title="<%=SalsaParameters.MATRIX_SERIE_DOCS%>">Scoring
 									Matrix Serie:</label>
 								<div class="col-sm-10">
 									<select id="matrixSerie" name="matrixSerie"
@@ -177,32 +181,32 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 										</c:forEach>
 									</select>
 								</div>
-							</div>	
-
+							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="minIterations">Min
-									Iterations:</label>
+								<label class="control-label col-sm-2" for="minIterations" 
+								title="<%=SalsaParameters.MIN_ITERATIONS_DOCS%>">Min Iterations:</label>
 								<div class="col-sm-10">
 									<input type="number" class="form-control" id="minIterations"
-										name="minIterations"
+										name="minIterations" title="<%=SalsaParameters.MIN_ITERATIONS_DOCS%>"
 										value="${fn:escapeXml(salsaParameters.minIterations)}">
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="probabilityOfSplit">Probability
-									Of Split:</label>
+								<label class="control-label col-sm-2" for="probabilityOfSplit" 
+								title="<%=SalsaParameters.PROBABILITY_OF_SPLIT_DOCS%>">Probability Of Split:</label>
 								<div class="col-sm-10">
 									<input type="number" step="0.01" class="form-control"
 										id="probabilityOfSplit" name="probabilityOfSplit"
-										value="${fn:escapeXml(salsaParameters.probabilityOfSplit)}">
+										value="${fn:escapeXml(salsaParameters.probabilityOfSplit)}"
+										title="<%=SalsaParameters.PROBABILITY_OF_SPLIT_DOCS%>">
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-2" for="terminalGAPsStrategy">Terminal
-									GAPs Strategy:</label>
+								<label class="control-label col-sm-2" for="terminalGAPsStrategy" 
+								title="<%=SalsaParameters.TERMINAL_GAPS_STRATEGY_DOCS%>">Terminal GAPs Strategy:</label>
 								<div class="col-sm-10">
 									<select id="terminalGAPsStrategy" name="terminalGAPsStrategy"
 										class="form-control">
@@ -218,7 +222,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
 									<div class="checkbox">
-										<label> <c:choose>
+										<label title="<%=SalsaParameters.GENERATE_PHYLOGENETIC_TREE_DOCS%>"> <c:choose>
 												<c:when
 													test="${salsaParameters.generatePhylogeneticTree==true}">
 													<input type="checkbox" id="generatePhylogeneticTree"
@@ -233,7 +237,6 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 									</div>
 								</div>
 							</div>
-
 
 						</div>
 					</div>

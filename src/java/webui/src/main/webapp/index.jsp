@@ -41,10 +41,12 @@
 
 		<div class="alert alert-danger alert-dismissible collapse col-sm-12"
 			role="alert" id="validation-errors">
+			<!-- 
 			<button type="button" class="close" data-dismiss="alert"
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
+			 -->
 			<strong>Error!</strong>
 			<p id="validation-errors-message"></p>
 		</div>
@@ -273,11 +275,11 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 
 		<jsp:include page="footer.jsp" />
 		<jsp:include page="standard-js.jsp" />
-		<script src="js/index.js" type="text/javascript"></script>
 		<script src="js/header.js" type="text/javascript"></script>
 		<!-- Load TypeScript compilation output -->
 		<script src="tcs.js/dynamicList.js" type="text/javascript"></script>
 		<script src="tcs.js/input_form_validation.js" type="text/javascript"></script>
+		<script src="tcs.js/index.js" type="text/javascript"></script>
 	</div>
 	<!-- Container -->
 </body>

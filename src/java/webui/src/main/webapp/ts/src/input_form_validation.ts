@@ -44,6 +44,9 @@ const EmptyString: string = "";
 const WhiteSpace: string = " ";
 const HTMLNewLine: string = "<br>";
 const SequenceStart: string = ">";
+const SequenceInputTextId: string = "manualInputSequence";
+const ValidationErrorsMessageId: string = "validation-errors-message";
+const ValidationErrorsId: string = "validation-errors";
 
 class ProteinValidator {
 
@@ -108,20 +111,34 @@ class ProteinValidator {
 
         let result = "The errors are:";
         errors.forEach((error) => result += "<p>" + error + "</p>");
-        result +=  "<p>" + htmlContent + "</p>";
+        result += "<p>" + htmlContent + "</p>";
         return result;
     }
 }
 
-$("#inputText").bind('input propertychange', function() {
-    let inputSequences: string = $("#inputText").val();
+function validateSequenceInputText(): boolean {
+    let isValidInput = true;
+    let inputSequences: string = $("#"+SequenceInputTextId).val();
+    // Avoid to manage empty strings
     if (inputSequences != null &&
         inputSequences.trim() != EmptyString) {
+        isValidInput = false;
         let htmlValidationResults = ProteinValidator.Validate(inputSequences);
         if (htmlValidationResults != null) {
             // Set error content and show
-            $("#validation-errors-message").html(htmlValidationResults);
-            $('#validation-errors').show();
+            $("#" + ValidationErrorsMessageId).html(htmlValidationResults);
+            $("#" + ValidationErrorsId).show();
+        }
+        else{
+            // Reset error
+            $("#" + ValidationErrorsMessageId).html(null);
+            $("#" + ValidationErrorsId).hide();
         }
     }
+
+    return isValidInput;
+}
+
+$("#"+SequenceInputTextId).bind('input propertychange', function() {
+    validateSequenceInputText();
 });

@@ -117,28 +117,26 @@ class ProteinValidator {
 }
 
 function validateSequenceInputText(): boolean {
-    let isValidInput = true;
-    let inputSequences: string = $("#"+SequenceInputTextId).val();
+    let inputSequences: string = $("#" + SequenceInputTextId).val();
     // Avoid to manage empty strings
     if (inputSequences != null &&
         inputSequences.trim() != EmptyString) {
-        isValidInput = false;
         let htmlValidationResults = ProteinValidator.Validate(inputSequences);
         if (htmlValidationResults != null) {
             // Set error content and show
             $("#" + ValidationErrorsMessageId).html(htmlValidationResults);
             $("#" + ValidationErrorsId).show();
+            return false;
         }
-        else{
-            // Reset error
-            $("#" + ValidationErrorsMessageId).html(null);
-            $("#" + ValidationErrorsId).hide();
-        }
+
+        // Reset error
+        $("#" + ValidationErrorsMessageId).html(null);
+        $("#" + ValidationErrorsId).hide();
     }
 
-    return isValidInput;
+    return true;
 }
 
-$("#"+SequenceInputTextId).bind('input propertychange', function() {
+$("#" + SequenceInputTextId).bind('input propertychange', function() {
     validateSequenceInputText();
 });

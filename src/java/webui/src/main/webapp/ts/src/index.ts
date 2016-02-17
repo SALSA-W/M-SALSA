@@ -39,7 +39,7 @@ $(document).ready(function() {
 	// http://stackoverflow.com/a/30538844
     $('#salsa-parameters-form').parsley().subscribe('parsley:form:validate', function (formInstance : any) {
         // If any of these fields are valid
-        if (($("textarea[name=" + SequenceInputTextId + "]").parsley().isValid()  && validateSequenceInputText() === true) || 
+        if (($("textarea[name=" + SequenceInputTextId + "]").parsley().isValid() && validateSequenceInputText() === true) || 
             $("input[name=" + InputFileId + "]").parsley().isValid()  ||
             $('#dynamicList').children('li').length > 2) 
         {

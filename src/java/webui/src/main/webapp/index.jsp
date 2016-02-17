@@ -92,7 +92,8 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 				<div class="col-sm-10">
 				
 					<label for="newitem">Add UniProt proteins ID</label>
-					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem">
+					<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
+					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
 					<button type="button" value="Add" id="btnAdd" class="btn btn-default">Add</button>
 					
 					<ul id="dynamicList">

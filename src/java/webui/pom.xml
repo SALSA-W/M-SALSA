@@ -26,7 +26,7 @@
 			<artifactId>msalsa-algorithm</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-                
+
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>javax.servlet.jsp-api</artifactId>
@@ -87,14 +87,16 @@
 	<build>
 
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
-					<encoding>${project.encoding}</encoding>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+
 
 			<!-- The Jetty plugin allows us to easily test the development build by 
 				running jetty:run on the command line. -->
@@ -106,6 +108,7 @@
 					<scanIntervalSeconds>2</scanIntervalSeconds>
 				</configuration>
 			</plugin>
+
 		</plugins>
 
 	</build>

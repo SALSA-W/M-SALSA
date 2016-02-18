@@ -46,7 +46,7 @@ import com.salsaw.msalsa.config.ConfigurationManager;
 public class CleanFolderListener implements ServletContextListener {
 	private static final int NUMBER_CLEAN_TREADS = 1;
 
-	static final Logger logger = LogManager.getLogger(CleanFolderListener.class);
+	private static final Logger LOGGER = LogManager.getLogger(CleanFolderListener.class);
 	private final ScheduledExecutorService executor;
 
 	public CleanFolderListener() throws IOException {
@@ -58,45 +58,50 @@ public class CleanFolderListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		int jobDaysValidity = ConfigurationManager.getInstance().getServerConfiguration().getCleanDaysValidityJob();
 
-		Runnable cleanTask = () -> {
-			// Clean the folder older then the validity time limit
-			try {
-				Instant validityDayLimit = Instant.now().minus(jobDaysValidity, ChronoUnit.DAYS);
+		// Could use lamda () -> instead of anonymous class. Used for coverity scan
+		Runnable cleanTask = new Runnable() {
+			@Override
+			public void run() {
+				// Clean the folder older then the validity time limit
+				try {
+					Instant validityDayLimit = Instant.now().minus(jobDaysValidity, ChronoUnit.DAYS);
 
-				// http://www.adam-bien.com/roller/abien/entry/java_7_deleting_recursively_a
-				Path workDirectory = Paths
-						.get(ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath());
+					// http://www.adam-bien.com/roller/abien/entry/java_7_deleting_recursively_a
+					Path workDirectory = Paths
+							.get(ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath());
 
-				Files.walkFileTree(workDirectory, new SimpleFileVisitor<Path>() {
-					@Override
-					public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-						if (Files.getLastModifiedTime(dir).toInstant().isBefore(validityDayLimit)) {
+					Files.walkFileTree(workDirectory, new SimpleFileVisitor<Path>() {
+						@Override
+						public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+								throws IOException {
+							if (Files.getLastModifiedTime(dir).toInstant().isBefore(validityDayLimit)) {
+								return FileVisitResult.CONTINUE;
+							} else {
+								return FileVisitResult.SKIP_SUBTREE;
+							}
+						}
+
+						@Override
+						public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+							Files.delete(file);
 							return FileVisitResult.CONTINUE;
-						} else {
-							return FileVisitResult.SKIP_SUBTREE;
-						}
-					}
-
-					@Override
-					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-						Files.delete(file);
-						return FileVisitResult.CONTINUE;
-					}
-
-					@Override
-					public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-						// Not delete root folder
-						if (workDirectory.equals(dir) == false){
-							Files.delete(dir);
-							logger.info("Delete folder {}", dir);
 						}
 
-						return FileVisitResult.CONTINUE;
-					}
-				});
+						@Override
+						public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+							// Not delete root folder
+							if (workDirectory.equals(dir) == false) {
+								Files.delete(dir);
+								LOGGER.info("Delete folder {}", dir);
+							}
 
-			} catch (Exception e) {
-				logger.error("error during clean task", e);
+							return FileVisitResult.CONTINUE;
+						}
+					});
+
+				} catch (Exception e) {
+					LOGGER.error("error during clean task", e);
+				}
 			}
 		};
 

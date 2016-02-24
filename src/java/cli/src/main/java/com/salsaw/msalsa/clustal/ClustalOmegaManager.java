@@ -99,15 +99,14 @@ public class ClustalOmegaManager extends ClustalManager {
 			throw new IllegalArgumentException("clustalFileMapper");
 		}
 
-		commands.add(createParameterEqualsCommand(INPUT_FILE, escapePath(this.clustalFileMapper.getInputFilePath())));
-		commands.add(
-				createParameterEqualsCommand(OUTPUT_FILE, escapePath(this.clustalFileMapper.getAlignmentFilePath())));
+		commands.add(createParameterEqualsCommand(INPUT_FILE, this.clustalFileMapper.getInputFilePath()));
+		commands.add(createParameterEqualsCommand(OUTPUT_FILE, this.clustalFileMapper.getAlignmentFilePath()));
 
 		// Set where tree file will be write
-		commands.add(createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE,
-				escapePath(this.clustalFileMapper.getGuideTreeFilePath())));
+		commands.add(
+				createParameterEqualsCommand(GUIDE_TREE_OUTPUT_FILE, this.clustalFileMapper.getGuideTreeFilePath()));
 		commands.add(createParameterEqualsCommand(DISTANCE_MATRIX_OUTPUT_FILE,
-				escapePath(this.clustalFileMapper.getDistanceMatrixFilePath())));
+				this.clustalFileMapper.getDistanceMatrixFilePath()));
 		commands.add(createParameterEqualsCommand(OUTPUT_FORMAT, this.clustalOmegaOputputFormat.toString()));
 
 		// Use all available threads
@@ -126,7 +125,7 @@ public class ClustalOmegaManager extends ClustalManager {
 			throws IOException, InterruptedException, SALSAException {
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(escapePath(clustalPath));
+		clustalProcessCommands.add(clustalPath);
 
 		// Create the name of output files
 		String inputFileName = FilenameUtils.getBaseName(clustalFileMapper.getInputFilePath());
@@ -143,8 +142,9 @@ public class ClustalOmegaManager extends ClustalManager {
 
 		// Create clustal omega data
 		generateClustalArguments(clustalProcessCommands);
-
-		final Process process = Runtime.getRuntime().exec(composeProcessCall(clustalProcessCommands));
+		
+		// avoid ProcessBuilder due to quotes escape issues
+		final Process process = Runtime.getRuntime().exec(clustalProcessCommands.stream().toArray(String[]::new));
 
 		try {			
 			try (InputStream is = process.getInputStream()) {

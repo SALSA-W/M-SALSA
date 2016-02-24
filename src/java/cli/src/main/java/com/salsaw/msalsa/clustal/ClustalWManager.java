@@ -107,10 +107,10 @@ public class ClustalWManager extends ClustalManager {
 		
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(escapePath(clustalPath));
-		clustalProcessCommands.add(escapePath(clustalFileMapper.getInputFilePath()));
+		clustalProcessCommands.add(clustalPath);
+		clustalProcessCommands.add(clustalFileMapper.getInputFilePath());
 		// Set output file name			
-		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FILE, escapePath(clustalFileMapper.getAlignmentFilePath())));
+		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
 		generateClustalArguments(clustalProcessCommands);
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
@@ -119,7 +119,7 @@ public class ClustalWManager extends ClustalManager {
 	private void generateTreeArguments(ClustalFileMapper clustalFileMapper, List<String> commands)
 	{
 		// Create tree starting from alignment produced
-		commands.add(createParameterEqualsCommand(INPUT_FILE, escapePath(clustalFileMapper.getAlignmentFilePath())));
+		commands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getAlignmentFilePath()));
 		commands.add(createBooleanParameterCommand(NEIGHBOUR_JOINING_TREE));		
 		
 		// Use default parameters
@@ -131,7 +131,7 @@ public class ClustalWManager extends ClustalManager {
 			ClustalFileMapper clustalFileMapper) throws IOException, SALSAException, InterruptedException{			
 		// Get program path to execute
 		List<String> clustalProcessCommands = new ArrayList<String>();
-		clustalProcessCommands.add(escapePath(clustalPath));
+		clustalProcessCommands.add(clustalPath);
 		generateTreeArguments(clustalFileMapper, clustalProcessCommands);
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
@@ -139,7 +139,8 @@ public class ClustalWManager extends ClustalManager {
 
 	private final void callClustalWProcess(List<String> clustalProcessCommands, ClustalFileMapper clustalFileMapper)
 			throws IOException, SALSAException, InterruptedException {
-		final Process process = Runtime.getRuntime().exec(composeProcessCall(clustalProcessCommands));
+		// avoid ProcessBuilder due to quotes escape issues
+		final Process process = Runtime.getRuntime().exec(clustalProcessCommands.stream().toArray(String[]::new));
 
 		try {
 			try (InputStream is = process.getInputStream()) {

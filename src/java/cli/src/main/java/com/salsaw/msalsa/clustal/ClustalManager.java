@@ -53,23 +53,6 @@ public abstract class ClustalManager {
 
 	protected abstract String createParameterEqualsCommand(String key, String value);
 	
-	protected final String escapePath(String pathInput){
-		// Add quotes to manage path with spaces 
-		return '"' + pathInput + '"';
-	}
-	
-	protected final String composeProcessCall(Iterable<String> clustalProcessCommands) {
-		// Compose process call for Runtime.getRuntime().exec
-		// avoid ProcessBuilder due to quotes escape issues
-		StringBuilder processCall = new StringBuilder();
-		for (String clustalProcessCommand : clustalProcessCommands) {
-			processCall.append(clustalProcessCommand);
-			processCall.append(" ");
-		}
-
-		return processCall.toString();
-	}
-	
 	/**
 	 * Check if process has content in error stream.
 	 * Throw {@link SALSAClustalException} if errors are present.

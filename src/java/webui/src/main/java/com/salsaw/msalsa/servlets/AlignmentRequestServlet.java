@@ -135,7 +135,8 @@ public class AlignmentRequestServlet extends HttpServlet {
 					Files.copy(inputAlignmentFileContet, inputFilePath);
 					salsaWebParameters.setInputFile(inputFilePath.toString());
 				}
-			} else if (salsaWebParameters.getManualInputSequence() != null){
+			} else if (salsaWebParameters.getManualInputSequence() != null && 
+					salsaWebParameters.getManualInputSequence().trim().isEmpty() == false){
 				// Generate file from manual input sequence
 				Path inputFilePath = Paths.get(requestProcessFolder.toString(), MANUAL_INPUT_FILE_NAME);
 				Files.write(inputFilePath, salsaWebParameters.getManualInputSequence().getBytes());

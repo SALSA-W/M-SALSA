@@ -28,9 +28,6 @@ src/c++/.vs/
 # Visual Studio files
 src/c++/M-SALSA.opensdf
 src/c++/M-SALSA.sdf
-src/c++/M-SALSA.sln
-src/c++/M-SALSA.vcxproj
-src/c++/M-SALSA.vcxproj.filters
 src/c++/M-SALSA.vcxproj.user
 
 # Eclipse folder

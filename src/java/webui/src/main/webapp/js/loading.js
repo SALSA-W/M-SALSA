@@ -14,33 +14,43 @@
  * limitations under the License.
  */
 
-$(document).ready(function() {
-	var processCheckerUrl = 'AlignmentChecker?id=' + getUrlParameter('id');
-	(function poll() {
-		$.ajax({
-			url : processCheckerUrl,
-			type: "GET",			
-			statusCode: {
-			      200: function (responseText) {		
-			    	 var redirectUrl = 'AlignmentResultServlet?id=' + getUrlParameter('id');
-			    	 window.location.href = redirectUrl;
-			      },
-			      
-			      202: function(){
-			    	  // TODO - manage incremental polling time
-			    	  // Polling: http://stackoverflow.com/questions/6835835/jquery-simple-polling-example
-			    	  setTimeout(function() {poll()}, 5000);
-			      },
-			   },					
-			error: function(){
-				// TODO - manage errors
-	            alert("Processes doesn't exists");
-	        },				      
-	        timeout: 2000,
+$(document).ready(
+		function() {
+			poll(7, 500, getUrlParameter('id'));
 		});
-	})();
-	
-});
+
+function poll(maxDelayIncrement, delayMilliseconds, processId) {
+	$.ajax({
+		url : 'AlignmentChecker?id=' + processId,
+		type : "GET",
+		statusCode : {
+			200 : function(responseText) {
+				var redirectUrl = 'AlignmentResultServlet?id=' + getUrlParameter('id');
+				window.location.href = redirectUrl;
+			},
+
+			202 : function() {
+				// http://jsfiddle.net/pajtai/pLka0ow9/
+				var exponentialBackoffDelay = delayMilliseconds;
+				if (maxDelayIncrement > 0) {
+					// Exponential backoff
+					exponentialBackoffDelay = delayMilliseconds * 1.5;
+				}
+
+				// Polling:
+				// http://stackoverflow.com/questions/6835835/jquery-simple-polling-example
+				setTimeout(function() {
+					poll(--maxDelayIncrement, exponentialBackoffDelay, processId)
+				}, exponentialBackoffDelay);
+			},
+		},
+		error : function() {
+			// TODO - manage errors
+			alert("Processes doesn't exists");
+		},
+		timeout : 2000,
+	});
+}
 
 // http://stackoverflow.com/a/21903119
 function getUrlParameter(sParam)

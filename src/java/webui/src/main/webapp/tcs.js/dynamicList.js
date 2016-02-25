@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 /// <reference path="../typings/main.d.ts" />
+var DynamicListItemId = "newitem";
+var DynamicListBtnAdd = "btnAdd";
 // http://codereview.stackexchange.com/questions/85116/simple-todo-list
 function initToDoList() {
-    var textBox = $("#newitem");
+    var textBox = $("#" + DynamicListItemId);
     var list = $("#dynamicList");
     // Attach evet to button
-    $("#btnAdd").click(function () { addItem(); });
+    $("#" + DynamicListBtnAdd).click(function () { addItem(); });
     function createSpacerSpanLink() {
         var deleteLink = document.createElement('span');
         // Use JQuery to avoid property problems

@@ -93,8 +93,9 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 				
 					<label for="newitem">Add UniProt proteins ID</label>
 					<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
-					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
-					<button type="button" value="Add" id="btnAdd" class="btn btn-default">Add</button>
+					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
+						data-parsley-pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
+					<button type="button" value="Add" id="btnAdd" class="btn btn-default" disabled="disabled">Add</button>
 					
 					<ul id="dynamicList">
 					</ul>								
@@ -276,6 +277,8 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 
 		<jsp:include page="footer.jsp" />
 		<jsp:include page="standard-js.jsp" />
+		<!-- Parsley Validation -->
+		<script src="http://parsleyjs.org/dist/parsley.min.js"></script>
 		<script src="js/header.js" type="text/javascript"></script>
 		<!-- Load TypeScript compilation output -->
 		<script src="tcs.js/dynamicList.js" type="text/javascript"></script>

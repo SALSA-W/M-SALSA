@@ -51,14 +51,14 @@ $(document).ready(function() {
             // Also, destroy parsley's object
             $("textarea[name=" + SequenceInputTextId + "]").removeAttr('required').parsley().destroy();
             $("input[name=" + InputFileId + "]").removeAttr('required').parsley().destroy();
-            $("input[name=newitem]").removeAttr('required').parsley();
+            $("input[name=" + DynamicListItemId + "]").removeAttr('required').parsley();
             return;
         }
 
         // If none is valid, add the validation to them all
         $("textarea[name=" + SequenceInputTextId + "]").attr('required', 'required').parsley();
         $("input[name=" + InputFileId + "]").attr('required', 'required').parsley();
-        $("input[name=newitem]").attr('required', 'required').parsley();
+        $("input[name=" + DynamicListItemId + "]").attr('required', 'required').parsley();
 
         // stop form submission
         formInstance.submitEvent.preventDefault();
@@ -107,3 +107,13 @@ function submitSalsaParametersForm(){
 	 // Set correct values for hidden input
 	SetUniProtIdsValues();
 }
+
+$("#" + DynamicListItemId).bind('input propertychange', function() {
+    // Force validation
+    let buttonDisabled = false;
+    $("input[name=" + DynamicListItemId + "]").parsley().validate();
+    if ($("input[name=" + DynamicListItemId + "]").parsley().isValid() === false) {
+        buttonDisabled = true;
+    }
+    $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
+});

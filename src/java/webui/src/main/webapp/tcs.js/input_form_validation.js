@@ -104,7 +104,7 @@ var ProteinValidator = (function () {
         return result;
     };
     return ProteinValidator;
-})();
+}());
 function validateSequenceInputText() {
     var inputSequences = $("#" + SequenceInputTextId).val();
     // Avoid to manage empty strings

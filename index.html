@@ -46,22 +46,20 @@ It is also available a web application that gives an easier user experience. It 
 <a id="c-version" class="anchor" href="#c-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>c++ version</h2>
 
 <p>In order to use M-SALSA command line version on linux you must use this sintax:<br>
-<code>./M-SALSA input_file output_file guide_tree_file [OPTIONAL PARAMETERS]</code><br>
-On windows the command is the same except you have to replace <em>./M-SALSA</em> with <em>M-SALSA.exe</em>:<br>
-<code>M-SALSA.exe input_file output_file guide_tree_file [OPTIONAL PARAMETERS]</code><br>
-Options must be specified writing the name of the option followed by a space and the option value:<br>
+<code>M-SALSA [PARAMETERS]</code><br>
+Parameters must be specified writing the name of the option followed by a space and the option value:<br>
 <code>-optionName option_value</code><br>
 An example of M-SALSA usage is:<br>
-<code>./M-SALSA BB11001.tfa BB11001_alignment.tfa BB11001.dnd -type PROTEINS -scoringMatrix BLOSUM80</code><br>
+<code>./M-SALSA -inputFile BB11001.tfa -outputFile BB11001_final.tfa -phTreeFile BB11001.dnd -scoringMatrix BLOSUM80</code><br>
 </p>
 
 <h3>
 <a id="mandatory-parameters" class="anchor" href="#mandatory-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mandatory parameters:</h3>
 
 <dl>
-<dt>input_file:</dt>       <dd>path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a></dd>
-<dt>output_file:</dt>      <dd>path of the output file. This will be in FASTA format as well</dd>
-<dt>guide_tree_file:</dt>  <dd>file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a></dd>
+<dt>-inputFile:</dt>       <dd>path of a file containing the initial alignment. The file must be in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a></dd>
+<dt>-outputFile:</dt>      <dd>path of the output file. This will be in FASTA format as well</dd>
+<dt>-phTreeFile:</dt>      <dd>file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score (link). The file must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a></dd>
 </dl>
 
 <hr>
@@ -74,7 +72,8 @@ An example of M-SALSA usage is:<br>
 <dt>-GEP:</dt>            <dd>GAP Extension Penalty (<i>default 5</i>)</dd>
 <dt>-gamma:</dt>          <dd>dimension of the range of positions a GAP can move in during an iteration (<i>default 30</i>)</dd>
 <dt>-type:</dt>           <dd>type of sequences. Possible options are DNA, RNA and PROTEINS (default PROTEINS</i>)</dd>
-<dt>-scoringMatrix:</dt>  <dd>scoring matrix file (<i>default BLOSUM62</i>). For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a></dd>
+<dt>-scoringMatrix:</dt>  <dd>scoring matrix (<i>default BLOSUM62</i>). Available matrices are: BLOSUM30, BLOSUM45, BLOSUM50, BLOSUM62, BLOSUM80, IUB, PAM20, PAM60, PAM120, PAM350.</dd>
+<dt>-scoringMatrixPath:</dt>  <dd>scoring matrix file. For more information on scoring matrix file format visit <a href="https://github.com/SALSA-W/M-SALSA/wiki">M-SALSA wiki</a></dd>
 <dt>-matrixSerie:</dt>    <dd>matrix serie. Possible options: BLOSUM or PAM (<i>default BLOSUM</i>)</dd>
 <dt>-distanceMatrix:</dt> <dd>distance matrix file</dd>
 <dt>-minIt:</dt>          <dd>minimum number of iterations (<i>default 1000</i>)</dd>
@@ -91,9 +90,9 @@ An example of M-SALSA usage is:<br>
 <h3>
 <a id="substitution-matrix-choice" class="anchor" href="#substitution-matrix-choice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Substitution matrix choice:</h3>
 
-<p>If no optional parameters are provided M-SALSA default substitution matrix is BLOSUM62. In order to work, the file containing such a matrix should be placed in the folder where M-SALSA executable is. If user specifies the type parameter, the default matrix is chosen according to it. For PROTEINS the default matrix is still BLOSUM62, for DNA it is IUB, for RNA no default matrix exists. Therefore, if input consists on RNA sequences user must provide a substitution matrix.</p>
+<p>If no optional parameters are provided M-SALSA default substitution matrix is BLOSUM62. If user specifies the type parameter, the default matrix is chosen according to it. For PROTEINS the default matrix is still BLOSUM62, for DNA it is IUB, for RNA no default matrix exists. Therefore, if input consists on RNA sequences user must provide a substitution matrix.</p>
 
-<p>In case of PROTEINS type it is also possible to specify a distance matrix, a matrix containing the distance between each couple of sequences in the alignment. M-SALSA uses such a matrix to automatically infer the correct substitution matrix. The chosen matrix depends also an the matrixSerie parameter, that can be BLOSUM or PAM (if not specified it will use a BLOSUM matrix). As with the default substitution matrixes, this can work only if the substitution matrixes files provided with source code of M-SALSA are inside M-SALSA executable folder.</p>
+<p>In case of PROTEINS type it is also possible to specify a distance matrix, a matrix containing the distance between each couple of sequences in the alignment. M-SALSA uses such a matrix to automatically infer the correct substitution matrix. The chosen matrix depends also an the matrixSerie parameter, that can be BLOSUM or PAM (if not specified it will use a BLOSUM matrix).</p>
 
 <h2>
 <a id="java-version" class="anchor" href="#java-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>java version</h2>

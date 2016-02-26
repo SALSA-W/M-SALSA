@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    
+    <!-- Includes -->
+    <?include Defines.wxi ?>
+    
+	<Product Id="*"
+             Name="$(var.CompanyName) $(var.ProductName)"
+             Language="1033"
+             Version="1.0.0.0"
+             Manufacturer="$(var.CompanyFullName)"
+             UpgradeCode="bbf20898-6022-4254-a5d4-dbe500246859">
+        
+		<Package InstallerVersion="200"
+                 Compressed="yes"
+                 InstallScope="perMachine" 
+                 Description="Installer for $(var.ProductName)"
+				 Comments= "Install $(var.ProductName)"/>
+
+        <!-- Set files compression -->
+        <MediaTemplate EmbedCab="yes"/>
+
+        <!-- Removes all the files regardless then installs the newer versions  -->
+		<MajorUpgrade Schedule="afterInstallValidate"
+                      DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        
+		<Feature Id="ProductFeature"
+                 Title="Application Setup"
+                 Level="1"
+                 Description="The [ProductName] application"
+                 ConfigurableDirectory='INSTALLDIR'>
+			<ComponentGroupRef Id="ProductFiles" />
+            <ComponentGroupRef Id="SubMatricesFiles" />
+		</Feature>
+
+        <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+
+        <!-- Define installer UI -->
+        <UI>
+            <UIRef Id="WixUI_Minimal" />
+        </UI>
+	</Product>
+
+	<Fragment>
+        <!-- Define product directories -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+            <!-- Installation Folder -->
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLDIR" Name="$(var.ProductName)" >
+                    <Directory Id="SubMatrices" Name="SubMatrices" />
+                </Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductFiles" Directory="INSTALLDIR">
+            <!-- Programs Files Folder -->
+            <Component Id="APPLICATION">
+                <File Id="APPLICATION.EXE"
+                      Name="$(var.M-SALSA.TargetFileName)"
+                      Source="$(var.M-SALSA.TargetPath)"
+                      KeyPath="yes">
+                </File>
+
+                <Environment Id="PATH" Name="PATH" Value="[INSTALLDIR]" Permanent="no" Part="last" Action="set" System="yes" />
+            </Component>
+		</ComponentGroup>
+	</Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="SubMatricesFiles" Directory="SubMatrices">
+            <Component Id="BLOSUM30">
+                <File Id="BLOSUM30"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\BLOSUM30" />
+            </Component>
+            <Component Id="BLOSUM45">
+                <File Id="BLOSUM45"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\BLOSUM45" />
+            </Component>
+            <Component Id="BLOSUM50">
+                <File Id="BLOSUM50"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\BLOSUM50" />
+            </Component>
+            <Component Id="BLOSUM62">
+                <File Id="BLOSUM62"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\BLOSUM62" />
+            </Component>
+            <Component Id="BLOSUM80">
+                <File Id="BLOSUM80"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\BLOSUM80" />
+            </Component>
+            <Component Id="IUB">
+                <File Id="IUB"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\IUB" />
+            </Component>
+            <Component Id="PAM20">
+                <File Id="PAM20"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\PAM20" />
+            </Component>
+            <Component Id="PAM60">
+                <File Id="PAM60"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\PAM60" />
+            </Component>
+            <Component Id="PAM120">
+                <File Id="PAM120"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\PAM120" />
+            </Component>
+            <Component Id="PAM350">
+                <File Id="PAM350"
+                      Source="$(var.M-SALSA.ProjectDir)SubMatrices\PAM350" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

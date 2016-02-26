@@ -22,7 +22,7 @@
 */
 
 #ifndef DATA_DIR
-	#define DATA_DIR "SubMatrices"
+	#define DATA_DIR ""
 #endif
 
 #include "DistanceMatrix.h"

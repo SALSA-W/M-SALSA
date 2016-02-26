@@ -87,10 +87,39 @@ function submitSalsaParametersForm() {
 $("#" + DynamicListItemId).bind('input propertychange', function () {
     // Force validation
     var buttonDisabled = false;
-    $("input[name=" + DynamicListItemId + "]").parsley().validate();
-    if ($("input[name=" + DynamicListItemId + "]").parsley().isValid() === false) {
+    var dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+    // Check regex  
+    if (dynamicListItem.isValid() === false) {
+        dynamicListItem.validate();
         buttonDisabled = true;
+    }
+    else {
+        asyncUniProtValidation(function (success) { return $("#" + DynamicListBtnAdd).prop("disabled", success == false); });
     }
     $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
 });
+var errorInvalidIdLabel = "invalidIdResource";
+function asyncUniProtValidation(callback) {
+    // Generate request based on inserted value
+    $.ajax({
+        url: "http://www.uniprot.org/uniprot/" + $("#" + DynamicListItemId).val() + ".fasta",
+        type: "HEAD",
+        statusCode: {
+            200: function () {
+                // Remove errors
+                var dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+                window.ParsleyUI.removeError(dynamicListItem, errorInvalidIdLabel);
+                dynamicListItem.validate();
+                callback(true);
+            },
+        },
+        error: function () {
+            // Add errors
+            var dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+            window.ParsleyUI.addError(dynamicListItem, errorInvalidIdLabel, "The input value doesn't exists inside UniProt");
+            callback(false);
+        },
+        timeout: 2000,
+    });
+}
 //# sourceMappingURL=index.js.map

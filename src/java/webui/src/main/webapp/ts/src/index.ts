@@ -27,6 +27,11 @@ interface JQueryStatic {
    listen(parsleyName: string, callback?: (ParsleyField : any) => void) : void; // Expand this bad boy later
 }
 
+interface Window{
+    ParsleyUI:any;
+}
+
+
 // http://stackoverflow.com/a/3261380
 function isBlank(str: string) {
     return (!str || /^\s*$/.test(str));
@@ -111,9 +116,43 @@ function submitSalsaParametersForm(){
 $("#" + DynamicListItemId).bind('input propertychange', function() {
     // Force validation
     let buttonDisabled = false;
-    $("input[name=" + DynamicListItemId + "]").parsley().validate();
-    if ($("input[name=" + DynamicListItemId + "]").parsley().isValid() === false) {
+    let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();  
+    // Check regex  
+    if (dynamicListItem.isValid() === false) {
+        dynamicListItem.validate();
         buttonDisabled = true;
+    }        
+    // Perform async validation only if regex is ok
+    else {
+        asyncUniProtValidation((success: boolean) => $("#" + DynamicListBtnAdd).prop("disabled", success == false))
     }
+
     $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
 });
+
+const errorInvalidIdLabel: string = "invalidIdResource";
+
+function asyncUniProtValidation(callback: (success: boolean) => void) {
+    // Generate request based on inserted value
+    $.ajax({
+        url: "http://www.uniprot.org/uniprot/" + $("#" + DynamicListItemId).val() + ".fasta",
+        type: "HEAD",
+        statusCode: {
+            200: function() {
+                // Remove errors
+                let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+                window.ParsleyUI.removeError(dynamicListItem, errorInvalidIdLabel);
+                dynamicListItem.validate();
+                callback(true);
+            },
+
+        },
+        error: function() {
+            // Add errors
+            let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+            window.ParsleyUI.addError(dynamicListItem, errorInvalidIdLabel, "The input value doesn't exists inside UniProt");
+            callback(false);
+        },
+        timeout: 2000,
+    });
+}

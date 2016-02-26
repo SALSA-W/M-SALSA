@@ -24,20 +24,24 @@
 #include "SubstitutionMatrix.h"
 #include <string>
 
+#ifndef DATA_DIR
+	#define DATA_DIR ""
+#endif
+
 SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matrixSerie, float pid, float GEP, Alphabet* a) {
 	if (a == NULL) a = new Alphabet("PROTEINS");
 	
 	if (!strcmp(matrixSerie, "BLOSUM")) {
-		if (pid > 0.8) return new SubstitutionMatrix("BLOSUM80", a, GEP);
-		if (pid > 0.6) return new SubstitutionMatrix("BLOSUM62", a, GEP);
-		if (pid > 0.3) return new SubstitutionMatrix("BLOSUM45", a, GEP);
-		return new SubstitutionMatrix("BLOSUM30", a, GEP);
+		if (pid > 0.8) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM80").c_str(), a, GEP);
+		if (pid > 0.6) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM62").c_str(), a, GEP);
+		if (pid > 0.3) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM45").c_str(), a, GEP);
+		return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM30").c_str(), a, GEP);
 	}
 	else if (!strcmp(matrixSerie, "PAM")) {
-		if (pid > 0.8) return new SubstitutionMatrix("PAM20", a, GEP);
-		if (pid > 0.6) return new SubstitutionMatrix("PAM60", a, GEP);
-		if (pid > 0.4) return new SubstitutionMatrix("PAM120", a, GEP);
-		return new SubstitutionMatrix("PAM350", a, GEP);
+		if (pid > 0.8) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM20").c_str(), a, GEP);
+		if (pid > 0.6) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM60").c_str(), a, GEP);
+		if (pid > 0.4) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM120").c_str(), a, GEP);
+		return new SubstitutionMatrix((string(DATA_DIR) + "/PAM350").c_str(), a, GEP);
 	}
 
 	//MatrixSerie is not BLOSUM and it is not PAM

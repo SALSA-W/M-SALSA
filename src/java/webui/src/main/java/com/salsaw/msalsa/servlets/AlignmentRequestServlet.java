@@ -58,7 +58,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 	private static final String MANUAL_INPUT_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "_input.fasta";
 	static final Logger logger = LogManager.getLogger(AlignmentRequestServlet.class);
 
-	class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
+	static class EnumAwareConvertUtilsBean extends ConvertUtilsBean {
 		// http://www.bitsandpix.com/entry/java-beanutils-enum-support-generic-enum-converter/
 		private final EnumConverter enumConverter = new EnumConverter();
 

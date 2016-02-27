@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.salsaw.msalsa</groupId>
 		<artifactId>msalsa</artifactId>
-		<version>1.0.0</version>
+		<version>${msalsa.version}</version>
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
@@ -25,11 +25,13 @@
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.salsaw.msalsa</groupId>
 			<artifactId>msalsa-algorithm</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${msalsa.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>

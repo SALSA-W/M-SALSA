@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.salsaw.msalsa</groupId>
 		<artifactId>msalsa</artifactId>
-		<version>1.0.0</version>
+		<version>${msalsa.version}</version>
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
@@ -18,13 +18,7 @@
 		<dependency>
 			<groupId>com.salsaw.msalsa</groupId>
 			<artifactId>msalsa-cli</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.salsaw.msalsa</groupId>
-			<artifactId>msalsa-algorithm</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${msalsa.version}</version>
 		</dependency>
 
 		<dependency>

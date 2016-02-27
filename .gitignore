@@ -41,7 +41,7 @@ x64/
 .classpath
 
 # TypeScript
-typings # dependencies folder
+typings/ # dependencies folder
 
 # SALSA test folders
 src/cli/logs/

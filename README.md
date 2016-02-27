@@ -28,4 +28,4 @@ limitations under the License.
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 
 #Build
-[![Build Status](https://travis-ci.org/SALSA-W/M-SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/M-SALSA)
+[![Build Status](https://travis-ci.org/SALSA-W/M-SALSA.svg?branch=master)](https://travis-ci.org/SALSA-W/M-SALSA) [![Coverity Scan Badge](https://scan.coverity.com/projects/4124/badge.svg)](https://scan.coverity.com/projects/4124)

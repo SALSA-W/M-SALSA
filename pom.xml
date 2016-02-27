@@ -9,6 +9,12 @@
 
 	<name>msalsa</name>
 
+	<url>http://salsa-w.github.io/M-SALSA/</url>
+	
+	<scm>
+		<url>https://github.com/SALSA-W/M-SALSA.git</url>
+	</scm>
+
 	<properties>
 		<jetty.plugin.version>9.3.7.v20160115</jetty.plugin.version>
 		<project.source.version>1.8</project.source.version>
@@ -153,7 +159,7 @@
 				<artifactId>msalsa-algorithm</artifactId>
 				<version>${msalsa.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.salsaw.msalsa</groupId>
 				<artifactId>msalsa-cli</artifactId>

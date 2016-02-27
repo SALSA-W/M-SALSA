@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 /// <reference path="../typings/main.d.ts" />
+"use strict";
 var DynamicListItemId = "newitem";
 var DynamicListBtnAdd = "btnAdd";
 // http://codereview.stackexchange.com/questions/85116/simple-todo-list

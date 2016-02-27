@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 /// <reference path="../typings/main.d.ts" />
+"use strict";
 var aminoAcids = [
     "A",
     "C",

@@ -16,6 +16,8 @@
 
 /// <reference path="../typings/main.d.ts" />
 
+"use strict";
+
 const DynamicListItemId: string = "newitem";
 const DynamicListBtnAdd:string = "btnAdd";
 

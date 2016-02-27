@@ -16,6 +16,8 @@
 
 /// <reference path="../typings/main.d.ts" />
 
+"use strict";
+
 const aminoAcids: Array<string> = [
     "A",//Ala
     "C",//Cys

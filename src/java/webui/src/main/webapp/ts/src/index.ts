@@ -17,6 +17,8 @@
 /// <reference path="../typings/main.d.ts" />
 /// <reference path="input_form_validation.ts"/>
 
+"use strict";
+
 // Temporary definition of parsley until not ported to DefinitelyTyped - https://github.com/DefinitelyTyped/DefinitelyTyped/issues/2491
 interface JQuery {
     parsley: any; // Expand this bad boy later    

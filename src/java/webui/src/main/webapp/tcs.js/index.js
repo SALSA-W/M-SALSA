@@ -15,6 +15,7 @@
  */
 /// <reference path="../typings/main.d.ts" />
 /// <reference path="input_form_validation.ts"/>
+"use strict";
 // http://stackoverflow.com/a/3261380
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));

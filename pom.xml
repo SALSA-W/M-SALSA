@@ -147,6 +147,19 @@
 				<version>2.2.11</version>
 			</dependency>
 
+			<!-- M-SALSA Dependencies -->
+			<dependency>
+				<groupId>com.salsaw.msalsa</groupId>
+				<artifactId>msalsa-algorithm</artifactId>
+				<version>${msalsa.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.salsaw.msalsa</groupId>
+				<artifactId>msalsa-cli</artifactId>
+				<version>${msalsa.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

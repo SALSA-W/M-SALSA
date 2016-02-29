@@ -33,6 +33,14 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	// Commands
+	public static final String  CLUSTAL_W_PATH = "clustalWPath";
+	
+	// Documentation of commands
+	public static final String INPUT_FILE__DOCS = "path of a file containing the initial alignment. The file must be in FASTA format";
+	public static final String OUTPUT_FILE_DOCS = "path of the output file. This will be in FASTA format";
+	public static final String PH_TREE_FILE_DOCS = "file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score. The file must be in Newicks format. The typical exstensions are: dnd, ph";
 	public static final String GOP_DOCS = "GAP Opening Penalty";
 	public static final String GEP_DOCS = "GAP Extension Penalty";
 	public static final String GAMMA_DOCS = "dimension of the range of positions for a GAP during an iteration";
@@ -40,18 +48,18 @@ public class SalsaParameters implements Serializable {
 	public static final String PROBABILITY_OF_SPLIT_DOCS = "probability of split";
 	public static final String TERMINAL_GAPS_STRATEGY_DOCS = "the strategy to be used to manage terminal GAPs";
 	public static final String MATRIX_SERIE_DOCS = "matrix serie to use. The specific scoring matrix will be set base on distance matrix data";
-	public static final String GENERATE_PHYLOGENETIC_TREE_DOCS = "define if the phylogenetic neighbour-joining tree file must be generated";
+	public static final String GENERATE_PHYLOGENETIC_TREE_DOCS = "define if the phylogenetic neighbour-joining tree file must be generated. Requie " + CLUSTAL_W_PATH;
 	public static final String INPUT_TYPE_DOCS = "type of sequences in input file";
 	public static final String SCORING_MATRIX_DOCS = "distance matrix file";
 	public static final String EMBEDDED_SCORING_MATRIX_DOCS = "provided scoring matrix to use";
 
-	@Parameter(names = { "-inputFile" }, description = "The FASTA file to process", required = true)
+	@Parameter(names = { "-inputFile" }, description = INPUT_FILE__DOCS, required = true)
 	private String inputFile;
 
-	@Parameter(names = { "-outputFile" }, description = "The FASTA produced after the process", required = true)
+	@Parameter(names = { "-outputFile" }, description = OUTPUT_FILE_DOCS, required = true)
 	private String outputFile;
 
-	@Parameter(names = { "-phTreeFile" }, description = "The ph or dnd file that contains the phylogenetic tree", required = false)
+	@Parameter(names = { "-phTreeFile" }, description = PH_TREE_FILE_DOCS, required = false)
 	private String phylogeneticTreeFile;
 
 	@Parameter(names = { "-GOP" }, description = GOP_DOCS)
@@ -97,7 +105,7 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-generatePhTree", description = GENERATE_PHYLOGENETIC_TREE_DOCS)
 	private boolean generatePhylogeneticTree = false;
 	
-	@Parameter(names = "-clustalWPath", description = "define path where clustalW program is intalled. Required for generate tree file")
+	@Parameter(names = "-" + CLUSTAL_W_PATH, description = "define path where clustalW program is intalled. Required for generate tree file")
 	private String clustalWPath;
 
 	// GET

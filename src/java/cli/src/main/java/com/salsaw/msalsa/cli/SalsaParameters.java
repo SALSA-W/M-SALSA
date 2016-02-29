@@ -35,7 +35,7 @@ public class SalsaParameters implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	// Commands
-	public static final String  CLUSTAL_W_PATH = "clustalWPath";
+	public static final String  CLUSTAL_W_PATH = "-clustalWPath";
 	
 	// Documentation of commands
 	public static final String INPUT_FILE__DOCS = "path of a file containing the initial alignment. The file must be in FASTA format";
@@ -48,7 +48,7 @@ public class SalsaParameters implements Serializable {
 	public static final String PROBABILITY_OF_SPLIT_DOCS = "probability of split";
 	public static final String TERMINAL_GAPS_STRATEGY_DOCS = "the strategy to be used to manage terminal GAPs";
 	public static final String MATRIX_SERIE_DOCS = "matrix serie to use. The specific scoring matrix will be set base on distance matrix data";
-	public static final String GENERATE_PHYLOGENETIC_TREE_DOCS = "define if the phylogenetic neighbour-joining tree file must be generated. Requie " + CLUSTAL_W_PATH;
+	public static final String GENERATE_PHYLOGENETIC_TREE_DOCS = "define if the phylogenetic neighbour-joining tree file must be generated. Requires ClustalW2 path defined. Could be set using  "+ CLUSTAL_W_PATH +" or using ClustalW2 for the alignment";
 	public static final String INPUT_TYPE_DOCS = "type of sequences in input file";
 	public static final String SCORING_MATRIX_DOCS = "distance matrix file";
 	public static final String EMBEDDED_SCORING_MATRIX_DOCS = "provided scoring matrix to use";
@@ -99,16 +99,16 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
 	private String clustalPath;
 		
-	@Parameter(names = "-clustal", description = "define what version of clustal use (could be W or Omega).")
+	@Parameter(names = "-clustal", description = "define what version of Clustal must be uses for perform the pre-alignment. (could be W or Omega).")
 	private ClustalType clustalType = ClustalType.CLUSTAL_O;
 	
 	@Parameter(names = "-generatePhTree", description = GENERATE_PHYLOGENETIC_TREE_DOCS)
 	private boolean generatePhylogeneticTree = false;
 	
-	@Parameter(names = "-" + CLUSTAL_W_PATH, description = "define path where clustalW program is intalled. Required for generate tree file")
+	@Parameter(names = CLUSTAL_W_PATH, description = "define path where clustalW program is intalled. Required for generate tree file")
 	private String clustalWPath;
 	
-	@Parameter(names = "--help", help = true)
+	@Parameter(names = "-help", description="write the documentation of all commands" ,help = true)
 	private boolean help;
 
 	// GET

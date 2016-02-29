@@ -107,6 +107,9 @@ public class SalsaParameters implements Serializable {
 	
 	@Parameter(names = "-" + CLUSTAL_W_PATH, description = "define path where clustalW program is intalled. Required for generate tree file")
 	private String clustalWPath;
+	
+	@Parameter(names = "--help", help = true)
+	private boolean help;
 
 	// GET
 	/**
@@ -204,6 +207,10 @@ public class SalsaParameters implements Serializable {
 	
 	public String getDistanceMatrix() {
 		return this.distanceMatrix;
+	}
+	
+	public boolean getHelp(){
+		return this.help;
 	}
 	
 	// SET

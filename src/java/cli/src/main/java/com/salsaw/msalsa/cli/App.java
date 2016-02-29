@@ -42,7 +42,10 @@ public class App {
 
 		try {
 			commands.parse(args);
-			
+			if (salsaParameters.getHelp() == true) {
+				commands.usage();
+	            return;
+	        }
 			SalsaAlgorithmExecutor.callClustal(salsaParameters);
 			
 			System.out.println("Aligned completed successfully");			

@@ -34,6 +34,7 @@ public:
 	static SubstitutionMatrix* getSubstitutionMatrix(const char* matrixSerie, float pid, float GEP, Alphabet* a = NULL);
 
 	SubstitutionMatrix(const char* file, Alphabet* a, float g);
+	SubstitutionMatrix(string matrixName, float g);
 
 	//Calculate the score between two characters (converted in integers)
 	float score(int a, int b);
@@ -41,6 +42,7 @@ public:
 
 	virtual ~SubstitutionMatrix();
 private:
+	bool embeddedMatrix;
 	int alphabetLength;
 	//GAP extension penalty
 	float GEP;

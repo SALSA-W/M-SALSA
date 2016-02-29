@@ -21,10 +21,6 @@
 *      Author: Alessandro Daniele
 */
 
-#ifndef DATA_DIR
-	#define DATA_DIR "SubMatrices"
-#endif
-
 #include "DistanceMatrix.h"
 #include "Node.h"
 #include "Tree.h"
@@ -138,32 +134,37 @@ int main(int argc, char **argv) {
 		if (!strcmp(outputFile, "")) throw("Output file not specified");
 		if (!strcmp(phTreeFile, "")) throw("phTreeFile option not specified");
 
-		Alignment* a = NULL;
 		SubstitutionMatrix* matrix = NULL;
 
 		if (subMatrix != "") {
 			if (subMatrixPath != "") throw("Error: specified both scoring matrix and scoring matrix path");
+			if (strcmp(distanceMatrix, "")) throw("Error: specified both scoring matrix and distance matrix");
 
-			subMatrixPath = DATA_DIR + subMatrix;
+			matrix = new SubstitutionMatrix(subMatrix, GEP);
+		}
+		else {
+			if (strcmp(distanceMatrix, "")) { //If distance matrix is specified
+				if (subMatrixPath != "") throw("Error: specified both scoring matrix path and distance matrix");
+				if (strcmp(type, "PROTEINS")) throw("Error: distance matrix can not be used with sequence type " + string(type));
+
+				DistanceMatrix* dm = new DistanceMatrix(distanceMatrix);
+				matrix = dm->createSubstitutionMatrix(matrixSerie, GEP);
+			}
+			else {
+				if (subMatrixPath != "") {
+					matrix = new SubstitutionMatrix(subMatrixPath.c_str(), new Alphabet(type), GEP);
+				}
+				else { //Nothing is specified. Default matrix
+					if (!strcmp(type, "RNA")) throw("Error: no default matrix for RNA sequences");
+					if (!strcmp(type, "DNA")) subMatrix = "IUB";
+					if (!strcmp(type, "PROTEINS")) subMatrix = "BLOSUM62";
+
+					matrix = new SubstitutionMatrix(subMatrix, GEP);
+				}
+			}
 		}
 
-		if (strcmp(distanceMatrix, "") && !strcmp(type, "PROTEINS")) { //If distance matrix is specified and we are dealing with proteins
-			DistanceMatrix* dm = new DistanceMatrix(distanceMatrix);
-			matrix = dm->createSubstitutionMatrix(matrixSerie, GEP);
-
-			a = new Alignment(inputFile, phTreeFile, matrix, GOP, t);
-		}
-		else { //It is not possible to calculate the correct substitution matrix: we use the default value or the one specified by the user
-			//Default value for substitution matrix
-			if (!strcmp(type, "DNA") && subMatrixPath == "") subMatrixPath = string(DATA_DIR) + "/IUB";
-			if (!strcmp(type, "PROTEINS") && subMatrixPath == "") subMatrixPath = string(DATA_DIR) + "/BLOSUM62";
-				
-			if (subMatrixPath == "") throw("Substitution matrix is not specified and no default value exists for the specified type of sequences");
-				
-			matrix = new SubstitutionMatrix(subMatrixPath.c_str(), new Alphabet(type), GEP);
-			a = new Alignment(inputFile, phTreeFile, matrix, GOP, t);
-		}
-			
+		Alignment* a = new Alignment(inputFile, phTreeFile, matrix, GOP, t);
 		LocalSearch* l = new LocalSearch(a, gamma, minIterations, probabilityOfSplit);
 
 		cout << "Initial value of WSP-Score: " << a->WSP() << endl;

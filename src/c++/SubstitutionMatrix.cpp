@@ -22,26 +22,23 @@
 */
 
 #include "SubstitutionMatrix.h"
+#include "EmbeddedMatrices.h"
 #include <string>
-
-#ifndef DATA_DIR
-	#define DATA_DIR ""
-#endif
 
 SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matrixSerie, float pid, float GEP, Alphabet* a) {
 	if (a == NULL) a = new Alphabet("PROTEINS");
 	
 	if (!strcmp(matrixSerie, "BLOSUM")) {
-		if (pid > 0.8) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM80").c_str(), a, GEP);
-		if (pid > 0.6) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM62").c_str(), a, GEP);
-		if (pid > 0.3) return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM45").c_str(), a, GEP);
-		return new SubstitutionMatrix((string(DATA_DIR) + "/BLOSUM30").c_str(), a, GEP);
+		if (pid > 0.8) return new SubstitutionMatrix("BLOSUM80", GEP);
+		if (pid > 0.6) return new SubstitutionMatrix("BLOSUM62", GEP);
+		if (pid > 0.3) return new SubstitutionMatrix("BLOSUM45", GEP);
+		return new SubstitutionMatrix("BLOSUM30", GEP);
 	}
 	else if (!strcmp(matrixSerie, "PAM")) {
-		if (pid > 0.8) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM20").c_str(), a, GEP);
-		if (pid > 0.6) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM60").c_str(), a, GEP);
-		if (pid > 0.4) return new SubstitutionMatrix((string(DATA_DIR) + "/PAM120").c_str(), a, GEP);
-		return new SubstitutionMatrix((string(DATA_DIR) + "/PAM350").c_str(), a, GEP);
+		if (pid > 0.8) return new SubstitutionMatrix("PAM20", GEP);
+		if (pid > 0.6) return new SubstitutionMatrix("PAM60", GEP);
+		if (pid > 0.4) return new SubstitutionMatrix("PAM120", GEP);
+		return new SubstitutionMatrix("PAM350", GEP);
 	}
 
 	//MatrixSerie is not BLOSUM and it is not PAM
@@ -49,6 +46,7 @@ SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matri
 }
 
 SubstitutionMatrix::SubstitutionMatrix(const char* fileName, Alphabet* a, float g) : alphabet(a), GEP(g) {
+	embeddedMatrix = false;
 	alphabetLength = alphabet->dimension();
 
 	matrix = new int[alphabetLength*alphabetLength];
@@ -84,6 +82,24 @@ SubstitutionMatrix::SubstitutionMatrix(const char* fileName, Alphabet* a, float 
 	file.close();
 }
 
+SubstitutionMatrix::SubstitutionMatrix(string matrixName, float g): GEP(g){
+	embeddedMatrix = true;
+
+	if (matrixName != "IUB") alphabet = new Alphabet("PROTEINS");
+	else alphabet = new Alphabet("DNA");
+	alphabetLength = alphabet->dimension();
+
+	if (matrixName == "BLOSUM30") matrix = BLOSUM30;
+	if (matrixName == "BLOSUM45") matrix = BLOSUM45;
+	if (matrixName == "BLOSUM62") matrix = BLOSUM62;
+	if (matrixName == "BLOSUM80") matrix = BLOSUM80;
+	if (matrixName == "IUB") matrix = IUB;
+	if (matrixName == "PAM20") matrix = PAM20;
+	if (matrixName == "PAM60") matrix = PAM60;
+	if (matrixName == "PAM120") matrix = PAM120;
+	if (matrixName == "PAM350") matrix = PAM350;
+}
+
 float SubstitutionMatrix::score(int a, int b) {
 	if (a == alphabet->INDEL()) {
 		if (b == alphabet->INDEL()) return 0;
@@ -99,6 +115,6 @@ Alphabet* SubstitutionMatrix::getAlphabet() {
 }
 
 SubstitutionMatrix::~SubstitutionMatrix() {
-	delete[] matrix;
+	if (!embeddedMatrix) delete[] matrix; //If it is an embedded matrix it is not saved in the heap
 	delete alphabet;
 }

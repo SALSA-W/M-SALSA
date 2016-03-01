@@ -35,7 +35,8 @@ public class SalsaParameters implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	// Commands
-	public static final String  CLUSTAL_W_PATH = "-clustalWPath";
+	public static final String CLUSTAL_W_PATH = "-clustalWPath";
+	public static final String CLUSTAL_TYPE = "-clustal";
 	
 	// Documentation of commands
 	public static final String INPUT_FILE__DOCS = "path of a file containing the initial alignment. The file must be in FASTA format";

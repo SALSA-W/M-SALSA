@@ -61,28 +61,36 @@ public class SalsaAlgorithmExecutor {
 	
 	private static void validateParameters(SalsaParameters salsaParameters) throws SALSAException
 	{
-		// VALIDATION
+		// VALIDATION - STEP 1
 		if (salsaParameters.getClustalPath() == null &&
 			salsaParameters.getPhylogeneticTreeFile() == null){
 			throw new SALSAParameterException("Required input missing: - clustal path for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
-		}		
-		
-		if (salsaParameters.getGeneratePhylogeneticTree() == true &&
-			salsaParameters.getClustalWPath() == null){
-				throw new SALSAParameterException("To calculate the phylogenetic tree the ClustalW path is required");
 		}
 		
 		if (salsaParameters.getClustalPath() != null){
 			String clustalProcessName = FilenameUtils.getBaseName(salsaParameters.getClustalPath());
 			String expectedClustalProcessName = ClustalType.getClustalProcessName(salsaParameters.getClustalType());
 			if (clustalProcessName.equalsIgnoreCase(expectedClustalProcessName) == false){
-				throw new SALSAParameterException("The clusal path passed reference a process called " + clustalProcessName + ". The expected one is " + expectedClustalProcessName);
+				// BEST EFFORT - try to find the correct Clustal type from process name
+				boolean matchFound = false;
+				for (ClustalType clustalType : ClustalType.values()){
+					if (clustalType == salsaParameters.getClustalType()){
+						// Ins't the correct one
+						continue;
+					}
+					String tryExpectedClustalProcessName = ClustalType.getClustalProcessName(clustalType);
+					if (clustalProcessName.equalsIgnoreCase(tryExpectedClustalProcessName) == true){
+						// The correct Clustal type has been found
+						salsaParameters.setClustalType(clustalType);
+						matchFound = true;								
+					}					
+				}				
+				if (matchFound == false) {
+					throw new SALSAParameterException("The clusal path passed reference a process called "
+							+ clustalProcessName + ". The expected one is " + expectedClustalProcessName
+							+ ". Please check value of " + SalsaParameters.CLUSTAL_TYPE);
+				}
 			}			
-		}
-		
-		if (salsaParameters.getMatrixSerie() == MatrixSerie.NONE &&
-			salsaParameters.getEmbeddedScoringMatrix() == EmbeddedScoringMatrix.NONE){
-			throw new SALSAParameterException("A matrix serie or a scoring matrix must be set");
 		}
 		
 		// INIT PARAMTERS
@@ -92,6 +100,19 @@ public class SalsaAlgorithmExecutor {
 			// If the path for ClustalW is already set, ensure is set in all properties
 			salsaParameters.setClustalWPath(salsaParameters.getClustalPath());
 		}
+		
+		// VALIDATION - STEP 2		
+		if (salsaParameters.getGeneratePhylogeneticTree() == true &&
+			salsaParameters.getClustalWPath() == null){
+				throw new SALSAParameterException("To calculate the phylogenetic tree the ClustalW path is required");
+		}
+		
+		if (salsaParameters.getMatrixSerie() == MatrixSerie.NONE &&
+			salsaParameters.getEmbeddedScoringMatrix() == EmbeddedScoringMatrix.NONE){
+			throw new SALSAParameterException("A matrix serie or a scoring matrix must be set");
+		}
+		
+
 	}
 	
 	public static void callClustal(SalsaParameters salsaParameters) throws SALSAException, IOException, InterruptedException {

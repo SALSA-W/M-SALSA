@@ -83,9 +83,13 @@ For the examples we define some common constants:
 * <clustal_o_path> = "C:\Program Files (x86)\clustal-omega\clustalo.exe"
 
 ## Linux
+* <input_file_path> = "/home/username/Documents/SALSA/input.txt"
+* <input_tree_file_path> = "/home/username/Documents/SALSA/input.dnd"
+* <output_file_path> = "/home/username/Documents/SALSA/output.fasta"
+* <clustal_w_path> = "/home/username/clustal/clustalw/clustalw2"
+* <clustal_o_path> = "/home/username/clustal/clustalo"
 
 # Examples:
-
 ## Input in FASTA format alredy processed from other aligment alghorim
 The input for this examples must be already processed by other alghorims.
 

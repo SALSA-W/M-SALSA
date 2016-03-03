@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>M-SALSA by SALSA-W</title>
-    <meta name="language" content="English">  
+    <meta name="language" content="English">
     <meta name="description" content="<%=SalsaAlgorithmExecutor.M_SALSA_HEADER%> is a multiple sequence alignment program for proteins. It produces biologically meaningful multiple sequence alignments of divergent sequences. Evolutionary relationships can be seen via viewing Cladograms or Phylograms.">
     <meta name="keywords" content="bioinformatics, multiple sequence alignment, CRIBI Biotechnology Center, unipd" />
-        
+
     <meta name="author" content="Alessandro Daniele, Fabio Cesarato, Andrea Giraldin">
-    <link rel="publisher" href="http://www.unipd.it/"/>
-    
+    <link rel="publisher" href="http://www.unipd.it/" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -83,8 +83,6 @@
                 must be in <a href="https://en.wikipedia.org/wiki/Newick_format">Newicks format</a></dd>
         </dl>
 
-        <hr>
-
         <h3>
 <a id="optional-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Optional parameters:</h3>
 
@@ -134,74 +132,79 @@
             matrix. The chosen matrix depends also an the matrixSerie parameter, that can be BLOSUM or PAM (if not specified
             it will use a BLOSUM matrix).</p>
 
+        <hr>
+
         <h2>
-<a id="java-version" class="anchor" href="#java-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>java version</h2>
+<a id="java-version" class="anchor" href="#java-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Java version</h2>
+
+        <p>M-SALSA Java implementation requires Java version > 1.8 that could be downloaded from <a href="https://java.com/it/download/">Java download</a></p>
+        <p>The command line call of Java version of M-SALSA is very smilar to the one in C++. See <a href="#c-version">C++ definition</a>            for more informations. The Java version has the same <a href="#mandatory-parameters">parameters of C++</a> version.
+            Other parameters are available (described in next paragraph)
+        </p>
+        <p> An example of M-SALSA usage is:
+            <br>
+            <code>java -jar m-salsa-cli.jar -inputFile BB11001.tfa -outputFile BB11001_final.fasta -phTreeFile BB11001.dnd</code>
+        </p>
+        <p>More examples are available in wiky <a href="https://github.com/SALSA-W/M-SALSA/wiki/Examples-Java">Examples-Java</a></p>
 
 
-        <p>The call of Java version of M-SALSA is very smilar to the one in C++. See <a href="#c-version">C++ definition</a>            to more informations.
-            <p> An example of M-SALSA usage is:
-                <br>
-                <code>java -jar m-salsa.jar -inputFile BB11001.tfa -outputFile BB11001_final.tfa -phTreeFile BB11001.dnd</code>
-            </p>
-            <p>The Java version has the same <a href="#mandatory-parameters">parameters of C++</a> version. Other optional parameters
-                are available.
-            </p>
+        <h3>
+<a id="java-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Java parameters:</h3>
+        <p>The Java version could call Clustal and perform the pre-alignment required from M-SALSA. This permit to avoid the
+            input of <i>-phTreeFile</i> because this data is generated using <strong>Clustal.</strong></p>
+        <p>This approach permit to give and input file <i>-inputFile</i> format different from FASTA, but accepted from Clustal:
+            NBRF/PIR, EMBL/UniProt, Pearson (FASTA), GDE, ALN/Clustal, GCG/MSF, RSF (see the Clustal help pages for details
+            about formats).</p>
+        <dl>
+            <dt>-clustal</dt>
+            <dd>define what version of Clustal must be uses for perform the pre-alignment. Possible values:
+                <ul>
+                    <li> CLUSTAL_O: <a href="http://www.clustal.org/omega/">ClustalOmega</a> (<i>default value</i>)</li>
+                    <li> CLUSTAL_W: <a href="http://www.clustal.org/clustal2/">ClustalW2</a></li>
+                </ul>
+            </dd>
+            <dt>-clustalPath</dt>
+            <dd>define the path where clustal program is available. The clustal programs are available at <a href="http://www.clustal.org/omega/">ClustalOmega</a>                and <a href="http://www.clustal.org/clustal2/">ClustalW2</a></dd>
+            <dt>-clustalWPath</dt>
+            <dd>define path where ClustalW2 program is installed. Required for generate tree file</dd>
+            <dt>-generatePhTree</dt>
+            <dd>define if the phylogenetic neighbour-joining tree file must be generated. Requires ClustalW2 path defined. Could
+                be set using <i>-clustalWPath</i> or using ClustalW2 for the alignment</dd>
+            <dt>-help</dt>
+            <dd>write the documentation of all commands</dd>
+        </dl>
+        <hr>
 
+        <h1><a id="source-documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Source Code Documentation</h1>
+        <p>The source code documentation is available at <a href="http://salsa-w.github.io/M-SALSA/apidocs">http://salsa-w.github.io/M-SALSA/apidocs</a></p>
+        <p>More informations about documentation generation is available at <a href="https://github.com/SALSA-W/M-SALSA/wiki/API-Docs">https://github.com/SALSA-W/M-SALSA/wiki/API-Docs</a></p>
 
-            <h3>
-<a id="optional-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Optional parameters:</h3>
-            <p>The Java version, if correctly set, could call Clustal and perform the pre-alignment required from M-SALSA. This
-                permit to avoid the input of <i>-phTreeFile</i> because this data is generated using Clustal.</p>
-            <dl>
-                <dt>-clustal</dt>
-                <dd>define what version of Clustal must be uses for perform the pre-alignment. Possible values:
-                    <ul>
-                        <li> CLUSTAL_O: <a href="http://www.clustal.org/omega/">ClustalOmega</a> (<i>default value</i>)</li>
-                        <li> CLUSTAL_W: <a href="http://www.clustal.org/clustal2/">ClustalW2</a></li>                        
-                    </ul>
-                </dd>
-                <dt>-clustalPath</dt>
-                <dd>define the path where clustal program is available. The clustal programs are available at <a href="http://www.clustal.org/omega/">ClustalOmega</a>                    and <a href="http://www.clustal.org/clustal2/">ClustalW2</a></dd>
-                <dt>-clustalWPath</dt>
-                <dd>define path where ClustalW2 program is installed. Required for generate tree file</dd>
-                <dt>-generatePhTree</dt>
-                <dd>define if the phylogenetic neighbour-joining tree file must be generated. Requires ClustalW2 path defined.
-                    Could be set using <i>-clustalWPath</i> or using ClustalW2 for the alignment</dd>
-                <dt>-help</dt>
-                <dd>write the documentation of all commands</dd>
-            </dl>
-            <hr>
-
-            <h1><a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h1>
-            <p>The documentation is available at <a href="http://salsa-w.github.io/M-SALSA/apidocs">http://salsa-w.github.io/M-SALSA/apidocs</a></p>
-            <p>More informations available on <a href="https://github.com/SALSA-W/M-SALSA/wiki/API-Docs">https://github.com/SALSA-W/M-SALSA/wiki/API-Docs</a></p>
-
-            <h1>
+        <h1>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
 
-            <p>Copyright 2015 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin</p>
+        <p>Copyright 2015 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin</p>
 
-            <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-                with the License. You may obtain a copy of the License at</p>
+        <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+            the License. You may obtain a copy of the License at</p>
 
-            <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+        <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 
-            <p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
-                on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
-                for the specific language governing permissions and limitations under the License.</p>
+        <p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+            on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+            for the specific language governing permissions and limitations under the License.</p>
 
-            <p>
-                <a href="https://raw.githubusercontent.com/SALSA-W/M-SALSA/master/LICENSE"><img src="http://img.shields.io/badge/license-APACHE2-blue.svg" alt="License"></a>
-            </p>
+        <p>
+            <a href="https://raw.githubusercontent.com/SALSA-W/M-SALSA/master/LICENSE"><img src="http://img.shields.io/badge/license-APACHE2-blue.svg" alt="License"></a>
+        </p>
 
-            <h1>
+        <h1>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h1>
 
-            <footer class="site-footer">
-                <span class="site-footer-owner"><a href="https://github.com/SALSA-W/M-SALSA">M-SALSA</a> is maintained by <a href="https://github.com/SALSA-W">SALSA-W</a>.</span>
+        <footer class="site-footer">
+            <span class="site-footer-owner"><a href="https://github.com/SALSA-W/M-SALSA">M-SALSA</a> is maintained by <a href="https://github.com/SALSA-W">SALSA-W</a>.</span>
 
-                <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-            </footer>
+            <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        </footer>
 
     </section>
 

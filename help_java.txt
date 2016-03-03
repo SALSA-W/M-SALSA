@@ -6,7 +6,6 @@ It's available from: https://java.com/it/download/
 To get more informations the reference site is: http://salsa-w.github.io/M-SALSA/
 
 === COMMANDS ===
-
 # Help
 To get the list of all commands you could use the help command:
 java -jar msalsa-cli.jar -help
@@ -80,8 +79,8 @@ For the examples we define some common constants:
 * <input_file_path> = "C:\Users\username\Documents\SALSA\input.txt"
 * <input_tree_file_path> = "C:\Users\username\Documents\SALSA\input.dnd"
 * <output_file_path> = "C:\Users\username\Documents\SALSA\output.fasta"
-* <clustal_w_path> = "C:\Program Files (x86)\clustal-omega\clustalo.exe"
-* <clustal_o_path> = "C:\Program Files (x86)\ClustalW2\clustalw2.exe"
+* <clustal_w_path> = "C:\Program Files (x86)\ClustalW2\clustalw2.exe"
+* <clustal_o_path> = "C:\Program Files (x86)\clustal-omega\clustalo.exe"
 
 ## Linux
 
@@ -97,13 +96,13 @@ M-SALSA will improve input aligment and produce the output aligment in the desir
 
 ## ClustalW and ClustalOmega Installed
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_o_path>
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_o_path>
 
 M-SALSA will use ClustalOmega to perform the pre-aligment. 
 M-SALSA will then improve alignment and produce the output alignment in the desired file.
 
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_o_path> -generatePhTree -clustalWPath <clustal_w_path>
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_o_path> -generatePhTree -clustalWPath <clustal_w_path>
 
 M-SALSA will use ClustalOmega to perform the pre-aligment. 
 M-SALSA will then improve alignment and produce the output alignment in the desired file.
@@ -111,20 +110,20 @@ Using ClustalW2 the phylogenetic neighbour-joining tree will be generated from t
 
 ## Only ClustalW Installed
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_w_path>
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_w_path>
 
 This example requires that the input <clustal_w_path> process name must be "clustalw2". From input given the other data are implicitly understood.
 M-SALSA will use ClustalW2 to perform the pre-aligment. 
 M-SALSA will then improve alignment and produce the output alignment in the desired file.
 
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_w_path> -clustal CLUSTAL_W
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_w_path> -clustal CLUSTAL_W
 
 M-SALSA will use ClustalW2 to perform the pre-aligment. 
 M-SALSA will then improve alignment and produce the output alignment in the desired file.
 
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_w_path> -generatePhTree
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_w_path> -generatePhTree
 
 This example requires that the input <clustal_w_path> process name must be "clustalw2". From input given the other data are implicitly understood.
 M-SALSA will use ClustalW2 to perform the pre-aligment. 
@@ -132,8 +131,24 @@ M-SALSA will then improve alignment and produce the output alignment in the desi
 Using ClustalW2 the phylogenetic neighbour-joining tree will be generated from the output M-SALSA aligment. 
 
 
-java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> --clustalPath <clustal_w_path> -clustal CLUSTAL_W -generatePhTree -clustalWPath <clustal_w_path>
+java -jar msalsa-cli.jar -inputFile <input_file_path> -outputFile <output_file_path> -clustalPath <clustal_w_path> -clustal CLUSTAL_W -generatePhTree -clustalWPath <clustal_w_path>
 
 M-SALSA will use ClustalW2 to perform the pre-aligment. 
 M-SALSA will then improve alignment and produce the output alignment in the desired file.
 Using ClustalW2 the phylogenetic neighbour-joining tree will be generated from the output M-SALSA aligment. 
+
+=== LICENSE ===
+Copyright 2016 Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+

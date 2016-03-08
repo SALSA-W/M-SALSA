@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
+import com.salsaw.msalsa.services.ServletExceptionManager;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -63,8 +64,7 @@ public class MainController extends HttpServlet {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
 			requestDispatcher.forward(request, response);
 		} catch (Exception e) {
-			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			ServletExceptionManager.manageException(e, request, response);
 		}
 	}
 }

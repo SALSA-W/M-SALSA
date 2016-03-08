@@ -40,6 +40,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
+import com.salsaw.msalsa.services.ServletExceptionManager;
 
 
 /**
@@ -60,15 +61,16 @@ public class AlignmentResultServlet extends HttpServlet {
 
 	/**
 	 * @throws IOException 
+	 * @throws ServletException 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		try {
 			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 			if (idRequest == null){
 				// The input data are invalid
-				return;
+				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
 				
 			AlignmentResult alignmentResult = new AlignmentResult(idRequest);
@@ -90,9 +92,8 @@ public class AlignmentResultServlet extends HttpServlet {
 				    request.getRequestDispatcher("results.jsp");
 			requestDispatcher.forward(request, response);
 		} catch (Exception e) {
-			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		} 		
+			ServletExceptionManager.manageException(e, request, response);
+		}
 	}	
 	
 	private String getPhylogeneticTreeFileContent(

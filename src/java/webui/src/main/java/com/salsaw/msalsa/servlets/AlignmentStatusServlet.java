@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.services.AlignmentRequestManager;
+import com.salsaw.msalsa.services.ServletExceptionManager;
 
 /**
  * Servlet implementation class AlignmentStatusServlet
@@ -40,7 +41,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			UUID idRequest = readAndValidateProcessId(request, response);
 			if (idRequest == null) {
 				// The input data are invalid
-				return;
+				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
 
 			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
@@ -55,10 +56,9 @@ public class AlignmentStatusServlet extends HttpServlet {
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
 				requestDispatcher.forward(request, response);
 			}
-		} catch (Exception e) {
-			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		} 
+		}  catch (Exception e) {
+			ServletExceptionManager.manageException(e, request, response);
+		}
 	}
 
 	public static UUID readAndValidateProcessId(HttpServletRequest request, HttpServletResponse response)

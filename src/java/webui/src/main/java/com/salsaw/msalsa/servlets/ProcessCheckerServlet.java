@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.services.AlignmentRequestManager;
+import com.salsaw.msalsa.services.ServletExceptionManager;
 
 /**
  * Servlet implementation class ProcessChecker
@@ -54,7 +55,7 @@ public class ProcessCheckerServlet extends HttpServlet {
 			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 			if (idRequest == null) {
 				// The input data are invalid
-				return;
+				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
 
 			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
@@ -63,8 +64,7 @@ public class ProcessCheckerServlet extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			}
 		} catch (Exception e) {
-			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			ServletExceptionManager.manageException(e, request, response);
 		}
 	}
 }

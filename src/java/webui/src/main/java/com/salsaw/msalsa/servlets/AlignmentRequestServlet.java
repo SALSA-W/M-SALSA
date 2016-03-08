@@ -43,6 +43,7 @@ import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.services.AlignmentRequestManager;
+import com.salsaw.msalsa.services.ServletExceptionManager;
 
 /**
  * Servlet implementation class AlignmentRequestServlet
@@ -83,12 +84,13 @@ public class AlignmentRequestServlet extends HttpServlet {
 	}
 
 	/**
+	 * @throws ServletException 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+			throws IOException, ServletException {
 		SalsaWebParameters salsaWebParameters = new SalsaWebParameters();
 		try {
 			// http://www.programcreek.com/java-api-examples/index.php?api=org.apache.commons.beanutils.ConvertUtilsBean
@@ -151,8 +153,7 @@ public class AlignmentRequestServlet extends HttpServlet {
 			// Redirect the request to index
 			response.sendRedirect("loading.jsp?id=" + newRequest.getId());
 		} catch (Exception e) {
-			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			ServletExceptionManager.manageException(e, request, response);
 		} 
 	}
 

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -62,7 +64,7 @@ public class AlignmentRequestExecutor implements Runnable {
 	private final AlignmentRequest alignmentRequest;
 	private final String webApplicationUri;
 	private final Thread thread;
-
+	
 	public AlignmentRequestExecutor(String webApplicationUri, AlignmentRequest alignmentRequest) {
 		if (alignmentRequest == null) {
 			throw new IllegalArgumentException("alignmentRequest");
@@ -170,7 +172,7 @@ public class AlignmentRequestExecutor implements Runnable {
 					SalsaAlgorithmExecutor.M_SALSA_HEADER, jobName, inpuFileName));
 		}
 		
-		sender.setBody(composeMailMessage(jobName), "ISO-8859-1", "html");
+		sender.setBody(composeMailMessage(jobName), StandardCharsets.ISO_8859_1.toString(), "html");
 		String resultsZipFile = composeZipResultFile(salsaWebParameters);
 		sender.addAttachment(resultsZipFile);
 		sender.send();

@@ -1,5 +1,9 @@
 <%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
 
+
+<!-- Corner ribbon: http://codepen.io/miroot/pen/wiKAp -->
+<div class="corner-ribbon top-left sticky red shadow">BETA</div>
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">

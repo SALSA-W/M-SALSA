@@ -15,9 +15,6 @@
 	<jsp:include page="header.jsp" />
 </head>
 <body>
-	<!-- Corner ribbon: http://codepen.io/miroot/pen/wiKAp -->
-	<div class="corner-ribbon top-left sticky red shadow">BETA</div>
-	
 	<!-- Style theme: https://bootswatch.com/lumen/ -->
 	<jsp:useBean id="salsaParameters"
 		class="com.salsaw.msalsa.cli.SalsaParameters" scope="request">

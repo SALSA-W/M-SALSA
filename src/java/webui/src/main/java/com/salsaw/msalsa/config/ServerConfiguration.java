@@ -31,6 +31,7 @@ public class ServerConfiguration {
 	private final int cleanDaysValidityJob;
 	private final String sitePublisher;
     private final String googleAnalyticsPropertyID;
+    private final Integer threadPoolMaxNumber;
 	
 	// CONSTRUCTOR
 	ServerConfiguration(
@@ -41,7 +42,8 @@ public class ServerConfiguration {
 			String mailPassword,
 			String cleanDaysValidityJob,
 			String sitePublisher,
-                        String googlePropertyID){
+            String googlePropertyID,
+            String threadPoolMaxNumber){
 		
 		this.clustalW = new File(clustalWPath);
 		this.clustalO = new File(clustalOPath);		
@@ -51,6 +53,7 @@ public class ServerConfiguration {
 		this.cleanDaysValidityJob = Integer.parseInt(cleanDaysValidityJob);
 		this.sitePublisher = sitePublisher;
         this.googleAnalyticsPropertyID = googlePropertyID;
+        this.threadPoolMaxNumber = Integer.parseInt(threadPoolMaxNumber);
 	}
 	
 	// GET
@@ -84,6 +87,10 @@ public class ServerConfiguration {
         
 	public String getGoogleAnalyticsPropertyID() {
 		return this.googleAnalyticsPropertyID;
+	}
+	
+	public Integer getThreadPoolMaxNumber() {
+		return this.threadPoolMaxNumber;
 	}
 }
 

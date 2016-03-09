@@ -30,6 +30,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -62,9 +64,11 @@ public class AlignmentRequestExecutor implements Runnable {
 	static final String RESULT_ZIP_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "-results.zip";
 		
 	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
+	static final ExecutorService executor = Executors
+			.newFixedThreadPool(ConfigurationManager.getInstance().getServerConfiguration().getThreadPoolMaxNumber());
+		
 	private final AlignmentRequest alignmentRequest;
 	private final String webApplicationUri;
-	private final Thread thread;
 	
 	public AlignmentRequestExecutor(String webApplicationUri, AlignmentRequest alignmentRequest) {
 		if (alignmentRequest == null) {
@@ -77,11 +81,10 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		this.alignmentRequest = alignmentRequest;
 		this.webApplicationUri = webApplicationUri;
-		this.thread = new Thread(this);
 	}
 
 	public void startAsyncAlignment() {
-		this.thread.start();
+		executor.submit(this);
 	}
 
 	@Override

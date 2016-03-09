@@ -68,7 +68,7 @@ MHIKKPLNAFMLYMKEMRANVVAESTLKESAAINQILGRRWHALSREEQAKYY
 >Protein_3_description
 MKKLKKHPDFPKKPLTPYFRFFMEKRAKYAKLHPEMSNLDLTKILSKKY
 >Protein_4_description
-GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span>:</label>
+GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span></label>
 				<div class="col-sm-10">
 					<textarea class="form-control" rows="5" id="manualInputSequence"
 						name="manualInputSequence" required data-parsley-errors-messages-disabled></textarea>
@@ -76,8 +76,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="inputFile">Input
-					file:</label>
+				<label class="control-label col-sm-2" for="inputFile">Input file</label>
 				<div class="col-sm-10">
 					<!-- http://stackoverflow.com/questions/11235206/twitter-bootstrap-form-file-element-upload-button -->
 					<span class="btn btn-default btn-file">File to align<input
@@ -91,7 +90,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="newitem">Input UniProt proteins <span title="Add UniProt proteins ID.
 Example:
-P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span>:</label>
+P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span></label>
 				<div class="col-sm-10">
 				
 					<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
@@ -250,7 +249,7 @@ P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span cl
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="email">Email:</label>
+				<label class="control-label col-sm-2" for="email">Email</label>
 				<div class="col-sm-10">
 					<input type="email" class="form-control" id="recipientEmail"
 						name="recipientEmail" data-parsley-trigger="keyup change"

@@ -15,9 +15,9 @@
 				<li><a href="http://salsa-w.github.io/M-SALSA/">Documentation</a></li>
 			</ul>
 
-			<ul class="nav navbar-nav navbar-right">
+		<!-- <ul class="nav navbar-nav navbar-right">
 				<li><a target="_blank" href="">Contacts</a></li>
-			</ul>
+			</ul>  -->	
 
 		</div>
 	</div>

@@ -105,12 +105,12 @@ public class AlignmentRequestExecutor implements Runnable {
 			// Get path to correct Clustal process
 			switch (salsaWebParameters.getClustalType()) {
 			case CLUSTAL_W:
-				salsaWebParameters.setClustalPath(
+				salsaWebParameters.setClustalWPath(
 						ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
 				break;
 
 			case CLUSTAL_O:
-				salsaWebParameters.setClustalPath(
+				salsaWebParameters.setClustalOmegaPath(
 						ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
 				break;
 			}
@@ -148,10 +148,10 @@ public class AlignmentRequestExecutor implements Runnable {
 				}
 			}				
 		} catch (Exception exception) {
-			ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(Paths
-					.get(this.alignmentRequest.getAlignmentRequestPath().toString(), AlignmentResult.ERROR_FILE_NAME)
-					.toString());
 			try {
+				ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(Paths
+						.get(this.alignmentRequest.getAlignmentRequestPath().toString(), AlignmentResult.ERROR_FILE_NAME)
+						.toString());
 				exceptionSerializer.serialize(exception);
 			} catch (IOException e) {
 				logger.error(e);

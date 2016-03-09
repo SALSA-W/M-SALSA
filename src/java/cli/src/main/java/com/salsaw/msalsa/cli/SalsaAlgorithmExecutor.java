@@ -61,47 +61,15 @@ public class SalsaAlgorithmExecutor {
 	
 	private static void validateParameters(SalsaParameters salsaParameters) throws SALSAException
 	{
-		// VALIDATION - STEP 1
-		if (salsaParameters.getClustalPath() == null &&
-			salsaParameters.getPhylogeneticTreeFile() == null){
-			throw new SALSAParameterException("Required input missing: - clustal path for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
-		}
+		// VALIDATION
+		if (salsaParameters.getClustalWPath() == null && 
+			salsaParameters.getClustalOmegaPath() == null &&
+			salsaParameters.getPhylogeneticTreeFile() == null) {
+			throw new SALSAParameterException("Required input missing: - clustal path ("
+					+ SalsaParameters.CLUSTAL_W_PATH + " or " + SalsaParameters.CLUSTAL_O_PATH
+					+ ") for calculate aligment on input file OR - input files required are aligment and phylogenetic tree");
+		}	
 		
-		if (salsaParameters.getClustalPath() != null){
-			String clustalProcessName = FilenameUtils.getBaseName(salsaParameters.getClustalPath());
-			String expectedClustalProcessName = ClustalType.getClustalProcessName(salsaParameters.getClustalType());
-			if (clustalProcessName.equalsIgnoreCase(expectedClustalProcessName) == false){
-				// BEST EFFORT - try to find the correct Clustal type from process name
-				boolean matchFound = false;
-				for (ClustalType clustalType : ClustalType.values()){
-					if (clustalType == salsaParameters.getClustalType()){
-						// Ins't the correct one
-						continue;
-					}
-					String tryExpectedClustalProcessName = ClustalType.getClustalProcessName(clustalType);
-					if (clustalProcessName.equalsIgnoreCase(tryExpectedClustalProcessName) == true){
-						// The correct Clustal type has been found
-						salsaParameters.setClustalType(clustalType);
-						matchFound = true;								
-					}					
-				}				
-				if (matchFound == false) {
-					throw new SALSAParameterException("The clusal path passed reference a process called "
-							+ clustalProcessName + ". The expected one is " + expectedClustalProcessName
-							+ ". Please check value of " + SalsaParameters.CLUSTAL_TYPE);
-				}
-			}			
-		}
-		
-		// INIT PARAMTERS
-		if (salsaParameters.getClustalType() == ClustalType.CLUSTAL_W &&
-			salsaParameters.getClustalPath() != null &&
-			salsaParameters.getClustalWPath() == null){
-			// If the path for ClustalW is already set, ensure is set in all properties
-			salsaParameters.setClustalWPath(salsaParameters.getClustalPath());
-		}
-		
-		// VALIDATION - STEP 2		
 		if (salsaParameters.getGeneratePhylogeneticTree() == true &&
 			salsaParameters.getClustalWPath() == null){
 				throw new SALSAParameterException("To calculate the phylogenetic tree the ClustalW path is required");
@@ -110,9 +78,7 @@ public class SalsaAlgorithmExecutor {
 		if (salsaParameters.getMatrixSerie() == MatrixSerie.NONE &&
 			salsaParameters.getEmbeddedScoringMatrix() == EmbeddedScoringMatrix.NONE){
 			throw new SALSAParameterException("A matrix serie or a scoring matrix must be set");
-		}
-		
-
+		}	
 	}
 	
 	public static void callClustal(SalsaParameters salsaParameters) throws SALSAException, IOException, InterruptedException {
@@ -125,15 +91,29 @@ public class SalsaAlgorithmExecutor {
 		
 		ClustalFileMapper clustalFileMapper = null;
 		
-		if (salsaParameters.getClustalPath() != null &&
-			salsaParameters.getPhylogeneticTreeFile() == null) {			
-			// Use Clustal to generate initial alignment
-			if (salsaParameters.getClustalType() == ClustalType.CLUSTAL_O){
-				salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));				
+		if ((salsaParameters.getClustalWPath() != null || salsaParameters.getClustalOmegaPath() != null) &&
+			 salsaParameters.getPhylogeneticTreeFile() == null) {
+			// Find clustal type
+			ClustalType clustalType;
+			String clustalPath;
+			// Evaluate first ClustalOmega because this is used to perform alignment also if ClustalW path is set
+			if (salsaParameters.getClustalOmegaPath() != null) {
+				clustalType = ClustalType.CLUSTAL_O;
+				clustalPath = salsaParameters.getClustalOmegaPath();
+				// Normalize input only for ClustalOmega
+				salsaParameters.setInputFile(normalizeInputFile(Paths.get(salsaParameters.getInputFile())));
+			} else if (salsaParameters.getClustalWPath() != null) {
+				clustalType = ClustalType.CLUSTAL_W;
+				clustalPath = salsaParameters.getClustalWPath();
+			} else {
+				throw new UnsupportedOperationException("Unable to find correct clustal");
 			}
+
+			// Use Clustal to generate initial alignment
 			clustalFileMapper = new ClustalFileMapper(salsaParameters.getInputFile());
-			ClustalManager clustalManager = ClustalManager.createClustalManager(salsaParameters.getClustalType());		
-			clustalManager.callClustal(salsaParameters.getClustalPath(), clustalFileMapper);
+
+			ClustalManager clustalManager = ClustalManager.createClustalManager(clustalType);
+			clustalManager.callClustal(clustalPath, clustalFileMapper);
 			alignmentFilePath = clustalFileMapper.getAlignmentFilePath();
 			phylogeneticTreeFilePath = clustalFileMapper.getTreeFilePath();
 			distanceMatrixFilePath = clustalFileMapper.getDistanceMatrixFilePath();

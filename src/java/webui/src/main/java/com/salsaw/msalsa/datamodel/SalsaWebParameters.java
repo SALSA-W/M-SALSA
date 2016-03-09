@@ -16,6 +16,7 @@
 package com.salsaw.msalsa.datamodel;
 
 import com.salsaw.msalsa.cli.SalsaParameters;
+import com.salsaw.msalsa.clustal.ClustalType;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -32,7 +33,11 @@ public class SalsaWebParameters extends SalsaParameters {
 	private String salsaParametersFile;
 	private String userJobTitle;
 	private String[] uniProtIds;
-	private String manualInputSequence;
+	private String manualInputSequence;	
+	/**
+	 * define what version of Clustal must be uses for perform the pre-alignment.
+	 */
+	private ClustalType clustalType = ClustalType.CLUSTAL_O;
 	
 	public String getRecipientEmail() {
 		return this.recipientEmail;
@@ -59,6 +64,10 @@ public class SalsaWebParameters extends SalsaParameters {
 		return this.manualInputSequence;
 	}
 	
+	public ClustalType getClustalType() {
+		return this.clustalType;
+	}	
+	
 	public void setSalsaParametersFile(String salsaParametersFile) {
 		this.salsaParametersFile = salsaParametersFile;
 	}		
@@ -77,5 +86,9 @@ public class SalsaWebParameters extends SalsaParameters {
 	
 	public void setManualInputSequence(String manualInputSequence) {
 		this.manualInputSequence = manualInputSequence;
+	}
+	
+	public void setClustalType(ClustalType clustalType) {
+		this.clustalType = clustalType;
 	}
 }

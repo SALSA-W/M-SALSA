@@ -25,7 +25,6 @@ import com.salsaw.msalsa.algorithm.enums.AlphabetType;
 import com.salsaw.msalsa.algorithm.enums.EmbeddedScoringMatrix;
 import com.salsaw.msalsa.algorithm.enums.MatrixSerie;
 import com.salsaw.msalsa.algorithm.enums.TerminalGAPsStrategy;
-import com.salsaw.msalsa.clustal.ClustalType;
 
 @XmlRootElement
 public class SalsaParameters implements Serializable {
@@ -36,7 +35,7 @@ public class SalsaParameters implements Serializable {
 	
 	// Commands
 	public static final String CLUSTAL_W_PATH = "-clustalWPath";
-	public static final String CLUSTAL_TYPE = "-clustal";
+	public static final String CLUSTAL_O_PATH = "-clustalOPath";
 	
 	// Documentation of commands
 	public static final String INPUT_FILE__DOCS = "path of a file containing the initial alignment. The file must be in FASTA format";
@@ -97,16 +96,13 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-distanceMatrix", description = SCORING_MATRIX_DOCS)
 	private String distanceMatrix;
 	
-	@Parameter(names = "-clustalPath", description = "define path where clustal program is intalled")
-	private String clustalPath;
+	@Parameter(names = CLUSTAL_O_PATH, description = "define path where clustalOmega is intalled. Use to perform the pre-alignment.")	
+	private String clustalOmegaPath;
 		
-	@Parameter(names = "-clustal", description = "define what version of Clustal must be uses for perform the pre-alignment. (could be W or Omega).")
-	private ClustalType clustalType = ClustalType.CLUSTAL_O;
-	
 	@Parameter(names = "-generatePhTree", description = GENERATE_PHYLOGENETIC_TREE_DOCS)
 	private boolean generatePhylogeneticTree = false;
 	
-	@Parameter(names = CLUSTAL_W_PATH, description = "define path where clustalW program is intalled. Required for generate tree file")
+	@Parameter(names = CLUSTAL_W_PATH, description = "define path where clustalW2 is intalled. Use to perform the pre-alignment only if " + CLUSTAL_O_PATH + " not set. Required for generate tree file")
 	private String clustalWPath;
 	
 	@Parameter(names = "-help", description="write the documentation of all commands" ,help = true)
@@ -182,16 +178,12 @@ public class SalsaParameters implements Serializable {
 		return minIterations;
 	}
 	
-	public String getClustalPath(){
-		return this.clustalPath;
+	public String getClustalOmegaPath(){
+		return this.clustalOmegaPath;
 	}
 	
 	public String getClustalWPath(){
 		return this.clustalWPath;
-	}
-	
-	public ClustalType getClustalType() {
-		return this.clustalType;
 	}
 	
 	public boolean getGeneratePhylogeneticTree() {
@@ -263,18 +255,14 @@ public class SalsaParameters implements Serializable {
 	}
 	
 	@XmlTransient
-	public void setClustalPath(String clustalPath){
-		this.clustalPath = clustalPath;
+	public void setClustalOmegaPath(String clustalOmegaPath){
+		this.clustalOmegaPath = clustalOmegaPath;
 	}
 	
 	@XmlTransient
 	public void setClustalWPath(String clustalWPath){
 		this.clustalWPath = clustalWPath;
-	}		
-	
-	public void setClustalType(ClustalType clustalType) {
-		this.clustalType = clustalType;
-	}
+	}			
 	
 	public void setGeneratePhylogeneticTree(boolean generatePhylogeneticTree) {
 		this.generatePhylogeneticTree = generatePhylogeneticTree;

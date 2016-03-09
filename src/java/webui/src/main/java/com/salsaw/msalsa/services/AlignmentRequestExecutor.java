@@ -46,6 +46,7 @@ import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.config.ServerConfiguration;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
+import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.SalsaWebParameters;
 import com.salsaw.msalsa.servlets.AlignmentResultServlet;
 import com.salsaw.msalsa.servlets.AlignmentStatusServlet;
@@ -59,6 +60,7 @@ import com.salsaw.msalsa.utils.UniProtSequenceManager;
 public class AlignmentRequestExecutor implements Runnable {
 
 	static final String RESULT_ZIP_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "-results.zip";
+		
 	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
 	private final AlignmentRequest alignmentRequest;
 	private final String webApplicationUri;
@@ -84,72 +86,77 @@ public class AlignmentRequestExecutor implements Runnable {
 
 	@Override
 	public void run() {
-		SalsaWebParameters salsaWebParameters = this.alignmentRequest.getSalsaWebParameters();
-		
-		if (salsaWebParameters.getInputFile() == null &&
-			salsaWebParameters.getUniProtIds() != null && 
-			salsaWebParameters.getUniProtIds().length != 0) {
-			// Load data from UniProt
-			UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
-					this.alignmentRequest.getAlignmentRequestPath().toString(), salsaWebParameters.getUniProtIds());
-			try {
+		try{
+			SalsaWebParameters salsaWebParameters = this.alignmentRequest.getSalsaWebParameters();
+			
+			if (salsaWebParameters.getInputFile() == null &&
+				salsaWebParameters.getUniProtIds() != null && 
+				salsaWebParameters.getUniProtIds().length != 0) {
+				// Load data from UniProt
+				UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
+						this.alignmentRequest.getAlignmentRequestPath().toString(), salsaWebParameters.getUniProtIds());
 				uniProtSequenceManager.composeInputFromId();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-			salsaWebParameters.setInputFile(uniProtSequenceManager.getGeneratedInputFile().toString());
-		}
+				salsaWebParameters.setInputFile(uniProtSequenceManager.getGeneratedInputFile().toString());
+			}
 
-		// Get path to correct Clustal process
-		switch (salsaWebParameters.getClustalType()) {
-		case CLUSTAL_W:
-			salsaWebParameters.setClustalPath(
+			// Get path to correct Clustal process
+			switch (salsaWebParameters.getClustalType()) {
+			case CLUSTAL_W:
+				salsaWebParameters.setClustalPath(
+						ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
+				break;
+
+			case CLUSTAL_O:
+				salsaWebParameters.setClustalPath(
+						ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
+				break;
+			}
+			salsaWebParameters.setClustalWPath(
 					ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
-			break;
 
-		case CLUSTAL_O:
-			salsaWebParameters.setClustalPath(
-					ConfigurationManager.getInstance().getServerConfiguration().getClustalO().getAbsolutePath());
-			break;
-		}
-		salsaWebParameters.setClustalWPath(
-				ConfigurationManager.getInstance().getServerConfiguration().getClustalW().getAbsolutePath());
+			// Create M-SALSA output file name
+			String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());
+			salsaWebParameters.setOutputFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
+					inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
 
-		// Create M-SALSA output file name
-		String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());
-		salsaWebParameters.setOutputFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
-				inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
-
-		try {
-			// Save parameters inside file
-			SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
-			salsaWebParameters
-					.setSalsaParametersFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
-							SalsaParametersXMLExporter.FILE_NAME).toString());
-			salsaParametersExporter.exportSalsaParameters(salsaWebParameters,
-					salsaWebParameters.getSalsaParametersFile());
-
-			// Start alignment
-			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
-		} catch (SALSAException | IOException | InterruptedException | JAXBException e) {
-			logger.error(e);
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String recipientEmail = salsaWebParameters.getRecipientEmail();
-		if (recipientEmail != null && recipientEmail.isEmpty() == false) {
 			try {
-				this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
-			} catch (MessagingException | IOException e) {
-				logger.error(recipientEmail, e);
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Save parameters inside file
+				SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
+				salsaWebParameters
+						.setSalsaParametersFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
+								SalsaParametersXMLExporter.FILE_NAME).toString());
+				salsaParametersExporter.exportSalsaParameters(salsaWebParameters,
+						salsaWebParameters.getSalsaParametersFile());
+
+				// Start alignment
+				SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
+			} catch (SALSAException | IOException | InterruptedException | JAXBException e) {
+				logger.error(e);
+				throw e;
+			}
+
+			String recipientEmail = salsaWebParameters.getRecipientEmail();
+			if (recipientEmail != null && recipientEmail.isEmpty() == false) {
+				try {
+					this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
+				} catch (MessagingException | IOException e) {
+					logger.error(recipientEmail, e);
+					throw e;
+				}
+			}				
+		} catch (Exception exception) {
+			ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(Paths
+					.get(this.alignmentRequest.getAlignmentRequestPath().toString(), AlignmentResult.ERROR_FILE_NAME)
+					.toString());
+			try {
+				exceptionSerializer.serialize(exception);
+			} catch (IOException e) {
+				logger.error(e);
 			}
 		}
-
-		AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
+		finally{
+			AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
+		}
 	}
 
 	private void sendResultMail(SalsaWebParameters salsaWebParameters, String recipientEmail, String jobName)

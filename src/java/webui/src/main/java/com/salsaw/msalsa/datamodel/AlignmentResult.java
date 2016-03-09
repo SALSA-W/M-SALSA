@@ -16,18 +16,21 @@
 package com.salsaw.msalsa.datamodel;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.config.ConfigurationManager;
+import com.salsaw.msalsa.services.ObjectSerializer;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
  */
 public class AlignmentResult {
+	// CONSTANTS
+	public static final String ERROR_FILE_NAME = "error.ser";
+	
 	// FIELDS
 	private final UUID id;
 	
@@ -35,7 +38,7 @@ public class AlignmentResult {
 	private String msalsaPhylogeneticTreeFilePath; 
 	
 	// CONSTRUCTOR
-	public AlignmentResult(UUID id) throws IllegalStateException, IOException
+	public AlignmentResult(UUID id) throws ClassNotFoundException, Exception
 	{
 		if (id == null){
 			throw new IllegalArgumentException("id");
@@ -62,10 +65,10 @@ public class AlignmentResult {
 	 * Load result file path from the file system 
 	 * 
 	 * @param idProccedRequest
-	 * @throws IOException
-	 * @throws IllegalStateException
+	 * @throws Exception 
+	 * @throws ClassNotFoundException 
 	 */
-	private void initSalsaData(String idProccedRequest) throws IOException, IllegalStateException{
+	private void initSalsaData(String idProccedRequest) throws ClassNotFoundException, Exception{
 		// Get the folder where the files are stored
 		File processedRequestFolder = new File(Paths.get(
 				ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
@@ -73,7 +76,7 @@ public class AlignmentResult {
 		File[] listOfFiles = processedRequestFolder.listFiles();
 		
 		String msalsaAligmentFilePath = null;
-		String msalsaPhylogeneticTreeFilePath = null; 
+		String msalsaPhylogeneticTreeFilePath = null;
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
 		    	// Search SALSA alignment and tree files
@@ -81,11 +84,16 @@ public class AlignmentResult {
 		        	msalsaAligmentFilePath = file.getAbsolutePath();
 		        	continue;
 		        }
-		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX))
-		        {
+		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX)){
 		        	msalsaPhylogeneticTreeFilePath = file.getAbsolutePath();
 		        	continue;
 		        }
+				if (file.getName().equals(ERROR_FILE_NAME)) {
+					// If errors are present throw the exception thrown inside the alignment process
+					String aligmentErrorPath = file.getAbsolutePath();
+					ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(aligmentErrorPath);
+					throw exceptionSerializer.deserialize();
+				}
 		    }
 		}
 		

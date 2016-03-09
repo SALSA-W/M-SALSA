@@ -94,7 +94,8 @@ public class AlignmentResultServlet extends HttpServlet {
 		} catch (Exception e) {
 			ServletExceptionManager.manageException(e, request, response);
 		}
-	}	
+	}
+	
 	
 	private String getPhylogeneticTreeFileContent(
 			String phylogeneticTreeFilePath) throws IOException {
@@ -111,32 +112,36 @@ public class AlignmentResultServlet extends HttpServlet {
 	}	
 	
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {			
-		// Download the requested file
-		AlignmentResultFileType alignmentResultFileType = 
-				AlignmentResultFileType.valueOf(request.getParameter(FILE_TYPE_DOWNLOAD_ATTRIBUTE));
-		
-		UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
-		if (idRequest == null){
-			// The input data are invalid
-			return;
-		}
-		
-		AlignmentResult alignmentResult = new AlignmentResult(idRequest);
-		
-		String fileToDownloadPath = null;
-		switch (alignmentResultFileType) {		
-		case Alignment:
-			fileToDownloadPath = alignmentResult.getAligmentFilePath();
-			break;
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			// Download the requested file
+			AlignmentResultFileType alignmentResultFileType = AlignmentResultFileType
+					.valueOf(request.getParameter(FILE_TYPE_DOWNLOAD_ATTRIBUTE));
 
-		case PhylogeneticTree:
-			fileToDownloadPath = alignmentResult.getPhylogeneticTreeFilePath();
-			break;
+			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
+			if (idRequest == null) {
+				// The input data are invalid
+				return;
+			}
+
+			AlignmentResult alignmentResult = new AlignmentResult(idRequest);
+
+			String fileToDownloadPath = null;
+			switch (alignmentResultFileType) {
+			case Alignment:
+				fileToDownloadPath = alignmentResult.getAligmentFilePath();
+				break;
+
+			case PhylogeneticTree:
+				fileToDownloadPath = alignmentResult.getPhylogeneticTreeFilePath();
+				break;
+			}
+
+			Path fileToDownload = Paths.get(fileToDownloadPath);
+			doDownload(request, response, fileToDownloadPath, fileToDownload.getFileName().toString());
+		} catch (Exception e) {
+			ServletExceptionManager.manageException(e, request, response);
 		}
-		
-		Path fileToDownload = Paths.get(fileToDownloadPath);		
-		doDownload(request, response, fileToDownloadPath, fileToDownload.getFileName().toString());
 	}
 	
 	/**

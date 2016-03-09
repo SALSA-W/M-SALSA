@@ -2,6 +2,7 @@ package com.salsaw.msalsa.servlets;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -51,7 +52,7 @@ public class AlignmentStatusServlet extends HttpServlet {
 			} else {
 
 				String aligmentResultServlet = "/" + AlignmentResultServlet.class.getSimpleName() + "?" + ID_PARAMETER
-						+ URLEncoder.encode(idRequest.toString(), "UTF-8");
+						+ URLEncoder.encode(idRequest.toString(), StandardCharsets.UTF_8.toString());
 				// Redirect the request to result servlet
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
 				requestDispatcher.forward(request, response);

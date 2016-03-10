@@ -1,5 +1,9 @@
 <%@page import="com.salsaw.msalsa.cli.SalsaAlgorithmExecutor"%>
 
+
+<!-- Corner ribbon: http://codepen.io/miroot/pen/wiKAp -->
+<div class="corner-ribbon top-left sticky red shadow">BETA</div>
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
@@ -15,9 +19,9 @@
 				<li><a href="http://salsa-w.github.io/M-SALSA/">Documentation</a></li>
 			</ul>
 
-			<ul class="nav navbar-nav navbar-right">
+		<!-- <ul class="nav navbar-nav navbar-right">
 				<li><a target="_blank" href="">Contacts</a></li>
-			</ul>
+			</ul>  -->	
 
 		</div>
 	</div>

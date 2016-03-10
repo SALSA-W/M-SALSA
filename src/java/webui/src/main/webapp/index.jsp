@@ -15,10 +15,7 @@
 	<jsp:include page="header.jsp" />
 </head>
 <body>
-	<!-- Corner ribbon: http://codepen.io/miroot/pen/wiKAp -->
-	<div class="corner-ribbon top-left sticky red shadow">BETA</div>
-	
-	<!-- Style theme: https://bootswatch.com/superhero/ -->
+	<!-- Style theme: https://bootswatch.com/lumen/ -->
 	<jsp:useBean id="salsaParameters"
 		class="com.salsaw.msalsa.cli.SalsaParameters" scope="request">
 	</jsp:useBean>
@@ -60,26 +57,23 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="manualInputSequence">Text
-					to align:</label>
+					to align <span title="Example:
+>Protein_1_description
+MQDRVKRPMNAFIVWSRDQRRKMALENPRMRNSEISKQLGYQWKMLTEAE
+>Protein_2_description
+MHIKKPLNAFMLYMKEMRANVVAESTLKESAAINQILGRRWHALSREEQAKYY
+>Protein_3_description
+MKKLKKHPDFPKKPLTPYFRFFMEKRAKYAKLHPEMSNLDLTKILSKKY
+>Protein_4_description
+GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span></label>
 				<div class="col-sm-10">
 					<textarea class="form-control" rows="5" id="manualInputSequence"
-						name="manualInputSequence" required data-parsley-errors-messages-disabled
-						placeholder="The input must be in FASTA/Pearson format.
-Example:
->Protein_1_description
-MQDRVKRPMNAFIVWSRDQRRKMALENPRMRNSEISKQLGYQWKMLTEAEKWPFFQEAQKLQAMHREKYPNYKYRPRRKAKMLPK
->Protein_2_description
-MHIKKPLNAFMLYMKEMRANVVAESTLKESAAINQILGRRWHALSREEQAKYYELARKERQLHMQLYPGWSARDNYGKKKKRKREK
->Protein_3_description
-MKKLKKHPDFPKKPLTPYFRFFMEKRAKYAKLHPEMSNLDLTKILSKKYKELPEKKKMKYIQDFQREKQEFERNLARFREDHPDLIQNAKK
->Protein_4_description
-GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPPKGE"></textarea>
+						name="manualInputSequence" required data-parsley-errors-messages-disabled></textarea>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="inputFile">Input
-					file:</label>
+				<label class="control-label col-sm-2" for="inputFile">Input file</label>
 				<div class="col-sm-10">
 					<!-- http://stackoverflow.com/questions/11235206/twitter-bootstrap-form-file-element-upload-button -->
 					<span class="btn btn-default btn-file">File to align<input
@@ -91,12 +85,13 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 			</div>
 			
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="newitem">Input UniProt proteins:</label>
+				<label class="control-label col-sm-2" for="newitem">Input UniProt proteins <span title="Add UniProt proteins ID.
+Example:
+P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span></label>
 				<div class="col-sm-10">
 				
-					<label for="newitem">Add UniProt proteins ID</label>
 					<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
-					<input id="newitem" type="text" placeholder="uniprod id ex: P69905" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
+					<input id="newitem" type="text" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
 						data-parsley-pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
 					<button type="button" value="Add" id="btnAdd" class="btn btn-default" disabled="disabled">Add</button>
 					
@@ -251,7 +246,7 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPP
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="email">Email:</label>
+				<label class="control-label col-sm-2" for="email">Email</label>
 				<div class="col-sm-10">
 					<input type="email" class="form-control" id="recipientEmail"
 						name="recipientEmail" data-parsley-trigger="keyup change"

@@ -10,6 +10,14 @@
 	<name>msalsa</name>
 
 	<url>http://salsa-w.github.io/M-SALSA/</url>
+	
+	<licenses>
+      <license>
+        <name>Apache License, Version 2.0</name>
+        <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>https://github.com/SALSA-W/M-SALSA/</distribution>
+      </license>
+    </licenses>
 
 	<scm>
 		<url>https://github.com/SALSA-W/M-SALSA.git</url>

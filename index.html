@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>M-SALSA by SALSA-W</title>
+    <title>M-SALSA</title>
     <meta name="language" content="English">
-    <meta name="description" content="<%=SalsaAlgorithmExecutor.M_SALSA_HEADER%> is a multiple sequence alignment program for proteins. It produces biologically meaningful multiple sequence alignments of divergent sequences. Evolutionary relationships can be seen via viewing Cladograms or Phylograms.">
+    <meta name="description" content="M-SALSA is a multiple sequence alignment program for proteins. It produces biologically meaningful multiple sequence alignments of divergent sequences. Evolutionary relationships can be seen via viewing Cladograms or Phylograms.">
     <meta name="keywords" content="bioinformatics, multiple sequence alignment, CRIBI Biotechnology Center, unipd" />
 
     <meta name="author" content="Alessandro Daniele, Fabio Cesarato, Andrea Giraldin">
@@ -152,21 +152,15 @@
 <a id="java-parameters" class="anchor" href="#optional-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Java parameters:</h3>
         <p>The Java version could call Clustal and perform the pre-alignment required from M-SALSA. This permit to avoid the
             input of <i>-phTreeFile</i> because this data is generated using <strong>Clustal.</strong></p>
+        <p>To perform the pre-alignment it's possible to use: <a href="http://www.clustal.org/omega/">ClustalOmega</a> or <a href="http://www.clustal.org/clustal2/">ClustalW2</a>.</p>
         <p>This approach permit to give and input file <i>-inputFile</i> format different from FASTA, but accepted from Clustal:
             NBRF/PIR, EMBL/UniProt, Pearson (FASTA), GDE, ALN/Clustal, GCG/MSF, RSF (see the Clustal help pages for details
             about formats).</p>
         <dl>
-            <dt>-clustal</dt>
-            <dd>define what version of Clustal must be uses for perform the pre-alignment. Possible values:
-                <ul>
-                    <li> CLUSTAL_O: <a href="http://www.clustal.org/omega/">ClustalOmega</a> (<i>default value</i>)</li>
-                    <li> CLUSTAL_W: <a href="http://www.clustal.org/clustal2/">ClustalW2</a></li>
-                </ul>
-            </dd>
-            <dt>-clustalPath</dt>
-            <dd>define the path where clustal program is available. The clustal programs are available at <a href="http://www.clustal.org/omega/">ClustalOmega</a>                and <a href="http://www.clustal.org/clustal2/">ClustalW2</a></dd>
+            <dt>-clustalOPath</dt>
+            <dd>define path where clustalOmega is intalled. Use to perform the pre-alignment</dd>
             <dt>-clustalWPath</dt>
-            <dd>define path where ClustalW2 program is installed. Required for generate tree file</dd>
+            <dd>define path where clustalW2 is intalled. Use to perform the pre-alignment only if <i>-clustalOPath<i> not set. Required for generate tree file</dd>
             <dt>-generatePhTree</dt>
             <dd>define if the phylogenetic neighbour-joining tree file must be generated. Requires ClustalW2 path defined. Could
                 be set using <i>-clustalWPath</i> or using ClustalW2 for the alignment</dd>

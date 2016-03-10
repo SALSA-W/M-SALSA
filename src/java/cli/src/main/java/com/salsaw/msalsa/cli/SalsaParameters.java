@@ -40,7 +40,7 @@ public class SalsaParameters implements Serializable {
 	// Documentation of commands
 	public static final String INPUT_FILE__DOCS = "path of a file containing the initial alignment. The file must be in FASTA format";
 	public static final String OUTPUT_FILE_DOCS = "path of the output file. This will be in FASTA format";
-	public static final String PH_TREE_FILE_DOCS = "file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score. The file must be in Newicks format. The typical exstensions are: dnd, ph";
+	public static final String PH_TREE_FILE_DOCS = "file containing the guide tree, used by M-SALSA in order to generate correct weigths for the WSP-Score. The file must be in Newicks format. The typical exstensions are: dnd, ph. Necessary only for a pre-aligned input sequence.";
 	public static final String GOP_DOCS = "GAP Opening Penalty";
 	public static final String GEP_DOCS = "GAP Extension Penalty";
 	public static final String GAMMA_DOCS = "dimension of the range of positions for a GAP during an iteration";
@@ -86,7 +86,6 @@ public class SalsaParameters implements Serializable {
 	@Parameter(names = "-matrixSerie", description = MATRIX_SERIE_DOCS)
 	private MatrixSerie matrixSerie = MatrixSerie.NONE;
 	
-	// TODO - set all parameters
 	@Parameter(names = "-scoringMatrix", description = EMBEDDED_SCORING_MATRIX_DOCS)
 	private EmbeddedScoringMatrix embeddedScoringMatrix = EmbeddedScoringMatrix.BLOSUM62;
 	

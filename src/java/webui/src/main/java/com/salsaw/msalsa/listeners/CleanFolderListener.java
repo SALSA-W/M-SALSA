@@ -74,7 +74,8 @@ public class CleanFolderListener implements ServletContextListener {
 						@Override
 						public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
 								throws IOException {
-							if (Files.getLastModifiedTime(dir).toInstant().isBefore(validityDayLimit)) {
+							if (dir.equals(workDirectory) ||
+								Files.getLastModifiedTime(dir).toInstant().isBefore(validityDayLimit)) {
 								return FileVisitResult.CONTINUE;
 							} else {
 								return FileVisitResult.SKIP_SUBTREE;

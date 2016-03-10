@@ -10,7 +10,7 @@
 	<name>msalsa</name>
 
 	<url>http://salsa-w.github.io/M-SALSA/</url>
-	
+
 	<scm>
 		<url>https://github.com/SALSA-W/M-SALSA.git</url>
 	</scm>
@@ -49,6 +49,13 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+
+			<!-- license:add-third-party -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
 			</plugin>
 
 		</plugins>

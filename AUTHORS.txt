@@ -1,0 +1,16 @@
+* M-SALSA Algorithm:
+Alessandro Daniele
+
+* Contribution and Support
+Giorgio Valle
+
+* M-SALSA C++:
+Alessandro Daniele
+
+* M-SALSA Java algorithm porting (command line client):
+Fabio Cesarato
+
+* M-SALSA Web:
+Fabio Cesarato
+Alessandro Daniele
+Andrea Giraldin

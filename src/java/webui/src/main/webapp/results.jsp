@@ -54,8 +54,8 @@
 		<jsp:include page="standard-js.jsp"/>
 		
 		<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
-			<script type="text/javascript" src="js/raphael-min.js" ></script> 
-			<script type="text/javascript" src="js/jsphylosvg-min.js"></script> 	
+			<script type="text/javascript" src="js/raphael/raphael-min.js" ></script> 
+			<script type="text/javascript" src="js/jsphylosvg/jsphylosvg-min.js"></script> 	
 			<script type="text/javascript">
 				var newickTreeString = '<%=request.getAttribute("newickTree")%>';
 				if (newickTreeString != null){

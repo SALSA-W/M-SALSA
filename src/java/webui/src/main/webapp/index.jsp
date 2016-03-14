@@ -30,6 +30,28 @@
 	<div class="container">
 		<jsp:include page="navbar.jsp" />
 
+		<!-- Modal for show validating process running -->
+		<div class="modal fade" id="validatingModal" data-backdrop="static" data-keyboard="false" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+				
+					<div class="modal-header">
+						<h1>Validating...</h1>
+					</div>
+
+					<div class="modal-body">
+						<div class="progress progress-striped active">
+							<div class="progress-bar" style="width: 100%"></div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
 		<div class="page-header">
 			<%=SalsaAlgorithmExecutor.M_SALSA_HEADER%>
 			is a new multiple sequence alignment program thought to generate

@@ -118,23 +118,31 @@ function submitSalsaParametersForm(){
 $("#" + DynamicListItemId).bind('input propertychange', function() {
     // Force validation
     let buttonDisabled = false;
-    let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();  
+    let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
     // Check regex  
     if (dynamicListItem.isValid() === false) {
         dynamicListItem.validate();
         buttonDisabled = true;
-    }        
+    }
     // Perform async validation only if regex is ok
     else {
-        asyncUniProtValidation((success: boolean) => $("#" + DynamicListBtnAdd).prop("disabled", success == false))
+        // Show loading during validation
+        $("#" + validatingModalItemId).modal();
+        asyncUniProtValidation((success: boolean) => {
+            $("#" + DynamicListBtnAdd).prop("disabled", success == false);
+            // Hide loading during validation
+            $("#" + validatingModalItemId).modal('hide');
+        }
+        );
     }
 
     $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
 });
 
 const errorInvalidIdLabel: string = "invalidIdResource";
+const validatingModalItemId: string = "validatingModal";
 
-function asyncUniProtValidation(callback: (success: boolean) => void) {
+function asyncUniProtValidation(callback: (success: boolean) => void) {    
     // Generate request based on inserted value
     $.ajax({
         url: "http://www.uniprot.org/uniprot/" + $("#" + DynamicListItemId).val() + ".fasta",
@@ -152,6 +160,15 @@ function asyncUniProtValidation(callback: (success: boolean) => void) {
         error: function() {
             // Add errors
             let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
+
+            // Clear previous errors
+            let errors = window.ParsleyUI.getErrorsMessages(dynamicListItem);
+            let oldError: any;
+            for (oldError of errors) {
+                window.ParsleyUI.removeError(dynamicListItem, name);
+            }
+            
+            // Add new errors
             window.ParsleyUI.addError(dynamicListItem, errorInvalidIdLabel, "The input value doesn't exists inside UniProt");
             callback(false);
         },

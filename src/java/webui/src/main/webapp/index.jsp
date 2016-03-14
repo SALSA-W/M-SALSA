@@ -111,14 +111,22 @@ GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTM" data-toggle="tooltip" class
 Example:
 P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span class="glyphicon glyphicon-question-sign" /></span></label>
 				<div class="col-sm-10">
-				
-					<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
-					<input id="newitem" type="text" name="newitem" pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
-						data-parsley-pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
-					<button type="button" value="Add" id="btnAdd" class="btn btn-default" disabled="disabled">Add</button>
-					
-					<ul id="dynamicList">
-					</ul>								
+					<div class="row">
+						<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
+						<div class="col-sm-2">
+							<input id="newitem" type="text" name="newitem"
+								pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
+								data-parsley-pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
+						</div>
+						<div class="col-sm-8">
+							<button type="button" value="Add" id="btnAdd"
+								class="btn btn-default" disabled="disabled">Add</button>
+						</div>
+					</div>
+					<div class="row">
+						<ul id="dynamicList">
+						</ul>
+					</div>
 				</div>
 			</div>
 

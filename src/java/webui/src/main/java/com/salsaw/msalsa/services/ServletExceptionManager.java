@@ -33,6 +33,15 @@ public class ServletExceptionManager {
 	public static final String ERROR_MESSAGE_ATTRIBUTE = "errorMessage";
 	static final Logger logger = LogManager.getLogger(ServletExceptionManager.class);
 
+	/**
+	 * Show the {@code errorMessage} passed to user in error JSP
+	 * 
+	 * @param errorMessage
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public static void manageErrorMessageException(String errorMessage, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Set error message as request attribute
 		request.setAttribute(ERROR_MESSAGE_ATTRIBUTE, errorMessage);
@@ -40,6 +49,15 @@ public class ServletExceptionManager {
 		request.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 	
+	/**
+	 * Log the exception and show the message of the {@code exception} passed to user in error JSP
+	 * 
+	 * @param exception
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public static void manageException(Exception exception, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.error(exception);

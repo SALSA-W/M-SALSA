@@ -41,6 +41,7 @@ import org.apache.logging.log4j.Logger;
 import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
 import com.salsaw.msalsa.services.ServletExceptionManager;
+import com.salsaw.msalsa.webui.exceptions.AlignmentExecutionException;
 
 
 /**
@@ -91,6 +92,11 @@ public class AlignmentResultServlet extends HttpServlet {
 			RequestDispatcher requestDispatcher =
 				    request.getRequestDispatcher("results.jsp");
 			requestDispatcher.forward(request, response);
+		}
+		catch (AlignmentExecutionException alignmentExecutionException) {
+			// Show message to user but not log exception because alredey logged
+			ServletExceptionManager.manageErrorMessageException(alignmentExecutionException.getCause().getMessage(),
+					request, response);
 		} catch (Exception e) {
 			ServletExceptionManager.manageException(e, request, response);
 		}

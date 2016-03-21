@@ -37,13 +37,11 @@ import java.util.zip.ZipOutputStream;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.config.ServerConfiguration;
@@ -62,22 +60,21 @@ import com.salsaw.msalsa.utils.UniProtSequenceManager;
 public class AlignmentRequestExecutor implements Runnable {
 
 	static final String RESULT_ZIP_FILE_NAME = SalsaAlgorithmExecutor.M_SALSA_HEADER + "-results.zip";
-		
+
 	static final Logger logger = LogManager.getLogger(AlignmentRequestExecutor.class);
 	static final ExecutorService executor = Executors
 			.newFixedThreadPool(ConfigurationManager.getInstance().getServerConfiguration().getThreadPoolMaxNumber());
-		
+
 	private final AlignmentRequest alignmentRequest;
 	private final String webApplicationUri;
-	
+
 	public AlignmentRequestExecutor(String webApplicationUri, AlignmentRequest alignmentRequest) {
 		if (alignmentRequest == null) {
 			throw new IllegalArgumentException("alignmentRequest");
 		}
-		if (webApplicationUri == null ||
-			webApplicationUri.isEmpty() == true){
+		if (webApplicationUri == null || webApplicationUri.isEmpty() == true) {
 			throw new IllegalArgumentException("webApplicationUri");
-		}		
+		}
 
 		this.alignmentRequest = alignmentRequest;
 		this.webApplicationUri = webApplicationUri;
@@ -89,12 +86,11 @@ public class AlignmentRequestExecutor implements Runnable {
 
 	@Override
 	public void run() {
-		try{
+		try {
 			SalsaWebParameters salsaWebParameters = this.alignmentRequest.getSalsaWebParameters();
-			
-			if (salsaWebParameters.getInputFile() == null &&
-				salsaWebParameters.getUniProtIds() != null && 
-				salsaWebParameters.getUniProtIds().length != 0) {
+
+			if (salsaWebParameters.getInputFile() == null && salsaWebParameters.getUniProtIds() != null
+					&& salsaWebParameters.getUniProtIds().length != 0) {
 				// Load data from UniProt
 				UniProtSequenceManager uniProtSequenceManager = new UniProtSequenceManager(
 						this.alignmentRequest.getAlignmentRequestPath().toString(), salsaWebParameters.getUniProtIds());
@@ -122,42 +118,33 @@ public class AlignmentRequestExecutor implements Runnable {
 			salsaWebParameters.setOutputFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
 					inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
 
-			try {
-				// Save parameters inside file
-				SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
-				salsaWebParameters
-						.setSalsaParametersFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
-								SalsaParametersXMLExporter.FILE_NAME).toString());
-				salsaParametersExporter.exportSalsaParameters(salsaWebParameters,
-						salsaWebParameters.getSalsaParametersFile());
+			// Save parameters inside file
+			SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
+			salsaWebParameters
+					.setSalsaParametersFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
+							SalsaParametersXMLExporter.FILE_NAME).toString());
+			salsaParametersExporter.exportSalsaParameters(salsaWebParameters,
+					salsaWebParameters.getSalsaParametersFile());
 
-				// Start alignment
-				SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
-			} catch (SALSAException | IOException | InterruptedException | JAXBException e) {
-				logger.error(e);
-				throw e;
-			}
+			// Start alignment
+			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
 
 			String recipientEmail = salsaWebParameters.getRecipientEmail();
 			if (recipientEmail != null && recipientEmail.isEmpty() == false) {
-				try {
-					this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
-				} catch (MessagingException | IOException e) {
-					logger.error(recipientEmail, e);
-					throw e;
-				}
-			}				
+				this.sendResultMail(salsaWebParameters, recipientEmail, this.alignmentRequest.getId().toString());
+			}
 		} catch (Exception exception) {
+			// Log exception once 
+			logger.error(exception);
 			try {
-				ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(Paths
-						.get(this.alignmentRequest.getAlignmentRequestPath().toString(), AlignmentResult.ERROR_FILE_NAME)
-						.toString());
+				ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(
+						Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
+								AlignmentResult.ERROR_FILE_NAME).toString());
 				exceptionSerializer.serialize(exception);
 			} catch (IOException e) {
 				logger.error(e);
 			}
-		}
-		finally{
+		} finally {
 			AlignmentRequestManager.getInstance().endManageRequest(this.alignmentRequest.getId());
 		}
 	}
@@ -170,17 +157,15 @@ public class AlignmentRequestExecutor implements Runnable {
 		GmailSender sender = new GmailSender();
 		sender.setSender(serverConfiguration.getMailUsername(), serverConfiguration.getMailPassword());
 		sender.addRecipient(recipientEmail);
-		
-		if (salsaWebParameters.getUserJobTitle() != null &&
-			salsaWebParameters.getUserJobTitle().isEmpty() == false){
+
+		if (salsaWebParameters.getUserJobTitle() != null && salsaWebParameters.getUserJobTitle().isEmpty() == false) {
 			sender.setSubject(salsaWebParameters.getUserJobTitle());
-		}
-		else{
+		} else {
 			String inpuFileName = new File(salsaWebParameters.getInputFile()).getName();
-			sender.setSubject(String.format("'%s' job completed for input '%s' id '%s'", 
+			sender.setSubject(String.format("'%s' job completed for input '%s' id '%s'",
 					SalsaAlgorithmExecutor.M_SALSA_HEADER, jobName, inpuFileName));
 		}
-		
+
 		sender.setBody(composeMailMessage(jobName), StandardCharsets.ISO_8859_1.toString(), "html");
 		String resultsZipFile = composeZipResultFile(salsaWebParameters);
 		sender.addAttachment(resultsZipFile);
@@ -188,8 +173,8 @@ public class AlignmentRequestExecutor implements Runnable {
 		// Delete the file use only as attachment
 		Files.delete(Paths.get(resultsZipFile));
 	}
-	
-	private String composeMailMessage(String jobName) throws UnknownHostException, MalformedURLException{
+
+	private String composeMailMessage(String jobName) throws UnknownHostException, MalformedURLException {
 		String resultLink = GetJobResultPath(this.webApplicationUri, jobName);
 		StringBuilder messageBuilder = new StringBuilder();
 		messageBuilder.append("<h1>");
@@ -226,21 +211,24 @@ public class AlignmentRequestExecutor implements Runnable {
 		messageBuilder.append("<p>");
 		messageBuilder.append(SalsaAlgorithmExecutor.M_SALSA_HEADER);
 		messageBuilder.append(" TEAM: ");
-		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ALESSANDRO_DANIELE, SalsaAlgorithmExecutor.AUTHOR_LINK_ALESSANDRO_DANIELE);
-		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_FABIO_CESARATO, SalsaAlgorithmExecutor.AUTHOR_LINK_FABIO_CESARATO);
-		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ANDREA_GIRALDIN, SalsaAlgorithmExecutor.AUTHOR_LINK_ANDREA_GIRALDIN);		
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ALESSANDRO_DANIELE,
+				SalsaAlgorithmExecutor.AUTHOR_LINK_ALESSANDRO_DANIELE);
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_FABIO_CESARATO,
+				SalsaAlgorithmExecutor.AUTHOR_LINK_FABIO_CESARATO);
+		addAuthor(messageBuilder, SalsaAlgorithmExecutor.AUTHOR_ANDREA_GIRALDIN,
+				SalsaAlgorithmExecutor.AUTHOR_LINK_ANDREA_GIRALDIN);
 		messageBuilder.append("</p>");
-		
+
 		return messageBuilder.toString();
 	}
-	
-	private StringBuilder addAuthor(StringBuilder messageBuilder, String name, String link){
+
+	private StringBuilder addAuthor(StringBuilder messageBuilder, String name, String link) {
 		messageBuilder.append("<address class=\"author\"><a rel=\"author\" href=\"");
 		messageBuilder.append(link);
 		messageBuilder.append("\">");
 		messageBuilder.append(name);
 		messageBuilder.append("</a></address>");
-		
+
 		return messageBuilder;
 	}
 
@@ -254,10 +242,10 @@ public class AlignmentRequestExecutor implements Runnable {
 				List<String> filesToCompress = new ArrayList<String>();
 				filesToCompress.add(salsaWebParameters.getInputFile());
 				filesToCompress.add(salsaWebParameters.getOutputFile());
-				
-				//TODO add next line when MSALSA parameters are loadable
-				//filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
-				if (salsaWebParameters.getGeneratePhylogeneticTree() == true){
+
+				// TODO add next line when MSALSA parameters are loadable
+				// filesToCompress.add(salsaWebParameters.getSalsaParametersFile());
+				if (salsaWebParameters.getGeneratePhylogeneticTree() == true) {
 					filesToCompress.add(salsaWebParameters.getPhylogeneticTreeFile());
 				}
 
@@ -273,11 +261,11 @@ public class AlignmentRequestExecutor implements Runnable {
 						byte[] buffer = new byte[1024];
 						while ((len = in.read(buffer)) > 0) {
 							zipOutStream.write(buffer, 0, len);
-						}						
+						}
 						in.close();
-					}				
+					}
 					zipOutStream.closeEntry();
-				}				
+				}
 				zipOutStream.close();
 			}
 		}
@@ -285,17 +273,17 @@ public class AlignmentRequestExecutor implements Runnable {
 		return resultZipFilePath;
 	}
 
-	public static String GetJobResultPath(String webApplicationUri, String jobId) throws UnknownHostException, MalformedURLException {
+	public static String GetJobResultPath(String webApplicationUri, String jobId)
+			throws UnknownHostException, MalformedURLException {
 		int indexOfLocalHost = webApplicationUri.indexOf("localhost");
-		if (indexOfLocalHost != -1)
-		{
+		if (indexOfLocalHost != -1) {
 			// localhost - replace with local ip
 			InetAddress ip = InetAddress.getLocalHost();
 			webApplicationUri = webApplicationUri.replace("localhost", ip.getHostAddress());
 		}
 
 		// TODO - check with DNS on production
-		return webApplicationUri +  "/" + AlignmentResultServlet.class.getSimpleName() + "?"
+		return webApplicationUri + "/" + AlignmentResultServlet.class.getSimpleName() + "?"
 				+ AlignmentStatusServlet.ID_PARAMETER + "=" + jobId;
 	}
 

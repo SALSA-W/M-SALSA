@@ -27,4 +27,9 @@ public class SALSAException extends Exception {
 	public SALSAException(String message){
 		super(message);
 	}
+
+	
+	public SALSAException(Throwable cause) {
+		super(cause);
+	}
 }

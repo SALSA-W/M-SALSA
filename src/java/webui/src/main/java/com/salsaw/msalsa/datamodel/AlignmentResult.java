@@ -16,12 +16,15 @@
 package com.salsaw.msalsa.datamodel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.services.ObjectSerializer;
+import com.salsaw.msalsa.webui.exceptions.AlignmentExecutionException;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -67,8 +70,11 @@ public class AlignmentResult {
 	 * @param idProccedRequest
 	 * @throws Exception 
 	 * @throws ClassNotFoundException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws AlignmentExecutionException 
 	 */
-	private void initSalsaData(String idProccedRequest) throws ClassNotFoundException, Exception{
+	private void initSalsaData(String idProccedRequest) throws ClassNotFoundException, AlignmentExecutionException, FileNotFoundException, IOException {
 		// Get the folder where the files are stored
 		File processedRequestFolder = new File(Paths.get(
 				ConfigurationManager.getInstance().getServerConfiguration().getTemporaryFilePath(),
@@ -92,7 +98,7 @@ public class AlignmentResult {
 					// If errors are present throw the exception thrown inside the alignment process
 					String aligmentErrorPath = file.getAbsolutePath();
 					ObjectSerializer<Exception> exceptionSerializer = new ObjectSerializer<>(aligmentErrorPath);
-					throw exceptionSerializer.deserialize();
+					throw new AlignmentExecutionException(exceptionSerializer.deserialize());
 				}
 		    }
 		}

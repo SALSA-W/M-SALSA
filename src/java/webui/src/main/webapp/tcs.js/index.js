@@ -96,17 +96,17 @@ $("#" + DynamicListItemId).bind('input propertychange', function () {
     }
     else {
         // Show loading during validation
-        $("#" + validatingModalItemId).modal();
+        $("#" + ValidatingModalItemId).modal();
         asyncUniProtValidation(function (success) {
             $("#" + DynamicListBtnAdd).prop("disabled", success == false);
             // Hide loading during validation
-            $("#" + validatingModalItemId).modal('hide');
+            $("#" + ValidatingModalItemId).modal('hide');
         });
     }
     $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
 });
-var errorInvalidIdLabel = "invalidIdResource";
-var validatingModalItemId = "validatingModal";
+var ErrorInvalidIdLabel = "invalidIdResource";
+var ValidatingModalItemId = "validatingModal";
 function asyncUniProtValidation(callback) {
     // Generate request based on inserted value
     $.ajax({
@@ -116,7 +116,7 @@ function asyncUniProtValidation(callback) {
             200: function () {
                 // Remove errors
                 var dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
-                window.ParsleyUI.removeError(dynamicListItem, errorInvalidIdLabel);
+                window.ParsleyUI.removeError(dynamicListItem, ErrorInvalidIdLabel);
                 dynamicListItem.validate();
                 callback(true);
             },
@@ -132,7 +132,7 @@ function asyncUniProtValidation(callback) {
                 window.ParsleyUI.removeError(dynamicListItem, name);
             }
             // Add new errors
-            window.ParsleyUI.addError(dynamicListItem, errorInvalidIdLabel, "The input value doesn't exists inside UniProt");
+            window.ParsleyUI.addError(dynamicListItem, ErrorInvalidIdLabel, "The input value doesn't exists inside UniProt");
             callback(false);
         },
         timeout: 2000,

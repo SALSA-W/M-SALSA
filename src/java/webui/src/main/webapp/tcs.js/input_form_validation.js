@@ -15,7 +15,7 @@
  */
 /// <reference path="../typings/main.d.ts" />
 "use strict";
-var aminoAcids = [
+var AminoAcidsSequenceContent = [
     "A",
     "C",
     "D",
@@ -36,6 +36,9 @@ var aminoAcids = [
     "V",
     "W",
     "Y",
+    // not possible two differentiate two closely related amino acids
+    "B",
+    "Z",
 ];
 var NewLine = "\n";
 var EmptyString = "";
@@ -83,7 +86,7 @@ var ProteinValidator = (function () {
                 line++;
                 htmlContent += HTMLNewLine;
             }
-            else if (input[i] != WhiteSpace && aminoAcids.indexOf(input[i]) === -1) {
+            else if (input[i] != WhiteSpace && AminoAcidsSequenceContent.indexOf(input[i]) === -1) {
                 // Not found
                 var error = "Invalid character '" + input[i] + "'";
                 error += " in sequence '" + sequenceName;
@@ -111,6 +114,8 @@ function validateSequenceInputText() {
     // Avoid to manage empty strings
     if (inputSequences != null &&
         inputSequences.trim() != EmptyString) {
+        // Reset error
+        $("#" + ValidationErrorsMessageId).html(null);
         var htmlValidationResults = ProteinValidator.Validate(inputSequences);
         if (htmlValidationResults != null) {
             // Set error content and show
@@ -118,8 +123,6 @@ function validateSequenceInputText() {
             $("#" + ValidationErrorsId).show();
             return false;
         }
-        // Reset error
-        $("#" + ValidationErrorsMessageId).html(null);
         $("#" + ValidationErrorsId).hide();
     }
     return true;

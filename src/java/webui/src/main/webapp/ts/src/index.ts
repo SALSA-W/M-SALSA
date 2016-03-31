@@ -127,11 +127,11 @@ $("#" + DynamicListItemId).bind('input propertychange', function() {
     // Perform async validation only if regex is ok
     else {
         // Show loading during validation
-        $("#" + validatingModalItemId).modal();
+        $("#" + ValidatingModalItemId).modal();
         asyncUniProtValidation((success: boolean) => {
             $("#" + DynamicListBtnAdd).prop("disabled", success == false);
             // Hide loading during validation
-            $("#" + validatingModalItemId).modal('hide');
+            $("#" + ValidatingModalItemId).modal('hide');
         }
         );
     }
@@ -139,8 +139,8 @@ $("#" + DynamicListItemId).bind('input propertychange', function() {
     $("#" + DynamicListBtnAdd).prop("disabled", buttonDisabled);
 });
 
-const errorInvalidIdLabel: string = "invalidIdResource";
-const validatingModalItemId: string = "validatingModal";
+const ErrorInvalidIdLabel: string = "invalidIdResource";
+const ValidatingModalItemId: string = "validatingModal";
 
 function asyncUniProtValidation(callback: (success: boolean) => void) {    
     // Generate request based on inserted value
@@ -151,7 +151,7 @@ function asyncUniProtValidation(callback: (success: boolean) => void) {
             200: function() {
                 // Remove errors
                 let dynamicListItem = $("input[name=" + DynamicListItemId + "]").parsley();
-                window.ParsleyUI.removeError(dynamicListItem, errorInvalidIdLabel);
+                window.ParsleyUI.removeError(dynamicListItem, ErrorInvalidIdLabel);
                 dynamicListItem.validate();
                 callback(true);
             },
@@ -169,7 +169,7 @@ function asyncUniProtValidation(callback: (success: boolean) => void) {
             }
             
             // Add new errors
-            window.ParsleyUI.addError(dynamicListItem, errorInvalidIdLabel, "The input value doesn't exists inside UniProt");
+            window.ParsleyUI.addError(dynamicListItem, ErrorInvalidIdLabel, "The input value doesn't exists inside UniProt");
             callback(false);
         },
         timeout: 2000,

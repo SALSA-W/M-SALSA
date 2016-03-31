@@ -18,7 +18,7 @@
 
 "use strict";
 
-const aminoAcids: Array<string> = [
+const AminoAcidsSequenceContent: Array<string> = [
     "A",//Ala
     "C",//Cys
     "D",//Asp
@@ -39,8 +39,10 @@ const aminoAcids: Array<string> = [
     "V",//Val
     "W",//Trp
     "Y",//Tyr
+    // not possible two differentiate two closely related amino acids
+    "B",//Asx (asparagine/aspartic acid)
+    "Z",//Glx (glutamine/glutamic acid) 
 ];
-
 const NewLine: string = "\n";
 const EmptyString: string = "";
 const WhiteSpace: string = " ";
@@ -92,7 +94,7 @@ class ProteinValidator {
 
                 htmlContent += HTMLNewLine;
             }
-            else if (input[i] != WhiteSpace && aminoAcids.indexOf(input[i]) === -1) {
+            else if (input[i] != WhiteSpace && AminoAcidsSequenceContent.indexOf(input[i]) === -1) {
                 // Not found
                 let error = "Invalid character '" + input[i] + "'";
                 error += " in sequence '" + sequenceName;
@@ -123,6 +125,9 @@ function validateSequenceInputText(): boolean {
     // Avoid to manage empty strings
     if (inputSequences != null &&
         inputSequences.trim() != EmptyString) {
+        // Reset error
+        $("#" + ValidationErrorsMessageId).html(null);
+
         let htmlValidationResults = ProteinValidator.Validate(inputSequences);
         if (htmlValidationResults != null) {
             // Set error content and show
@@ -131,8 +136,7 @@ function validateSequenceInputText(): boolean {
             return false;
         }
 
-        // Reset error
-        $("#" + ValidationErrorsMessageId).html(null);
+
         $("#" + ValidationErrorsId).hide();
     }
 

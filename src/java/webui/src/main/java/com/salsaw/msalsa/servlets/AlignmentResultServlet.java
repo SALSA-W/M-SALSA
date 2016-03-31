@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.salsaw.msalsa.algorithm.FastaFileReader;
 import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
 import com.salsaw.msalsa.services.ServletExceptionManager;
@@ -57,7 +58,9 @@ public class AlignmentResultServlet extends HttpServlet {
 	private static final long serialVersionUID = 2516441712372871271L;
 	private static final int BUFSIZE = 4096;
 	public static final String FILE_TYPE_DOWNLOAD_ATTRIBUTE = "fileToDownload";
-	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";	
+	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";
+	public static final String ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE = "alignmentSequencesHeaders";
+	public static final String ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE = "alignmentSequencesContent";
 	static final Logger logger = LogManager.getLogger(AlignmentResultServlet.class);
 
 	/**
@@ -83,12 +86,13 @@ public class AlignmentResultServlet extends HttpServlet {
 				request.setAttribute("newickTree", newickTree);
 			}	
 			request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
-			
-			String aligmentFileContent =  new String(Files.readAllBytes(Paths.get(alignmentResult.getAligmentFilePath())));
-			request.setAttribute("aligmentFileContent", aligmentFileContent);
-					
+								
 			// Redirect the request to index and add info to request
+			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFilePath());
+			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
+			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
 			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
+			
 			RequestDispatcher requestDispatcher =
 				    request.getRequestDispatcher("results.jsp");
 			requestDispatcher.forward(request, response);

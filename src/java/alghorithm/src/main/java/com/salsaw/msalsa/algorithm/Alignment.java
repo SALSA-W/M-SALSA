@@ -15,10 +15,8 @@
  */
 package com.salsaw.msalsa.algorithm;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -90,7 +88,7 @@ public final class Alignment {
 	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTORS
-
+	
 	public Alignment(final String inputFilePath, final String treeFileName,
 			final SubstitutionMatrix s, final float gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
@@ -408,54 +406,14 @@ public final class Alignment {
 	 */
 	private ArrayList<String> readInputSequences(String filePath)
 			throws IOException {
-		ArrayList<String> sequences = new ArrayList<>();
-		ArrayList<String> sequencesHeaders = new ArrayList<>();
+		FastaFileReader fastaReader = new FastaFileReader(filePath);
 
-		try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
-			String line;
-			StringBuffer contentBuffer = new StringBuffer();
-
-			// https://github.com/joewandy/BioinfoApp/blob/master/src/com/joewandy/bioinfoapp/model/core/io/FastaReader.java
-
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.isEmpty()) {
-					continue;
-				}
-				char firstChar = line.charAt(0);
-
-				if (firstChar == '>') {
-					if (contentBuffer.length() != 0) {
-						// save the previous sequence read
-						sequences.add(contentBuffer.toString());
-					}
-
-					// now can get the new id > ..
-					sequencesHeaders.add(line.substring(1).trim());
-
-					// start a new content buffer
-					contentBuffer = new StringBuffer();
-
-				} else if (firstChar == ';') {
-					// comment line, skip it
-				} else {
-					// carry on reading sequence content
-					contentBuffer.append(line.trim());
-				}
-			}
-
-			if (contentBuffer.length() != 0) {
-				// save the last sequence
-				sequences.add(contentBuffer.toString());
-			}
-		}
-
-		this.numberOfSequences = sequences.size();
-		this.properties = sequencesHeaders.toArray(new String[sequencesHeaders
+		this.numberOfSequences = fastaReader.getSequences().size();
+		this.properties = fastaReader.getSequencesHeaders().toArray(new String[fastaReader.getSequencesHeaders()
 				.size()]);
-		this.length = sequences.get(0).length();
+		this.length = fastaReader.getSequences().get(0).length();
 
-		return sequences;
+		return fastaReader.getSequences();
 	}
 
 	/**

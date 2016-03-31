@@ -18,30 +18,44 @@
 
 "use strict";
 
-const AminoAcids: Array<string> = [
-    "A",//Ala
-    "C",//Cys
-    "D",//Asp
-    "E",//Glu
-    "F",//Phe
-    "G",//Gly
-    "H",//His
-    "I",//Ile
-    "K",//Lys
-    "L",//Leu
-    "M",//Met
-    "N",//Asn
-    "P",//Pro
-    "Q",//Gln
-    "R",//Arg
-    "S",//Ser
-    "T",//Thr
-    "V",//Val
-    "W",//Trp
-    "Y",//Tyr
-];
 const AlignmentSequenceId: string = "sequencesContent";
 const ApplyAlignmentColoursButtonId: string = "colorsButton";
+
+const NonPolarClass: string = "nonPolar";
+const AcidicPolarClass: string = "acidicPolar";
+const BasicPolarClass: string = "basicPolar";
+const PolarClass: string = "polar";
+const NotAminoAcidClas: string  = "NotAA";
+
+// Create a map to get amino acid polarity
+interface IAminoPolarityMap {
+    [aminoacid: string]: string;
+}
+var AminoPolarityMap: IAminoPolarityMap = {};
+// non polar
+AminoPolarityMap["A"] = NonPolarClass;
+AminoPolarityMap["V"] = NonPolarClass;
+AminoPolarityMap["F"] = NonPolarClass;
+AminoPolarityMap["P"] = NonPolarClass;
+AminoPolarityMap["M"] = NonPolarClass;
+AminoPolarityMap["I"] = NonPolarClass;
+AminoPolarityMap["L"] = NonPolarClass;
+AminoPolarityMap["W"] = NonPolarClass;
+// acidicPolar
+AminoPolarityMap["D"] = AcidicPolarClass;
+AminoPolarityMap["E"] = AcidicPolarClass;
+// basicPolar
+AminoPolarityMap["R"] = BasicPolarClass;
+AminoPolarityMap["K"] = BasicPolarClass;
+// polar
+AminoPolarityMap["S"] = PolarClass;
+AminoPolarityMap["T"] = PolarClass;
+AminoPolarityMap["Y"] = PolarClass;
+AminoPolarityMap["H"] = PolarClass;
+AminoPolarityMap["C"] = PolarClass;
+AminoPolarityMap["N"] = PolarClass;
+AminoPolarityMap["G"] = PolarClass;
+AminoPolarityMap["Q"] = PolarClass;
 
 class AminoAcidColorsApplyer {
     private static colourApplayed: boolean = false;
@@ -60,8 +74,7 @@ class AminoAcidColorsApplyer {
         }
         
         // Set colour to content
-        $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentWithColour);
-        
+        $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentWithColour);        
     }
 
     public static toogleColour() {
@@ -79,13 +92,12 @@ class AminoAcidColorsApplyer {
     }
 
     private static applySimbolColour(aminoAcid: string): string {
-        if (AminoAcids.indexOf(aminoAcid) > -1)
-        {
+        if (aminoAcid in AminoPolarityMap) {
             // Is an amino acid
-           return '<span class="' + aminoAcid + '">' + aminoAcid + '</span>'; 
+            return '<span class="' + AminoPolarityMap[aminoAcid] + '">' + aminoAcid + '</span>';
         }
         // Isn't an amino acid
-        return '<span class="NotAA">' + aminoAcid + '</span>';
+        return '<span class="' + NotAminoAcidClas + '">' + aminoAcid + '</span>';
     }
 }
 

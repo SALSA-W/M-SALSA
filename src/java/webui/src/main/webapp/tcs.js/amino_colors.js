@@ -15,30 +15,38 @@
  */
 /// <reference path="../typings/main.d.ts" />
 "use strict";
-var AminoAcids = [
-    "A",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "K",
-    "L",
-    "M",
-    "N",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "V",
-    "W",
-    "Y",
-];
 var AlignmentSequenceId = "sequencesContent";
 var ApplyAlignmentColoursButtonId = "colorsButton";
+var NonPolarClass = "nonPolar";
+var AcidicPolarClass = "acidicPolar";
+var BasicPolarClass = "basicPolar";
+var PolarClass = "polar";
+var NotAminoAcidClas = "NotAA";
+var AminoPolarityMap = {};
+// non polar
+AminoPolarityMap["A"] = NonPolarClass;
+AminoPolarityMap["V"] = NonPolarClass;
+AminoPolarityMap["F"] = NonPolarClass;
+AminoPolarityMap["P"] = NonPolarClass;
+AminoPolarityMap["M"] = NonPolarClass;
+AminoPolarityMap["I"] = NonPolarClass;
+AminoPolarityMap["L"] = NonPolarClass;
+AminoPolarityMap["W"] = NonPolarClass;
+// acidicPolar
+AminoPolarityMap["D"] = AcidicPolarClass;
+AminoPolarityMap["E"] = AcidicPolarClass;
+// basicPolar
+AminoPolarityMap["R"] = BasicPolarClass;
+AminoPolarityMap["K"] = BasicPolarClass;
+// polar
+AminoPolarityMap["S"] = PolarClass;
+AminoPolarityMap["T"] = PolarClass;
+AminoPolarityMap["Y"] = PolarClass;
+AminoPolarityMap["H"] = PolarClass;
+AminoPolarityMap["C"] = PolarClass;
+AminoPolarityMap["N"] = PolarClass;
+AminoPolarityMap["G"] = PolarClass;
+AminoPolarityMap["Q"] = PolarClass;
 var AminoAcidColorsApplyer = (function () {
     function AminoAcidColorsApplyer() {
     }
@@ -69,12 +77,12 @@ var AminoAcidColorsApplyer = (function () {
         }
     };
     AminoAcidColorsApplyer.applySimbolColour = function (aminoAcid) {
-        if (AminoAcids.indexOf(aminoAcid) > -1) {
+        if (aminoAcid in AminoPolarityMap) {
             // Is an amino acid
-            return '<span class="' + aminoAcid + '">' + aminoAcid + '</span>';
+            return '<span class="' + AminoPolarityMap[aminoAcid] + '">' + aminoAcid + '</span>';
         }
         // Isn't an amino acid
-        return '<span class="NotAA">' + aminoAcid + '</span>';
+        return '<span class="' + NotAminoAcidClas + '">' + aminoAcid + '</span>';
     };
     AminoAcidColorsApplyer.colourApplayed = false;
     AminoAcidColorsApplyer.alignmentContentWithColour = "";

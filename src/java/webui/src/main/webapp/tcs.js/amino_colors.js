@@ -53,11 +53,26 @@ var AminoAcidColorsApplyer = (function () {
     AminoAcidColorsApplyer.applyColour = function () {
         // Save clean content
         AminoAcidColorsApplyer.alignmentContentNoColour = $("#" + AlignmentSequenceId).html();
+        if (AminoAcidColorsApplyer.alignmentContentNoColour.length === 0) {
+            // nothing to do
+            return;
+        }
         if (AminoAcidColorsApplyer.alignmentContentWithColour === "") {
+            // Create first element color
+            var styleClass = AminoAcidColorsApplyer.getAminoClass(AminoAcidColorsApplyer.alignmentContentNoColour[0]);
+            var htmlContent = '<span class="' + styleClass + '">' + AminoAcidColorsApplyer.alignmentContentNoColour[0];
+            var aminoColour = {
+                htmlContent: htmlContent,
+                styleClass: styleClass
+            };
+            AminoAcidColorsApplyer.alignmentContentWithColour += htmlContent;
             // Create colours for amino acids
-            for (var i = 0, len = AminoAcidColorsApplyer.alignmentContentNoColour.length; i < len; i++) {
-                AminoAcidColorsApplyer.alignmentContentWithColour += AminoAcidColorsApplyer.applySimbolColour(AminoAcidColorsApplyer.alignmentContentNoColour[i]);
+            for (var i = 1, len = AminoAcidColorsApplyer.alignmentContentNoColour.length; i < len; i++) {
+                aminoColour = AminoAcidColorsApplyer.applySimbolColour(AminoAcidColorsApplyer.alignmentContentNoColour[i], aminoColour);
+                AminoAcidColorsApplyer.alignmentContentWithColour += aminoColour.htmlContent;
             }
+            // Close last span
+            AminoAcidColorsApplyer.alignmentContentWithColour += '</span>';
         }
         // Set colour to content
         $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentWithColour);
@@ -76,13 +91,30 @@ var AminoAcidColorsApplyer = (function () {
             AminoAcidColorsApplyer.colourApplayed = false;
         }
     };
-    AminoAcidColorsApplyer.applySimbolColour = function (aminoAcid) {
+    AminoAcidColorsApplyer.getAminoClass = function (aminoAcid) {
         if (aminoAcid in AminoPolarityMap) {
             // Is an amino acid
-            return '<span class="' + AminoPolarityMap[aminoAcid] + '">' + aminoAcid + '</span>';
+            return AminoPolarityMap[aminoAcid];
         }
         // Isn't an amino acid
-        return '<span class="' + NotAminoAcidClas + '">' + aminoAcid + '</span>';
+        return NotAminoAcidClas;
+    };
+    AminoAcidColorsApplyer.applySimbolColour = function (aminoAcid, previousAminoColour) {
+        var currentStyleClass = AminoAcidColorsApplyer.getAminoClass(aminoAcid);
+        if (currentStyleClass === previousAminoColour.styleClass) {
+            // The current span is already correct
+            return {
+                htmlContent: aminoAcid,
+                styleClass: currentStyleClass
+            };
+        }
+        else {
+            // Close old span and start new one
+            return {
+                htmlContent: '</span><span class="' + currentStyleClass + '">' + aminoAcid,
+                styleClass: currentStyleClass
+            };
+        }
     };
     AminoAcidColorsApplyer.colourApplayed = false;
     AminoAcidColorsApplyer.alignmentContentWithColour = "";

@@ -49,3 +49,4 @@ if (ConfigurationManager.getInstance().getServerConfiguration().getGoogleAnalyti
 <link rel="stylesheet" href="css/spacer.css">
 <link rel="stylesheet" href="css/corner-ribbon.css">
 <link rel="stylesheet" href="css/info-button.css">
+<link rel="stylesheet" href="css/tabs.css">

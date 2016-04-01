@@ -46,25 +46,33 @@
 			</c:if>
 		</div>
 
-		<button id="colorsButton" class="btn btn-default">Show colors</button>
-		<div class="row">
-			<%
-				// Print all alignment data
-			%>
-			<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${alignmentSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach>
-			</pre>
-			<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach>
-			</pre>
-		</div>
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#alignment">Alignment</a></li>
+			<li><a data-toggle="tab" href="#tree">Phylogenetic Tree</a></li>
+		</ul>
 
-		<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
-			<div class="spacer"></div>
-
-			<div class="col-md-12 text-center">
-				<div id="svgCanvas"></div>
+		<div class="tab-content">
+			<div id="alignment" class="tab-pane fade in active">
+				<button id="colorsButton" class="btn btn-default">Show colors</button>
+				<div class="row correct-margin">
+					<%
+						// Print all alignment data
+					%>
+					<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${alignmentSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach><%=Constants.NEW_LINE%></pre>
+					<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+				</div>
 			</div>
-
-		</c:if>
+			
+			<div id="tree" class="tab-pane fade">
+				<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
+					<div class="spacer"></div>
+		
+					<div class="col-md-12 text-center">
+						<div id="svgCanvas"></div>
+					</div>
+				</c:if>
+			</div>
+		</div>
 
 		<jsp:include page="footer.jsp"/>
 		<jsp:include page="standard-js.jsp"/>

@@ -72,15 +72,16 @@
 		<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
 			<script type="text/javascript" src="js/raphael/raphael-min.js" ></script> 
 			<script type="text/javascript" src="js/jsphylosvg/jsphylosvg-min.js"></script> 	
-			<script type="text/javascript">
+			<script type="text/javascript">			
 				var newickTreeString = '<%=request.getAttribute("newickTree")%>';
+				var sequencesNumber = ${alignmentSequencesNumber};
 				if (newickTreeString != null){
 					window.onload = function(){
 						var dataObject = { newick: newickTreeString };
 						phylocanvas = new Smits.PhyloCanvas(
 							dataObject,
 							'svgCanvas', 
-							500, 500
+							1100, 27 * sequencesNumber
 						);
 						document.getElementById('tree').setAttribute("style","height:500px");
 					};

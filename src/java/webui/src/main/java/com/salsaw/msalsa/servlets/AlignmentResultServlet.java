@@ -61,6 +61,7 @@ public class AlignmentResultServlet extends HttpServlet {
 	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";
 	public static final String ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE = "alignmentSequencesHeaders";
 	public static final String ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE = "alignmentSequencesContent";
+	public static final String ALIGNMENT_FILE_SEQUENCES_NUMBER = "alignmentSequencesNumber";
 	static final Logger logger = LogManager.getLogger(AlignmentResultServlet.class);
 
 	/**
@@ -91,6 +92,7 @@ public class AlignmentResultServlet extends HttpServlet {
 			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFilePath());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
+			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
 			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
 			
 			RequestDispatcher requestDispatcher =

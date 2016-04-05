@@ -73,17 +73,18 @@
 			<script type="text/javascript" src="js/raphael/raphael-min.js" ></script> 
 			<script type="text/javascript" src="js/jsphylosvg/jsphylosvg-min.js"></script> 	
 			<script type="text/javascript">			
-				var newickTreeString = '<%=request.getAttribute("newickTree")%>';
+				var newickTreeString = '${newickTree}%>';
 				var sequencesNumber = ${alignmentSequencesNumber};
 				if (newickTreeString != null){
 					window.onload = function(){
+						var height = 27 * sequencesNumber;
 						var dataObject = { newick: newickTreeString };
 						phylocanvas = new Smits.PhyloCanvas(
 							dataObject,
 							'svgCanvas', 
-							1100, 27 * sequencesNumber
+							1100, height
 						);
-						document.getElementById('tree').setAttribute("style","height:500px");
+						document.getElementById('tree').setAttribute("style","height:" + (height + 50) + "px");
 					};
 				}
 			</script>

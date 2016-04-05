@@ -37,14 +37,19 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class GmailSender {
-	private static String protocol = "smtp";
+import com.salsaw.msalsa.config.ConfigurationManager;
+
+public class EmailSender {	
+	public static final String PROP_MAIL_SMTP_AUTH = "mail.smtp.auth";
+	public static final String PROP_MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
+	public static final String PROP_MAIL_SMTP_HOST = "mail.smtp.host";
+	public static final String PROP_MAIL_SMTP_PORT = "mail.smtp.port";
 
 	private Session session;
 	private Message message;
 	private Multipart multipart;
 
-	public GmailSender() {
+	public EmailSender() {
 		this.multipart = new MimeMultipart();
 	}
 
@@ -94,10 +99,14 @@ public class GmailSender {
 	private static Session getSession(String username, String password) {
 		Properties properties = System.getProperties();
 
-		properties.put("mail.smtp.auth", "true");
-		properties.put("mail.smtp.starttls.enable", "true");
-		properties.put("mail.smtp.host", protocol + ".gmail.com");
-		properties.put("mail.smtp.port", "587");
+		properties.put(PROP_MAIL_SMTP_AUTH,
+				ConfigurationManager.getInstance().getServerConfiguration().getMailSmtpAuth());
+		properties.put(PROP_MAIL_SMTP_STARTTLS_ENABLE,
+				ConfigurationManager.getInstance().getServerConfiguration().isMailSmtpStartTtlsEnable());
+		properties.put(PROP_MAIL_SMTP_HOST,
+				ConfigurationManager.getInstance().getServerConfiguration().getMailSmtpHost());
+		properties.put(PROP_MAIL_SMTP_PORT,
+				ConfigurationManager.getInstance().getServerConfiguration().getMailSmtpPort());
 
 		Authenticator authenticator = new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {

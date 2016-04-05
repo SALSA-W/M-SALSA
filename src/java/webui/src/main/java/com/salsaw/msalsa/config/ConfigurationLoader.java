@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.cli.App;
+import com.salsaw.msalsa.services.EmailSender;
 
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
@@ -59,6 +60,10 @@ class ConfigurationLoader {
 					properties.getProperty(KEY_TEMP_PATH),
 					properties.getProperty(KEY_MAIL_USERNAME),
 					properties.getProperty(KEY_MAIL_PASSWORD),
+					properties.getProperty(EmailSender.PROP_MAIL_SMTP_AUTH),
+					properties.getProperty(EmailSender.PROP_MAIL_SMTP_STARTTLS_ENABLE),
+					properties.getProperty(EmailSender.PROP_MAIL_SMTP_HOST),
+					properties.getProperty(EmailSender.PROP_MAIL_SMTP_PORT),					
 					properties.getProperty(KEY_CLEAN_DAYS_VALIDITY),
 					properties.getProperty(KEY_PUBLISHER),
 					properties.getProperty(KEY_GOOGLE_ANALYTICS_PROPERTY_ID),

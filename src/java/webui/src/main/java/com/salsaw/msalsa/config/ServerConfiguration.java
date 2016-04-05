@@ -28,6 +28,10 @@ public class ServerConfiguration {
 	private final String temporaryFilePath;
 	private final String mailUsername;
 	private final String mailPassword;
+	private final String mailSmtpAuth;
+	private final boolean mailSmtpStartTtlsEnable;
+	private final String mailSmtpHost;
+	private final int mailSmtpPort;
 	private final int cleanDaysValidityJob;
 	private final String sitePublisher;
     private final String googleAnalyticsPropertyID;
@@ -40,6 +44,10 @@ public class ServerConfiguration {
 			String temporaryFilePath,
 			String mailUsername,
 			String mailPassword,
+			String mailSmtpAuth,
+			String mailSmtpStartTtlsEnable,
+			String mailSmtpHost,
+			String mailSmtpPort,
 			String cleanDaysValidityJob,
 			String sitePublisher,
             String googlePropertyID,
@@ -50,6 +58,10 @@ public class ServerConfiguration {
 		this.temporaryFilePath = temporaryFilePath;
 		this.mailUsername = mailUsername;
 		this.mailPassword = mailPassword;
+		this.mailSmtpAuth = mailSmtpAuth;
+		this.mailSmtpStartTtlsEnable = Boolean.parseBoolean(mailSmtpStartTtlsEnable);
+		this.mailSmtpHost = mailSmtpHost;
+		this.mailSmtpPort = Integer.parseInt(mailSmtpPort);
 		this.cleanDaysValidityJob = Integer.parseInt(cleanDaysValidityJob);
 		this.sitePublisher = sitePublisher;
         this.googleAnalyticsPropertyID = googlePropertyID;
@@ -91,6 +103,22 @@ public class ServerConfiguration {
 	
 	public Integer getThreadPoolMaxNumber() {
 		return this.threadPoolMaxNumber;
+	}
+	
+	public String getMailSmtpAuth() {
+		return mailSmtpAuth;
+	}
+
+	public boolean isMailSmtpStartTtlsEnable() {
+		return mailSmtpStartTtlsEnable;
+	}
+
+	public String getMailSmtpHost() {
+		return mailSmtpHost;
+	}
+
+	public int getMailSmtpPort() {
+		return mailSmtpPort;
 	}
 }
 

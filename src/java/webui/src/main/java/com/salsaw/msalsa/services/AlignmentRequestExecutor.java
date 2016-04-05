@@ -154,7 +154,7 @@ public class AlignmentRequestExecutor implements Runnable {
 
 		ServerConfiguration serverConfiguration = ConfigurationManager.getInstance().getServerConfiguration();
 
-		GmailSender sender = new GmailSender();
+		EmailSender sender = new EmailSender();
 		sender.setSender(serverConfiguration.getMailUsername(), serverConfiguration.getMailPassword());
 		sender.addRecipient(recipientEmail);
 

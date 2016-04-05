@@ -79,16 +79,16 @@ $(document).ready(function() {
     $.listen('parsley:field:success', function(ParsleyField : any) : void {
     	// Show the title to add to email if e-mail is correct
         if(ParsleyField.$element.attr('name') === 'recipientEmail') {
-        	if (isBlank($("recipientEmail").val()) === false){
+        	if (isBlank($("#recipientEmail").val()) === false){
         		$("div#userJobTitleForm").removeClass('hidden').addClass('show');        		
         	}
         }
     });
-    
-    $.listen('parsley:field:error', function(ParsleyField : any) : void {
-    	// Hide the title to add to email if e-mail isn't correct
-        if(ParsleyField.$element.attr('name') === 'recipientEmail') {
-        	$("div#userJobTitleForm").removeClass('show').addClass('hidden');
+
+    $.listen('parsley:field:error', function(ParsleyField: any): void {
+        // Hide the title to add to email if e-mail isn't correct
+        if (ParsleyField.$element.attr('name') === 'recipientEmail') {
+            $("div#userJobTitleForm").removeClass('show').addClass('hidden');
         }
     });    
 });

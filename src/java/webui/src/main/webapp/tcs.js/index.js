@@ -53,7 +53,7 @@ $(document).ready(function () {
     $.listen('parsley:field:success', function (ParsleyField) {
         // Show the title to add to email if e-mail is correct
         if (ParsleyField.$element.attr('name') === 'recipientEmail') {
-            if (isBlank($("recipientEmail").val()) === false) {
+            if (isBlank($("#recipientEmail").val()) === false) {
                 $("div#userJobTitleForm").removeClass('hidden').addClass('show');
             }
         }

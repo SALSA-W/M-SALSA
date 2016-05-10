@@ -135,8 +135,9 @@ public class SalsaAlgorithmExecutor {
 			}
 		}
 		else{
-			if (salsaParameters.getAlphabetType() != AlphabetType.PROTEINS){
-				throw new SALSAException("Error: if the type of residues is different from "+ AlphabetType.PROTEINS.toString() +" it is required to specify the substitutionMatrix.");
+			if (salsaParameters.getAlphabetType() != AlphabetType.PROTEINS &&
+				salsaParameters.getEmbeddedScoringMatrix() == EmbeddedScoringMatrix.NONE){
+				throw new SALSAException("Error: if the type of residues is different from "+ AlphabetType.PROTEINS.toString() +" it is required to specify the scoring matrix or provide one from file.");
 			}
 			
 			if (distanceMatrixFilePath != null &&

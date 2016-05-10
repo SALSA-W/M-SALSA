@@ -471,9 +471,11 @@ public final class Alignment {
 	 */
 	private int[] convert(String s) throws SALSAException {
 		int[] sequenceOfNumbers = new int[this.length];
-
+		
+		// Avoid case errors
+		String upperInput = s.toUpperCase(); 
 		for (int c = 0; c < this.length; c++) {
-			sequenceOfNumbers[c] = this.alphabet.charToInt(s.charAt(c));
+			sequenceOfNumbers[c] = this.alphabet.charToInt(upperInput.charAt(c));
 		}
 
 		return sequenceOfNumbers;

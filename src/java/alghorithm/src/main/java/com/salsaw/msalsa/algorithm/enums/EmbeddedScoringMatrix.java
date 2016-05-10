@@ -51,6 +51,7 @@ public enum EmbeddedScoringMatrix {
 	 * Matches score 1.0 and mismatches score 0. All matches for IUB symbols also score 0. 
 	 */
 	DNAClustal,
+	RNAClustal,
 	;
 	
     // converter that will be used later

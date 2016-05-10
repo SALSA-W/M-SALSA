@@ -41,6 +41,7 @@ public final class SubstitutionMatrix {
 	// CONSTANTS 
 	private static Alphabet ALPHABET_PROTEINS;
 	private static Alphabet ALPHABET_DNA;
+	private static Alphabet ALPHABET_RNA;
 
 	// FIELDS
 	private final int alphabetLength;
@@ -62,6 +63,7 @@ public final class SubstitutionMatrix {
 		try {
 			ALPHABET_PROTEINS = new Alphabet(AlphabetType.PROTEINS);
 			ALPHABET_DNA = new Alphabet(AlphabetType.DNA);
+			ALPHABET_RNA = new Alphabet(AlphabetType.RNA);
 		} catch (SALSAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,6 +205,10 @@ public final class SubstitutionMatrix {
 			case IUB:
 			case DNAClustal:
 				alphabet = ALPHABET_DNA;
+				break;
+				
+			case RNAClustal:
+				alphabet = ALPHABET_RNA;
 				break;
 								
 			default:

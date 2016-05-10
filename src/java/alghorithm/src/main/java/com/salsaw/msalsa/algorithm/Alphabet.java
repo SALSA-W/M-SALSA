@@ -40,7 +40,7 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 public class Alphabet {
 	
 	// CONSTANTS
-	private static final char[] ALPHABET_DNA = new char[] {'A', 'T', 'C', 'G'};
+	private static final char[] ALPHABET_DNA = new char[] {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'M', 'K', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X'};
 	private static final char[] ALPHABET_RNA = new char[] {'A', 'U', 'C', 'G'};
 	private static final char[] ALPHABET_PROTEINS = new char[] {'A', 'R', 'N', 'D', 'C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','Z','X'};
 	public static final char GAP_SYMBOL = '-';

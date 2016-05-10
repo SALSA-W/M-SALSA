@@ -201,7 +201,7 @@ public final class SubstitutionMatrix {
 				break;
 				
 			case IUB:
-			case ClustalW:
+			case DNAClustal:
 				alphabet = ALPHABET_DNA;
 				break;
 								

@@ -114,7 +114,7 @@ P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span cl
 					<div class="row">
 						<!-- UniProt id validation http://www.uniprot.org/help/accession_numbers -->
 						<div class="col-sm-2">
-							<input id="newitem" type="text" name="newitem"
+							<input id="newitem" type="text" name="newitem" class="form-control"
 								pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
 								data-parsley-pattern="[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}">
 						</div>

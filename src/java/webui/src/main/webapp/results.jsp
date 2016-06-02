@@ -40,7 +40,7 @@
 			</li>
 		</ul>
 
-		<div class="tab-content">
+		<div class="tab-content" id="results-tab">
 			<div id="alignment" class="tab-pane fade in active">
 				<button id="colorsButton" class="btn btn-default">Show colors</button>
 				<div class="row correct-margin">
@@ -51,15 +51,21 @@
 					<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
 				</div>
 			</div>
-			
-			<div id="tree" class="tab-pane fade">
-				<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
-					<div class="spacer"></div>
-		
-					<div class="col-md-12 text-center">
-						<div id="svgCanvas"></div>
-					</div>
-				</c:if>
+
+            <div id="tree" class="tab-pane fade">
+                <c:if test="${requestScope.phylogeneticTreeDataAvailable}">
+                    <div class="col-md-12 text-center" >
+                        <div class="row">
+                            <div id="canvas-container-div"></div>
+                        </div>
+                        <div class="row">
+                            <div class="spacer"></div>
+                        </div>
+                        <div class="row">
+                            <div id="scale-container-div"></div>
+                        </div>
+                    </div>
+                </c:if>
 			</div>
 		</div>
 
@@ -70,21 +76,49 @@
 		<script src="tcs.js/amino_colors.js" type="text/javascript"></script>
 		
 		<c:if test="${requestScope.phylogeneticTreeDataAvailable}">
-			<script type="text/javascript" src="js/raphael/raphael-min.js" ></script> 
-			<script type="text/javascript" src="js/jsphylosvg/jsphylosvg-min.js"></script> 	
-			<script type="text/javascript">			
-				var newickTreeString = '${newickTree}%>';
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+		<script src="https://raw.githubusercontent.com/DessimozLab/phylo-io/master/www/js/treecompare.js"></script>
+		<script type="text/javascript">			
+				// https://github.com/phylocanvas/phylocanvas/wiki/Quick-Start
+				var newickTreeString = '${newickTree}';
 				var sequencesNumber = ${alignmentSequencesNumber};
-				if (newickTreeString != null){
-					window.onload = function(){
-						var height = 27 * sequencesNumber;
-						var dataObject = { newick: newickTreeString };
-						phylocanvas = new Smits.PhyloCanvas(
-							dataObject,
-							'svgCanvas', 
-							1100, height
-						);
-						document.getElementById('tree').setAttribute("style","height:" + (height + 50) + "px");
+                var height = (23 * sequencesNumber) + 150; // add the space for buttons and zoom manager
+				
+				var treecomp = null;
+				
+				function drawNewickTree(){
+
+					treecomp.viewTree("Newick Tree", "canvas-container-div", "scale-container-div");
+                    // Manually set div height to ensure correct space
+                    $("#canvas-container-div").height(height);
+                    // Update container height to get correct shape
+                    document.getElementById('tree').setAttribute("style","height:" + (height + 50) + "px");
+				}
+
+				if (newickTreeString != null) {
+                    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                        // Get the name of activated
+                        var tabName = $(e.target).attr("href");
+                        if (tabName === "#tree")
+                        {
+                            treecomp = TreeCompare.init({
+                                //whether the tree is scaled to fit in the render space on initial render
+                                fitTree: "scale", //none, scale
+                            });
+                            treecomp.addTree(newickTreeString, "Newick Tree");
+                            drawNewickTree();
+                        }
+                    });
+
+					window.onresize = function(event) {
+                        var activeTabName = $('.nav-tabs .active > a').attr('href');
+                        if (activeTabName === "#tree")
+                        {
+                            // Resize the tree only if the tree tab is open
+                            drawNewickTree();
+                        }
 					};
 				}
 			</script>

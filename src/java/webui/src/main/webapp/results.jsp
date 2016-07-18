@@ -79,7 +79,7 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-		<script src="https://raw.githubusercontent.com/DessimozLab/phylo-io/master/www/js/treecompare.js"></script>
+		<script src="https://rawgit.com/DessimozLab/phylo-io/master/www/js/treecompare.js"></script>
 		<script type="text/javascript">			
 				// https://github.com/phylocanvas/phylocanvas/wiki/Quick-Start
 				var newickTreeString = '${newickTree}';

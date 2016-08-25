@@ -82,9 +82,9 @@ public final class Tree {
 	 * @return
 	 * @throws SALSAException
 	 */
-	public final float generateWeights(String[] names, float[] weights)
+	public final double generateWeights(String[] names, double[] weights)
 			throws SALSAException {
-		float weightsSum = 0.0f;
+		double weightsSum = 0.0f;
 		int index;
 
 		for (int i = 0; i < this.insertedSequences; i++) {
@@ -202,9 +202,9 @@ public final class Tree {
 		reader.unread((int) c);
 	}
 
-	private final float leafWeight(Node leaf) {
+	private final double leafWeight(Node leaf) {
 		Node current = leaf;
-		float weight = 0.0f;
+		double weight = 0.0f;
 
 		// Cycling until the root has been found (parent = null)
 		while (current != null) {

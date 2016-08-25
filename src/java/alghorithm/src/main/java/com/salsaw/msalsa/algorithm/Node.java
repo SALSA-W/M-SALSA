@@ -29,18 +29,18 @@ public final class Node {
 	private Node right;
 	private Node parent;
 
-	private float distance;
+	private double distance;
 	private int descendantLeaves;
 
 	/**
 	 * It represent the sum of distances between this node and its descendant
 	 * leaves
 	 */
-	private float distancesSum;
-	private float difference;
+	private double distancesSum;
+	private double difference;
 
 	// CONSTRUCTORS
-	public Node(final String name, final Node left, final Node right, final Node parent, final float distance) {
+	public Node(final String name, final Node left, final Node right, final Node parent, final double distance) {
 
 		this.name = name;
 		this.left = left;
@@ -84,7 +84,7 @@ public final class Node {
 		return null;
 	}
 
-	public final float getDistance() {
+	public final double getDistance() {
 		return this.distance;
 	}
 
@@ -100,7 +100,7 @@ public final class Node {
 		this.parent = parent;
 	}
 
-	public final void setDistance(final float distance) {
+	public final void setDistance(final double distance) {
 		this.distance = distance;
 	}
 
@@ -190,12 +190,12 @@ public final class Node {
 	 * @throws SALSAException
 	 */
 	public final Node calculatePositionOfRoot(final int totalNumberOfLeafs,
-			final float parentLeftSum) throws SALSAException {
+			final double parentLeftSum) throws SALSAException {
 		Node brother = getBrother();
 		int numberOfLeftLeaves = totalNumberOfLeafs - this.descendantLeaves;
 
 		// Distances of brother's descendant leaves from parent
-		float d = 0;
+		double d = 0;
 		if (brother != null) {
 			d = brother.distancesSum + brother.distance
 					* brother.descendantLeaves;
@@ -207,7 +207,7 @@ public final class Node {
 		// Distances of all left leaves from the current node
 		d += this.distance * numberOfLeftLeaves;
 
-		float leftMean = 0.0f;
+		double leftMean = 0.0f;
 		if (numberOfLeftLeaves != 0) {
 			leftMean = d / numberOfLeftLeaves;
 		}
@@ -227,7 +227,7 @@ public final class Node {
 			}
 		}
 
-		float currentDifference = leftMean
+		double currentDifference = leftMean
 				- (this.distancesSum / this.descendantLeaves);
 		if (currentDifference == 0
 				|| (currentDifference > 0 && currentDifference < 2 * this.distance)) {
@@ -248,8 +248,8 @@ public final class Node {
 	 */
 	public final Node addRoot() throws SALSAException {
 		if (this.parent != null) {
-			float newDistance = this.difference / 2;
-			float newDistanceParent = this.distance - newDistance;
+			double newDistance = this.difference / 2;
+			double newDistanceParent = this.distance - newDistance;
 
 			Node root = new Node("ROOT", parent, this, null, 0.0f);
 			if (this.parent.left == this) {
@@ -276,10 +276,10 @@ public final class Node {
 	 * 
 	 * @throws SALSAException
 	 */
-	private void invertNode(final Node newParent, final float newDistance)
+	private void invertNode(final Node newParent, final double newDistance)
 			throws SALSAException {
 		Node oldParent = this.parent;
-		float oldDistance = this.distance;
+		double oldDistance = this.distance;
 		this.parent = newParent;
 		this.distance = newDistance;
 

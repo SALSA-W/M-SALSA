@@ -48,7 +48,7 @@ public final class SubstitutionMatrix {
 	/**
 	 * GAP extension penalty
 	 */
-	private final float GEP;
+	private final double GEP;
 
 	private final Alphabet alphabet;
 
@@ -70,7 +70,7 @@ public final class SubstitutionMatrix {
 		}
 	}
 	
-	public SubstitutionMatrix(SubstitutionMatrix substitutionMatrix, float gep)
+	public SubstitutionMatrix(SubstitutionMatrix substitutionMatrix, double gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;
 		this.matrix = substitutionMatrix.matrix;
@@ -78,7 +78,7 @@ public final class SubstitutionMatrix {
 		this.alphabetLength = this.alphabet.dimension();
 	}
 	
-	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet expectedAlphabet, float gep)
+	public SubstitutionMatrix(InputStream scoringMatrixStream, Alphabet expectedAlphabet, double gep)
 			throws SALSAException, IOException {
 		this.GEP = gep;		
 		
@@ -139,7 +139,7 @@ public final class SubstitutionMatrix {
 	 * @param b
 	 * @return
 	 */
-	public final float score(int a, int b) {
+	public final double score(int a, int b) {
 		if (a == this.alphabet.INDEL()) {
 			if (b == this.alphabet.INDEL()) {
 				return 0;
@@ -154,7 +154,7 @@ public final class SubstitutionMatrix {
 		return matrix[a * alphabetLength + b];
 	}
 	
-	public static final EmbeddedScoringMatrix getEmbeddedSubstitutionMatrix(MatrixSerie matrixSerie, float pid) throws SALSAException, IOException {		
+	public static final EmbeddedScoringMatrix getEmbeddedSubstitutionMatrix(MatrixSerie matrixSerie, double pid) throws SALSAException, IOException {		
 		switch (matrixSerie) {
 		case BLOSUM:
 			if (pid > 0.8) return EmbeddedScoringMatrix.BLOSUM80;
@@ -183,7 +183,7 @@ public final class SubstitutionMatrix {
 	 * @throws IOException 
 	 * @throws SALSAException 
 	 */
-	public static final SubstitutionMatrix getSubstitutionMatrix(EmbeddedScoringMatrix scoringMatrix, float GEP)
+	public static final SubstitutionMatrix getSubstitutionMatrix(EmbeddedScoringMatrix scoringMatrix, double GEP)
 			throws IOException, SALSAException {
 		SubstitutionMatrix cachedSubstitutionMatrix = SUBSTITUTION_MATRIX_CACHE.getOrDefault(scoringMatrix, null);
 

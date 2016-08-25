@@ -34,14 +34,14 @@ public final class LocalSearch {
 	private int numberOfGAPS;
 	private final int gamma;
 	private final int minIterations;
-	private final float probabiltyOfSplit;
+	private final double probabiltyOfSplit;
         private final Random randomGenerator;
 
 	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTOR
 	public LocalSearch(final Alignment alignment, final int gamma, final int minIterations,
-			final float probabiltyOfSplit) {
+			final double probabiltyOfSplit) {
 		this.align = alignment;
 		this.gamma = gamma;
 		this.minIterations = minIterations;
@@ -63,7 +63,7 @@ public final class LocalSearch {
 		int iteration = 0;
 		int positionOfGAP;
 		boolean left;
-		float split;
+		double split;
 
 		// Initialize seed
 		Random random = new Random(System.currentTimeMillis());
@@ -131,13 +131,13 @@ public final class LocalSearch {
 		}
 
 		// Best delta found until now
-		float deltaMax;
+		double deltaMax;
 
 		// It indicates the iteration corresponding to the best delta found
 		int bestIterator = 0;
 
 		// Penalty of a GOP in the corresponding row
-		float deltaGOP = this.align.getGOP(g.getRow());
+		double deltaGOP = this.align.getGOP(g.getRow());
 
 		if (split) {
 			deltaMax = deltaGOP;
@@ -151,10 +151,10 @@ public final class LocalSearch {
 		}
 
 		// Improvement of the last move
-		float delta;
+		double delta;
 
 		// Total improvement in current iteration
-		float deltaSum = 0.0f;
+		double deltaSum = 0.0f;
 
 		boolean finished = false;
 		boolean improvement = false;

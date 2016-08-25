@@ -30,14 +30,14 @@ import com.salsaw.msalsa.algorithm.exceptions.SALSAException;
 public final class DistanceMatrix {
 
 	private final int numberOfSequences;
-	private final float[] distMatrix;
+	private final double[] distMatrix;
 	private final String[] names;
 
 	public DistanceMatrix(final InputStream distanceMatrixStream) {
 		try (Scanner scanner = new Scanner(distanceMatrixStream)) {
 			// First line contains the number of sequences
 			this.numberOfSequences = scanner.nextInt();
-			this.distMatrix = new float[numberOfSequences * numberOfSequences];
+			this.distMatrix = new double[numberOfSequences * numberOfSequences];
 			this.names = new String[numberOfSequences];
 
 			// Read the values for the matrix value (the matrix is numberOfSequences x numberOfSequences)
@@ -63,9 +63,9 @@ public final class DistanceMatrix {
 	 * @throws SALSAException
 	 * @throws IOException
 	 */
-	public final SubstitutionMatrix createSubstitutionMatrix(final MatrixSerie matrixSerie, float GEP)
+	public final SubstitutionMatrix createSubstitutionMatrix(final MatrixSerie matrixSerie, double GEP)
 			throws SALSAException, IOException {
-		float pid = 0.0f;
+		double pid = 0.0f;
 
 		for (int i = 0; i < this.numberOfSequences; i++) {
 			for (int j = i + 1; j < this.numberOfSequences; j++) {

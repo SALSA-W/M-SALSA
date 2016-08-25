@@ -63,10 +63,10 @@ public class SalsaParameters implements Serializable {
 	private String phylogeneticTreeFile;
 
 	@Parameter(names = { "-GOP" }, description = GOP_DOCS)
-	private float GOP = 8;
+	private double GOP = 8;
 
 	@Parameter(names = "-GEP", description = GEP_DOCS)
-	private float GEP = 5;
+	private double GEP = 5;
 
 	@Parameter(names = "-gamma", description = GAMMA_DOCS)
 	private int gamma = 30;
@@ -78,7 +78,7 @@ public class SalsaParameters implements Serializable {
 	private int minIterations = 1000;
 
 	@Parameter(names = "-pSplit", description = PROBABILITY_OF_SPLIT_DOCS)
-	private float probabilityOfSplit = 0.1f;
+	private double probabilityOfSplit = 0.1f;
 	
 	@Parameter(names = "-terminal", description = TERMINAL_GAPS_STRATEGY_DOCS)
 	private TerminalGAPsStrategy terminalGAPsStrategy = TerminalGAPsStrategy.ONLY_GEP;
@@ -113,7 +113,7 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 * @return
 	 */
-	public float getGOP() {
+	public double getGOP() {
 		return GOP;
 	}
 
@@ -122,7 +122,7 @@ public class SalsaParameters implements Serializable {
 	 * 
 	 * @return
 	 */
-	public float getGEP() {
+	public double getGEP() {
 		return GEP;
 	}
 
@@ -164,7 +164,7 @@ public class SalsaParameters implements Serializable {
 		return terminalGAPsStrategy;
 	}
 
-	public float getProbabilityOfSplit() {
+	public double getProbabilityOfSplit() {
 		return probabilityOfSplit;
 	}
 
@@ -206,11 +206,11 @@ public class SalsaParameters implements Serializable {
 	}
 	
 	// SET
-	public void setGOP(float gop) {
+	public void setGOP(double gop) {
 		this.GOP = gop;
 	}
 
-	public void setGEP(float gep) {
+	public void setGEP(double gep) {
 		this.GEP = gep;
 	}
 
@@ -245,7 +245,7 @@ public class SalsaParameters implements Serializable {
 		this.terminalGAPsStrategy = terminalGAPsStrategy;
 	}
 
-	public void setProbabilityOfSplit(float probabilityOfSplit) {
+	public void setProbabilityOfSplit(double probabilityOfSplit) {
 		this.probabilityOfSplit = probabilityOfSplit;
 	}
 

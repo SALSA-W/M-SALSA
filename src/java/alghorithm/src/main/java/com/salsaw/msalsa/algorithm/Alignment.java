@@ -74,44 +74,44 @@ public final class Alignment {
 	 * Sequences name and properties (found in FASTA files)
 	 */
 	private String[] properties;
-	private float[] weights;
-	private float weightsSUM;
+	private double[] weights;
+	private double weightsSUM;
 	private final ArrayList<GAP> GAPS;
 
-	private float[] countersMatrix;
+	private double[] countersMatrix;
 
 	/**
 	 * GAP opening penalty
 	 */
-	private final float GOP;
+	private final double GOP;
 
 	private final TerminalGAPsStrategy terminal;
 
 	// CONSTRUCTORS
 	
 	public Alignment(final String inputFilePath, final String treeFileName,
-			final SubstitutionMatrix s, final float gop, final TerminalGAPsStrategy tgs)
+			final SubstitutionMatrix s, final double gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {
 		this(inputFilePath, treeFileName, s, gop, tgs, EmbeddedScoringMatrix.NONE, MatrixSerie.NONE, null);
 	}
 	
 	public Alignment(final String inputFilePath, final String treeFileName,
-			final MatrixSerie matrixSerie, final float gep, 
-			final float gop, final TerminalGAPsStrategy tgs)
+			final MatrixSerie matrixSerie, final double gep, 
+			final double gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {		
 		this(inputFilePath, treeFileName, null, gop, tgs, EmbeddedScoringMatrix.NONE , matrixSerie, gep);			
 	}
 	
 	public Alignment(final String inputFilePath, final String treeFileName,
-			final EmbeddedScoringMatrix scoringMatrix, final float gep, 
-			final float gop, final TerminalGAPsStrategy tgs)
+			final EmbeddedScoringMatrix scoringMatrix, final double gep, 
+			final double gop, final TerminalGAPsStrategy tgs)
 			throws IOException, SALSAException {		
 		this(inputFilePath, treeFileName, null, gop, tgs, scoringMatrix, MatrixSerie.NONE, gep);			
 	}	
 	
 	private Alignment(final String inputFilePath, final String treeFileName,
-			final SubstitutionMatrix substitutionMatrix, final float gop, 
-			final TerminalGAPsStrategy tgs, final EmbeddedScoringMatrix scoringMatrix, final MatrixSerie matrixSerie, final Float gep)
+			final SubstitutionMatrix substitutionMatrix, final double gop, 
+			final TerminalGAPsStrategy tgs, final EmbeddedScoringMatrix scoringMatrix, final MatrixSerie matrixSerie, final Double gep)
 			throws IOException, SALSAException {		
 		this.GOP = gop;
 		this.terminal = tgs;
@@ -126,7 +126,7 @@ public final class Alignment {
 				throw new SALSAException("Invalid input data for generate scoringMatrix");
 			}
 			if (matrixSerie != MatrixSerie.NONE) {				
-				float pid = getAverageIdentityScore();
+				double pid = getAverageIdentityScore();
 				this.substitution = SubstitutionMatrix
 						.getSubstitutionMatrix(SubstitutionMatrix.getEmbeddedSubstitutionMatrix(matrixSerie, pid), gep);
 			} else {
@@ -142,7 +142,7 @@ public final class Alignment {
 		createWeights(treeFileName);
 		preprocessing(sequences);
 		createCounters();
-	}	
+	}
 
 	// GET / SET
 	public final int getNumberOfSequences() {
@@ -170,7 +170,7 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException
 	 */
-	private float getIdentityScore(final int firstRow, final int secondRow) throws SALSAException{
+	private double getIdentityScore(final int firstRow, final int secondRow) throws SALSAException{
 		if (firstRow < 0 || 
 			firstRow >= numberOfSequences || 
 			secondRow < 0 || 
@@ -209,8 +209,8 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException 
 	 */
-	private float getAverageIdentityScore() throws SALSAException{
-		float sum = 0.0f;
+	private double getAverageIdentityScore() throws SALSAException{
+		double sum = 0.0f;
 
 		for (int i = 0; i < numberOfSequences - 1; i++){
 			for (int j = i + 1; j < numberOfSequences; j++){
@@ -229,7 +229,7 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException 
 	 */
-	protected final float getPairwiseDistance(int firstRow, int secondRow) throws SALSAException{
+	protected final double getPairwiseDistance(int firstRow, int secondRow) throws SALSAException{
 		return (1.0f - getIdentityScore(firstRow, secondRow)) * 100;		
 	}
 	
@@ -238,8 +238,8 @@ public final class Alignment {
 	 * 
 	 * @return
 	 */
-	public final float WSP() {
-		float objval = 0.0f;
+	public final double WSP() {
+		double objval = 0.0f;
 		// Int array already initialize at 0
 		int[] numberOfGAPS = new int[numberOfSequences];
 		GAP g;
@@ -271,12 +271,12 @@ public final class Alignment {
 	 * @return
 	 * @throws SALSAException
 	 */
-	public final float moveLeft(GAP g) throws SALSAException {
+	public final double moveLeft(GAP g) throws SALSAException {
 		int leftColumn = g.getBegin() - 1;
 		int rightColumn = g.getEnd();
 		int row = g.getRow();
 
-		float delta = changeCell(row, rightColumn, this.alignMatrix[row
+		double delta = changeCell(row, rightColumn, this.alignMatrix[row
 				* this.length + leftColumn]);
 		delta += changeCell(row, leftColumn, this.alphabet.INDEL());
 
@@ -284,12 +284,12 @@ public final class Alignment {
 		return delta;
 	}
 
-	public final float moveRight(GAP g) throws SALSAException {
+	public final double moveRight(GAP g) throws SALSAException {
 		int leftColumn = g.getBegin();
 		int rightColumn = g.getEnd() + 1;
 		int row = g.getRow();
 
-		float delta = changeCell(row, leftColumn, this.alignMatrix[row
+		double delta = changeCell(row, leftColumn, this.alignMatrix[row
 				* this.length + rightColumn]);
 		delta += changeCell(row, rightColumn, this.alphabet.INDEL());
 
@@ -344,7 +344,7 @@ public final class Alignment {
 	 * @param row
 	 * @return
 	 */
-	public final float getGOP(int row) {
+	public final double getGOP(int row) {
 		return this.GOP * this.weights[row]
 				* (this.weightsSUM - this.weights[row]);
 	}
@@ -393,7 +393,7 @@ public final class Alignment {
 
 		t.changeRoot();
 
-		this.weights = new float[this.numberOfSequences];
+		this.weights = new double[this.numberOfSequences];
 		this.weightsSUM = t.generateWeights(this.properties, this.weights);
 	}
 
@@ -482,7 +482,7 @@ public final class Alignment {
 	}
 
 	private void createCounters() {
-		this.countersMatrix = new float[(this.alphabet.dimension() + 1)
+		this.countersMatrix = new double[(this.alphabet.dimension() + 1)
 				* this.length];
 
 		// Java already initialize at 0f :
@@ -509,9 +509,9 @@ public final class Alignment {
 	 * @param numberOfGAPSr2
 	 * @return
 	 */
-	private float pairwise(int row1, int row2, int numberOfGAPSr1,
+	private double pairwise(int row1, int row2, int numberOfGAPSr1,
 			int numberOfGAPSr2) {
-		float value = 0;
+		double value = 0;
 		int alpha, beta;
 		for (int column = 0; column < this.length; column++) {
 			alpha = this.alignMatrix[row1 * this.length + column];
@@ -533,13 +533,13 @@ public final class Alignment {
 	 * @param newCharacter
 	 * @return
 	 */
-	private float changeCell(int row, int column, int newCharacter) {
+	private double changeCell(int row, int column, int newCharacter) {
 		// align
 		int oldCharacter = this.alignMatrix[row * this.length + column];
 		// counters
 		this.countersMatrix[oldCharacter * this.length + column] -= weights[row];
 
-		float delta = 0.0f;
+		double delta = 0.0f;
 		for (int alpha = 0; alpha <= this.alphabet.dimension(); alpha++) {
 			delta +=
 			// counters

@@ -35,7 +35,7 @@ DistanceMatrix::DistanceMatrix(const char * fileName) {
 
 	file.setf(ios::skipws);
 	file >> numberOfSequences;
-	distMatrix = new float[numberOfSequences*numberOfSequences];
+	distMatrix = new double[numberOfSequences*numberOfSequences];
 	names = new string[numberOfSequences];
 	char c;
 
@@ -55,7 +55,7 @@ DistanceMatrix::DistanceMatrix(const char * fileName) {
 	}
 }
 
-float DistanceMatrix::similarity(string name1, string name2) {
+double DistanceMatrix::similarity(string name1, string name2) {
 	int index1, index2;
 
 	for (int i = 0; i < numberOfSequences; i++) {
@@ -66,8 +66,8 @@ float DistanceMatrix::similarity(string name1, string name2) {
 	return 1.0 - distMatrix[index1*numberOfSequences + index2];
 }
 
-SubstitutionMatrix* DistanceMatrix::createSubstitutionMatrix(const char* matrixSerie, float GEP) {
-	float pid = 0.0;
+SubstitutionMatrix* DistanceMatrix::createSubstitutionMatrix(const char* matrixSerie, double GEP) {
+	double pid = 0.0;
 
 	for (int i = 0; i < numberOfSequences; i++) {
 		for (int j = i + 1; j < numberOfSequences; j++) {

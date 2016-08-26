@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-LocalSearch::LocalSearch(Alignment* a, int g, int mi, float pos): align(a), gamma(g), minIterations(mi), probabiltyOfSplit(pos){
+LocalSearch::LocalSearch(Alignment* a, int g, int mi, double pos): align(a), gamma(g), minIterations(mi), probabiltyOfSplit(pos){
 	GAPS=a->getGAPS();
 	numberOfGAPS=GAPS->size();
 	terminal=align->getTerminalGAPStrategy();
@@ -37,11 +37,11 @@ bool LocalSearch::move(int GAPPosition, bool left, bool split){
 	if ((left && (g->getBegin()==0)) || (!left && (g->getEnd()==align->getLength()-1))) return false;
 
 	//Best delta found until now
-	float deltaMax;
+	double deltaMax;
 	//It indicates the iteration corresponding to the best delta found
 	int bestIterator=0;
 	//Penalty of a GOP in the corresponding row
-	float deltaGOP=align->getGOP(g->getRow());
+	double deltaGOP=align->getGOP(g->getRow());
 
 	if (split) deltaMax=deltaGOP;
 	else{
@@ -50,9 +50,9 @@ bool LocalSearch::move(int GAPPosition, bool left, bool split){
 	}
 
 	//Improvement of the last move
-	float delta;
+	double delta;
 	//Total improvement in current iteration
-	float deltaSum=0.0f;
+	double deltaSum=0.0f;
 
 	bool finished=false;
 	bool improvement=false;
@@ -157,12 +157,12 @@ Alignment* LocalSearch::execute(){
 	int iteration=0;
 	int positionOfGAP;
 	bool left;
-	float split;
+	double split;
 
 	while(lastImprovement+minIterations>iteration){
 		positionOfGAP=rand()%numberOfGAPS;
 		left=rand()%2;
-		split=((float)rand())/RAND_MAX; //split is between 0 and one
+		split=((double)rand())/RAND_MAX; //split is between 0 and one
 
 		if (split<probabiltyOfSplit){
 			if (splitAndMove(positionOfGAP, left)) lastImprovement=iteration;

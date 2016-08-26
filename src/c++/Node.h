@@ -30,7 +30,7 @@ using namespace std;
 
 class Node {
 public:
-	Node(string n, Node* l, Node* r, Node* p, float d);
+	Node(string n, Node* l, Node* r, Node* p, double d);
 	bool leaf();
 
 	string getName();
@@ -38,14 +38,14 @@ public:
 	Node* getRight();
 	Node* getParent();
 	Node* getBrother();
-	float getDistance();
+	double getDistance();
 	int getDescendentLeaves();
 
 	void setName(string n);
 	void setLeft(Node* l);
 	void setRight(Node* r);
 	void setParent(Node* p);
-	void setDistance(float d);
+	void setDistance(double d);
 	/* It returns the best candidate for the role of root.
 	 * The best root is the one that minimize the difference between left and right means.
 	 * Left[Right] mean is the mean of distances from left[right] leaves to the root.
@@ -53,7 +53,7 @@ public:
 	 *
 	 * Variable totalNumberOfLeafs is the total amount of leaves in all the tree and
 	 * parentLeftSum is the sum of distances between parent's left leaves and parent himself.*/
-	Node* calculatePositionOfRoot(int totalNumberOfLeafs, float parentLeftSum=0);
+	Node* calculatePositionOfRoot(int totalNumberOfLeafs, double parentLeftSum=0);
 	/* It generates a new node and changes the tree in order to let him become the new root.
 	 * It has to be invoked on the node returned by valculatePositionOfRoot. */
 	Node* addRoot();
@@ -64,7 +64,7 @@ public:
 protected:
 	/* Right now, newParent is a son of the current node. The method invert the current parent with newParent
 	 * and do a recursive call.*/
-	void invertNode(Node* newParent, float newDistance);
+	void invertNode(Node* newParent, double newDistance);
 	/* Calculate the number of descendant leaves of the current node and all the descendant nodes.
 	 * Called on the root of a tree, it updates the internal variable descendantLeaves on all the nodes of the tree.*/
 	int calculateDescendantLeaves();
@@ -74,11 +74,11 @@ protected:
 	Node* right;
 	Node* parent;
 
-	float distance;
+	double distance;
 	int descendantLeaves;
 	//It represent the sum of distances between this node and its descendant leaves
-	float distancesSum;
-	float difference;
+	double distancesSum;
+	double difference;
 };
 
 #endif /* NODE_H_ */

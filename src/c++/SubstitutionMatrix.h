@@ -31,13 +31,13 @@ using namespace std;
 
 class SubstitutionMatrix {
 public:
-	static SubstitutionMatrix* getSubstitutionMatrix(const char* matrixSerie, float pid, float GEP, Alphabet* a = NULL);
+	static SubstitutionMatrix* getSubstitutionMatrix(const char* matrixSerie, double pid, double GEP, Alphabet* a = NULL);
 
-	SubstitutionMatrix(const char* file, Alphabet* a, float g);
-	SubstitutionMatrix(string matrixName, float g);
+	SubstitutionMatrix(const char* file, Alphabet* a, double g);
+	SubstitutionMatrix(string matrixName, double g);
 
 	//Calculate the score between two characters (converted in integers)
-	float score(int a, int b);
+	double score(int a, int b);
 	Alphabet* getAlphabet();
 
 	virtual ~SubstitutionMatrix();
@@ -45,7 +45,7 @@ private:
 	bool embeddedMatrix;
 	int alphabetLength;
 	//GAP extension penalty
-	float GEP;
+	double GEP;
 
 	Alphabet* alphabet;
 	int* matrix;

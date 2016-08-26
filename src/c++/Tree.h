@@ -38,14 +38,14 @@ public:
 
 	/* Take as input the sequences' names and the weights array,
 	 * it modifies the weights and returns the their sum.*/
-	float generateWeights(string* names, float* weights);
+	double generateWeights(string* names, double* weights);
 	void printTree();
 
 	virtual ~Tree();
 protected:
 	string readName();
 	Node* createNode(Node* parent);
-	float leafWeight(Node* leaf);
+	double leafWeight(Node* leaf);
 
 	Node* root;
 	Node** leaves;

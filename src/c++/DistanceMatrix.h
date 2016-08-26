@@ -32,15 +32,15 @@ using namespace std;
 class DistanceMatrix {
 public:
 	explicit DistanceMatrix(const char* fileName);
-	float similarity(string name1, string name2);
+	double similarity(string name1, string name2);
 
 	//It calculates the average percentage of identity of the sequences and based on that it choose the correct substitution matrix
-	SubstitutionMatrix* createSubstitutionMatrix(const char* type, float GEP);
+	SubstitutionMatrix* createSubstitutionMatrix(const char* type, double GEP);
 
 	~DistanceMatrix();
 private:
 	int numberOfSequences;
-	float* distMatrix;
+	double* distMatrix;
 	string* names;
 };
 

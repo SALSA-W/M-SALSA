@@ -25,7 +25,7 @@
 #include <math.h>
 #include <string>
 
-Node::Node(string n, Node* l, Node* r, Node* p, float d):name(n),left(l),parent(p),distance(d){
+Node::Node(string n, Node* l, Node* r, Node* p, double d):name(n),left(l),parent(p),distance(d){
 	//In this way, descendentLeafs is correct
 	setRight(r);
 }
@@ -59,7 +59,7 @@ Node* Node::getBrother(){
 	return NULL;
 }
 
-float Node::getDistance(){
+double Node::getDistance(){
 	return distance;
 }
 
@@ -109,7 +109,7 @@ void Node::setParent(Node* p){
 	parent=p;
 }
 
-void Node::setDistance(float d){
+void Node::setDistance(double d){
 	distance=d;
 }
 
@@ -122,12 +122,12 @@ int Node::calculateDescendantLeaves(){
 	return descendantLeaves;
 }
 
-Node* Node::calculatePositionOfRoot(int totalNumberOfLeafs, float parentLeftSum){
+Node* Node::calculatePositionOfRoot(int totalNumberOfLeafs, double parentLeftSum){
 	Node* brother=getBrother();
 	int numberOfLeftLeaves=totalNumberOfLeafs-descendantLeaves;
 
 	//Distances of brother's descendant leaves from parent
-	float d=0;
+	double d=0;
 	if (brother!=NULL) d=brother->distancesSum+brother->distance*brother->descendantLeaves;
 
 	//Distances of all left leaves from parent
@@ -136,7 +136,7 @@ Node* Node::calculatePositionOfRoot(int totalNumberOfLeafs, float parentLeftSum)
 	//Distances of all left leaves from the current node
 	d+=distance*numberOfLeftLeaves;
 
-	float leftMean=0.0f;
+	double leftMean=0.0f;
 	if (numberOfLeftLeaves!=0) leftMean=d/numberOfLeftLeaves;
 
 	if (left!=NULL){
@@ -148,7 +148,7 @@ Node* Node::calculatePositionOfRoot(int totalNumberOfLeafs, float parentLeftSum)
 		if (rootRight!=NULL) return rootRight;
 	}
 
-	float currentDifference=leftMean-(distancesSum/descendantLeaves);
+	double currentDifference=leftMean-(distancesSum/descendantLeaves);
 	if (currentDifference==0 || (currentDifference>0 && currentDifference<2*distance)){
 		difference=currentDifference;
 		return this;
@@ -157,9 +157,9 @@ Node* Node::calculatePositionOfRoot(int totalNumberOfLeafs, float parentLeftSum)
 	return NULL;
 }
 
-void Node::invertNode(Node* newParent, float newDistance){
+void Node::invertNode(Node* newParent, double newDistance){
 	Node* oldParent=parent;
-	float oldDistance=distance;
+	double oldDistance=distance;
 	parent=newParent;
 	distance=newDistance;
 
@@ -172,8 +172,8 @@ void Node::invertNode(Node* newParent, float newDistance){
 
 Node* Node::addRoot(){
 	if (parent!=NULL){
-		float newDistance=difference/2;
-		float newDistanceParent=distance-newDistance;
+		double newDistance=difference/2;
+		double newDistanceParent=distance-newDistance;
 
 		Node* root=new Node("ROOT",parent, this, NULL, 0.0);
 		if (parent->left==this) parent->left=root;

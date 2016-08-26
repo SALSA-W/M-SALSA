@@ -31,7 +31,7 @@ using namespace std;
 
 class LocalSearch {
 public:
-	LocalSearch(Alignment* a, int g, int mi, float pos);
+	LocalSearch(Alignment* a, int g, int mi, double pos);
 	Alignment* execute();
 	int getNumberOfGAPs();
 
@@ -49,7 +49,7 @@ protected:
 	int numberOfGAPS;
 	int gamma;
 	int minIterations;
-	float probabiltyOfSplit;
+	double probabiltyOfSplit;
 
 	terminalGAPsStrategy terminal;
 };

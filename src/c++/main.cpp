@@ -40,9 +40,9 @@ int main(int argc, char **argv) {
 		//Optional parameters
 		int gamma = 30;
 		int minIterations = 1000;
-		float GOP = 8;
-		float GEP = 5;
-		float probabilityOfSplit = 0.1;
+		double GOP = 8;
+		double GEP = 5;
+		double probabilityOfSplit = 0.1;
 		const char* type = "PROTEINS";
 		string subMatrix = "";
 		string subMatrixPath = "";

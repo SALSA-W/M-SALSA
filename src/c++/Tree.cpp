@@ -52,7 +52,7 @@ Node* Tree::createNode(Node* parent){
 	file.setf(ios::skipws);
 	Node* current=new Node("",NULL,NULL,parent,0);
 	char c;
-	float distance;
+	double distance;
 
 	file>>c;
 	if (c!='('){ //Leaf
@@ -114,9 +114,9 @@ void Tree::changeRoot(){
 	if (bestNode!=NULL) root=bestNode->addRoot();
 }
 
-float Tree::leafWeight(Node* leaf){
+double Tree::leafWeight(Node* leaf){
 	Node* current=leaf;
-	float w=0.0;
+	double w=0.0;
 
 	while (current!=NULL){
 		w+=current->getDistance()/current->getDescendentLeaves();
@@ -127,8 +127,8 @@ float Tree::leafWeight(Node* leaf){
 	return w;
 }
 
-float Tree::generateWeights(string* names, float* weights){
-	float WSUM=0.0;
+double Tree::generateWeights(string* names, double* weights){
+	double WSUM=0.0;
 	int index;
 
 	for (int i=0;i<insertedSequences;i++){

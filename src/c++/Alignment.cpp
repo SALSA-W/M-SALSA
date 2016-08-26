@@ -24,7 +24,7 @@
 #include "Alignment.h"
 #include <string>
 
-Alignment::Alignment(const char* fileName, const char* treeFileName, SubstitutionMatrix* s, float g, terminalGAPsStrategy tgs): substitution(s), GOP(g), terminal(tgs) {
+Alignment::Alignment(const char* fileName, const char* treeFileName, SubstitutionMatrix* s, double g, terminalGAPsStrategy tgs): substitution(s), GOP(g), terminal(tgs) {
 	alphabet=s->getAlphabet();
 	vector<string>* seq=read(fileName);
 	alignMatrix=new int[numberOfSequences*length];
@@ -37,7 +37,7 @@ Alignment::Alignment(const char* fileName, const char* treeFileName, Substitutio
 	delete seq;
 }
 
-Alignment::Alignment(const char * fileName, const char * treeFileName, const char* matrixSerie, float gep, float gop, terminalGAPsStrategy tgs): GOP(gop), terminal(tgs) {
+Alignment::Alignment(const char * fileName, const char * treeFileName, const char* matrixSerie, double gep, double gop, terminalGAPsStrategy tgs): GOP(gop), terminal(tgs) {
 	alphabet = new Alphabet("PROTEINS");
 	vector<string>* seq = read(fileName);
 	alignMatrix = new int[numberOfSequences*length];
@@ -108,7 +108,7 @@ void Alignment::createWeights(const char* fileName){
 	//t->printTree();
 
 	//cout<<endl<<endl;
-	weights=new float[numberOfSequences];
+	weights=new double[numberOfSequences];
 	string* names=getNames();
 	weightsSUM=t->generateWeights(names,weights);
 
@@ -117,7 +117,7 @@ void Alignment::createWeights(const char* fileName){
 }
 
 void Alignment::createCounters(){
-	countersMatrix=new float[(alphabet->dimension()+1)*length];
+	countersMatrix=new double[(alphabet->dimension()+1)*length];
 
 	for (int i=0; i<(alphabet->dimension()+1)*length; i++) countersMatrix[i]=0.0f;
 
@@ -130,8 +130,8 @@ void Alignment::createCounters(){
 	}
 }
 
-float Alignment::pairwise(int r1, int r2, int numberOfGAPSr1, int numberOfGAPSr2){
-	float value=0;
+double Alignment::pairwise(int r1, int r2, int numberOfGAPSr1, int numberOfGAPSr2){
+	double value=0;
 	int alpha, beta;
 	for (int c=0; c<length; c++){
 		alpha=align(r1,c);
@@ -144,8 +144,8 @@ float Alignment::pairwise(int r1, int r2, int numberOfGAPSr1, int numberOfGAPSr2
 	return value;
 }
 
-float Alignment::WSP(){
-	float objval=0.0f;
+double Alignment::WSP(){
+	double objval=0.0f;
 	int* numberOfGAPS=new int[numberOfSequences];
 	GAP* g;
 
@@ -166,7 +166,7 @@ float Alignment::WSP(){
 	return objval;
 }
 
-float Alignment::getIdentityScore(int firstRow, int secondRow){
+double Alignment::getIdentityScore(int firstRow, int secondRow){
 	if (firstRow < 0 || firstRow >= numberOfSequences || secondRow < 0 || secondRow >= numberOfSequences)
 		throw("Error: the two rows are not inside the correct range");
 
@@ -181,22 +181,22 @@ float Alignment::getIdentityScore(int firstRow, int secondRow){
 		if (align(firstRow, i) != alphabet->INDEL() && align(firstRow, i) == align(secondRow, i)) count++;
 	}
 
-	if (lengthFirstRow < lengthSecondRow) return count / ((float) lengthFirstRow);
-	else return count / ((float) lengthSecondRow);
+	if (lengthFirstRow < lengthSecondRow) return count / ((double) lengthFirstRow);
+	else return count / ((double) lengthSecondRow);
 }
 
-float Alignment::getPairwiseDistance(int firstRow, int secondRow){
+double Alignment::getPairwiseDistance(int firstRow, int secondRow){
 	return (1.0 - getIdentityScore(firstRow, secondRow)) * 100;
 }
 
-void Alignment::createSubstitutionMatrix(const char * matrixSerie, float GEP){
-	float pid = getAverageIdentityScore();
+void Alignment::createSubstitutionMatrix(const char * matrixSerie, double GEP){
+	double pid = getAverageIdentityScore();
 
 	substitution = SubstitutionMatrix::getSubstitutionMatrix(matrixSerie, pid, GEP, alphabet);
 }
 
-float Alignment::getAverageIdentityScore(){
-	float sum = 0.0;
+double Alignment::getAverageIdentityScore(){
+	double sum = 0.0;
 
 	for (int i = 0; i < numberOfSequences - 1; i++){
 		for (int j = i + 1; j < numberOfSequences; j++){
@@ -204,14 +204,14 @@ float Alignment::getAverageIdentityScore(){
 		}
 	}
 
-	return 2 * sum / ((float) numberOfSequences * (numberOfSequences - 1));
+	return 2 * sum / ((double) numberOfSequences * (numberOfSequences - 1));
 }
 
-float Alignment::changeCell(int row, int column, int newCharacter){
+double Alignment::changeCell(int row, int column, int newCharacter){
 	int oldCharacter=align(row, column);
 	counters(oldCharacter,column)-=weights[row];
 
-	float delta=0.0f;
+	double delta=0.0f;
 	for (int alpha=0; alpha<=alphabet->dimension();alpha++){
 		delta+=counters(alpha,column)*(substitution->score(newCharacter,alpha)-substitution->score(oldCharacter,alpha));
 	}
@@ -231,31 +231,31 @@ void Alignment::restoreCell(int row, int column, int newCharacter){
 	align(row,column)=newCharacter;
 }
 
-float Alignment::moveLeft(GAP* g){
+double Alignment::moveLeft(GAP* g){
 	int leftColumn=g->getBegin()-1;
 	int rightColumn=g->getEnd();
 	int row=g->getRow();
 
-	float delta=changeCell(row,rightColumn,align(row,leftColumn));
+	double delta=changeCell(row,rightColumn,align(row,leftColumn));
 	delta+=changeCell(row,leftColumn,alphabet->INDEL());
 
 	g->moveLeft();
 	return delta;
 }
 
-float Alignment::moveRight(GAP* g){
+double Alignment::moveRight(GAP* g){
 	int leftColumn=g->getBegin();
 	int rightColumn=g->getEnd()+1;
 	int row=g->getRow();
 
-	float delta=changeCell(row,leftColumn,align(row,rightColumn));
+	double delta=changeCell(row,leftColumn,align(row,rightColumn));
 	delta+=changeCell(row,rightColumn,alphabet->INDEL());
 
 	g->moveRight();
 	return delta;
 }
 
-void Alignment::goBackToLeft(GAP* g/*OLD: , float delta*/){
+void Alignment::goBackToLeft(GAP* g/*OLD: , double delta*/){
 	int leftColumn=g->getBegin()-1;
 	int rightColumn=g->getEnd();
 	int row=g->getRow();
@@ -266,7 +266,7 @@ void Alignment::goBackToLeft(GAP* g/*OLD: , float delta*/){
 	g->moveLeft();
 }
 
-void Alignment::goBackToRight(GAP* g/*OLD: , float delta*/){
+void Alignment::goBackToRight(GAP* g/*OLD: , double delta*/){
 	int leftColumn=g->getBegin();
 	int rightColumn=g->getEnd()+1;
 	int row=g->getRow();
@@ -281,7 +281,7 @@ int& Alignment::align(int row, int column){
 	return alignMatrix[row*length+column];
 }
 
-float& Alignment::counters(int character, int column){
+double& Alignment::counters(int character, int column){
 	return countersMatrix[character*length+column];
 }
 
@@ -308,7 +308,7 @@ vector<GAP*>* Alignment::getGAPS(){
 	return GAPS;
 }
 
-float Alignment::getGOP(int row){
+double Alignment::getGOP(int row){
 	return GOP*weights[row]*(weightsSUM-weights[row]);
 }
 

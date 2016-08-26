@@ -25,7 +25,7 @@
 #include "EmbeddedMatrices.h"
 #include <string>
 
-SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matrixSerie, float pid, float GEP, Alphabet* a) {
+SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matrixSerie, double pid, double GEP, Alphabet* a) {
 	if (a == NULL) a = new Alphabet("PROTEINS");
 	
 	if (!strcmp(matrixSerie, "BLOSUM")) {
@@ -45,7 +45,7 @@ SubstitutionMatrix * SubstitutionMatrix::getSubstitutionMatrix(const char* matri
 	return NULL;
 }
 
-SubstitutionMatrix::SubstitutionMatrix(const char* fileName, Alphabet* a, float g) : alphabet(a), GEP(g) {
+SubstitutionMatrix::SubstitutionMatrix(const char* fileName, Alphabet* a, double g) : alphabet(a), GEP(g) {
 	embeddedMatrix = false;
 	alphabetLength = alphabet->dimension();
 
@@ -82,7 +82,7 @@ SubstitutionMatrix::SubstitutionMatrix(const char* fileName, Alphabet* a, float 
 	file.close();
 }
 
-SubstitutionMatrix::SubstitutionMatrix(string matrixName, float g): GEP(g){
+SubstitutionMatrix::SubstitutionMatrix(string matrixName, double g): GEP(g){
 	embeddedMatrix = true;
 
 	if (matrixName != "IUB") alphabet = new Alphabet("PROTEINS");
@@ -100,7 +100,7 @@ SubstitutionMatrix::SubstitutionMatrix(string matrixName, float g): GEP(g){
 	if (matrixName == "PAM350") matrix = PAM350;
 }
 
-float SubstitutionMatrix::score(int a, int b) {
+double SubstitutionMatrix::score(int a, int b) {
 	if (a == alphabet->INDEL()) {
 		if (b == alphabet->INDEL()) return 0;
 		else return -GEP;// *scalingFactor;

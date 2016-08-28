@@ -89,7 +89,7 @@ public class AlignmentResultServlet extends HttpServlet {
 			request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
 								
 			// Redirect the request to index and add info to request
-			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFilePath());
+			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
@@ -141,7 +141,7 @@ public class AlignmentResultServlet extends HttpServlet {
 			String fileToDownloadPath = null;
 			switch (alignmentResultFileType) {
 			case Alignment:
-				fileToDownloadPath = alignmentResult.getAligmentFilePath();
+				fileToDownloadPath = alignmentResult.getAligmentFastaFilePath();
 				break;
 
 			case PhylogeneticTree:

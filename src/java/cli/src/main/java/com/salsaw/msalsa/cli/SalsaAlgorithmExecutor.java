@@ -41,7 +41,6 @@ import com.salsaw.msalsa.clustal.ClustalFileMapper;
 import com.salsaw.msalsa.clustal.ClustalManager;
 import com.salsaw.msalsa.clustal.ClustalType;
 import com.salsaw.msalsa.clustal.ClustalWManager;
-
 /**
  * @author Alessandro Daniele, Fabio Cesarato, Andrea Giraldin
  *
@@ -49,7 +48,9 @@ import com.salsaw.msalsa.clustal.ClustalWManager;
 public class SalsaAlgorithmExecutor {
 	
 	public static final String M_SALSA_HEADER = "MSALSA";
-	public static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln" + Constants.FASTA_FILE_EXSTENSION;
+	private static final String SALSA_ALIGMENT_SUFFIX = "-" + M_SALSA_HEADER + "-aln";
+	public static final String SALSA_ALIGMENT_FASTA_SUFFIX = SALSA_ALIGMENT_SUFFIX + Constants.FASTA_FILE_EXSTENSION;
+	public static final String SALSA_ALIGMENT_CLUSTAL_SUFFIX = "-" + M_SALSA_HEADER + "-aln" + Constants.CLUSTAL_FILE_EXSTENSION;
 	public static final String SALSA_TREE_SUFFIX = "-" + M_SALSA_HEADER + "-aln.ph";
 	
 	public static final String AUTHOR_ALESSANDRO_DANIELE = "Alessandro Daniele";

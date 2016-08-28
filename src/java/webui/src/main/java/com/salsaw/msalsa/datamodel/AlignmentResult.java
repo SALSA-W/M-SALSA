@@ -37,8 +37,9 @@ public class AlignmentResult {
 	// FIELDS
 	private final UUID id;
 	
-	private String msalsaAligmentFilePath;
-	private String msalsaPhylogeneticTreeFilePath; 
+	private String msalsaAligmentFastaFilePath;
+	private String msalsaAligmentClustalFilePath; 
+	private String msalsaPhylogeneticTreeFilePath;
 	
 	// CONSTRUCTOR
 	public AlignmentResult(UUID id) throws ClassNotFoundException, Exception
@@ -56,8 +57,12 @@ public class AlignmentResult {
 		return this.id;
 	}
 	
-	public String getAligmentFilePath() {
-		return this.msalsaAligmentFilePath;
+	public String getAligmentFastaFilePath() {
+		return this.msalsaAligmentFastaFilePath;
+	}
+	
+	public String getAligmentClustalFilePath() {
+		return this.msalsaAligmentClustalFilePath;
 	}
 	
 	public String getPhylogeneticTreeFilePath() {
@@ -81,13 +86,18 @@ public class AlignmentResult {
 				idProccedRequest).toString());
 		File[] listOfFiles = processedRequestFolder.listFiles();
 		
-		String msalsaAligmentFilePath = null;
-		String msalsaPhylogeneticTreeFilePath = null;
+		String msalsaFastaAligmentFilePath = null;
+		String msalsaClustalAligmentFilePath = null;
+		String msalsaPhylogeneticTreeFilePath = null;		
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
 		    	// Search SALSA alignment and tree files
-		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX)){
-		        	msalsaAligmentFilePath = file.getAbsolutePath();
+		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_ALIGMENT_FASTA_SUFFIX)){
+		        	msalsaFastaAligmentFilePath = file.getAbsolutePath();
+		        	continue;
+		        }
+		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_ALIGMENT_CLUSTAL_SUFFIX)){
+		        	msalsaClustalAligmentFilePath = file.getAbsolutePath();
 		        	continue;
 		        }
 		        if (file.getName().endsWith(SalsaAlgorithmExecutor.SALSA_TREE_SUFFIX)){
@@ -103,11 +113,12 @@ public class AlignmentResult {
 		    }
 		}
 		
-		if (msalsaAligmentFilePath == null){
-			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX + " for UUID " + idProccedRequest);
+		if (msalsaFastaAligmentFilePath == null){
+			throw new IllegalStateException("Unable to find file " + SalsaAlgorithmExecutor.SALSA_ALIGMENT_FASTA_SUFFIX + " for UUID " + idProccedRequest);
 		}
 		
-		this.msalsaAligmentFilePath = msalsaAligmentFilePath;
+		this.msalsaAligmentFastaFilePath = msalsaFastaAligmentFilePath;
+		this.msalsaAligmentClustalFilePath = msalsaClustalAligmentFilePath;
 		this.msalsaPhylogeneticTreeFilePath = msalsaPhylogeneticTreeFilePath;
 	}
 }

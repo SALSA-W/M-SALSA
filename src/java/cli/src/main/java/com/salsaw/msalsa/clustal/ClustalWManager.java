@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +48,11 @@ public class ClustalWManager extends ClustalManager {
 	/**
 	 * do full multiple alignment
 	 */
-	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";	
+	private static final String EXECUTE_MULTIPLE_ALIGNMENT = "ALIGN";
+	/**
+	 * output the input sequences in a different file format
+	 */
+	private static final String EXECUTE_FORMAT_CONVERSION = "CONVERT";	
 
 	// keys of options
 	/**
@@ -136,12 +141,30 @@ public class ClustalWManager extends ClustalManager {
 
 		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
 	}
+		
+	public final void convertSequence(String clustalPath, ClustalFileMapper clustalFileMapper,
+			ClustalWOputputFormat oputputFormat) throws IOException, SALSAException, InterruptedException {			
+		List<String> clustalProcessCommands = new ArrayList<String>();		
+		clustalProcessCommands.add(clustalPath);		
+		// Set file format conversion parameters
+		clustalProcessCommands.add(createParameterEqualsCommand(INPUT_FILE, clustalFileMapper.getInputFilePath()));
+		clustalProcessCommands.add(createBooleanParameterCommand(EXECUTE_FORMAT_CONVERSION));				
+		clustalProcessCommands.add(createParameterEqualsCommand(OUPUT_FORMAT, oputputFormat.toString()));
+
+		callClustalWProcess(clustalProcessCommands, clustalFileMapper);
+	}
 
 	private final void callClustalWProcess(List<String> clustalProcessCommands, ClustalFileMapper clustalFileMapper)
 			throws IOException, SALSAException, InterruptedException {
+		String[] processArguments = clustalProcessCommands.stream().toArray(String[]::new);
+		if (App.IS_DEBUG == true){
+			// Print process arguments
+			logger.debug(Arrays.toString(processArguments));
+		}
+		
 		// avoid ProcessBuilder due to quotes escape issues
-		final Process process = Runtime.getRuntime().exec(clustalProcessCommands.stream().toArray(String[]::new));
-
+		final Process process = Runtime.getRuntime().exec(processArguments);
+		
 		try {
 			try (InputStream is = process.getInputStream()) {
 				try (InputStreamReader isr = new InputStreamReader(is)) {
@@ -176,7 +199,7 @@ public class ClustalWManager extends ClustalManager {
 								clustalFileMapper.setGuideTreeFilePath(matcher.group(1));
 							}
 
-							if (line.indexOf("Fasta-Alignment file created") >= 0) {
+							if (line.indexOf("-Alignment file created") >= 0) {
 								Matcher matcher = pattern.matcher(line);
 								if (matcher.find() == false) {
 									throw new SALSAException("Unable to read the path of alignment file");

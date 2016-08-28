@@ -41,6 +41,7 @@ import org.apache.logging.log4j.Logger;
 import com.salsaw.msalsa.algorithm.FastaFileReader;
 import com.salsaw.msalsa.datamodel.AlignmentResult;
 import com.salsaw.msalsa.datamodel.AlignmentResultFileType;
+import com.salsaw.msalsa.services.ClustalFileContentSplitter;
 import com.salsaw.msalsa.services.ServletExceptionManager;
 import com.salsaw.msalsa.webui.exceptions.AlignmentExecutionException;
 
@@ -87,6 +88,10 @@ public class AlignmentResultServlet extends HttpServlet {
 				request.setAttribute("newickTree", newickTree);
 			}	
 			request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
+			
+			if(alignmentResult.getAligmentClustalFilePath() != null){			
+				ClustalFileContentSplitter clustalFileContentSplitter = new ClustalFileContentSplitter(alignmentResult.getAligmentClustalFilePath());
+			}
 								
 			// Redirect the request to index and add info to request
 			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());

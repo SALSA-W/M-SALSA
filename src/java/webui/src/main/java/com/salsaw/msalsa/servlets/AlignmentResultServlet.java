@@ -60,8 +60,9 @@ public class AlignmentResultServlet extends HttpServlet {
 	private static final int BUFSIZE = 4096;
 	public static final String FILE_TYPE_DOWNLOAD_ATTRIBUTE = "fileToDownload";
 	public static final String PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE = "phylogeneticTreeDataAvailable";
-	public static final String ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE = "alignmentSequencesHeaders";
-	public static final String ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE = "alignmentSequencesContent";
+	public static final String ALIGNMENT_FILE_CLUSTAL_SECTIONS_ATTRIBUTE = "alignmentClustalSections";
+	public static final String ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE = "alignmentFastaSequencesHeaders";
+	public static final String ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE = "alignmentFastaSequencesContent";
 	public static final String ALIGNMENT_FILE_SEQUENCES_NUMBER = "alignmentSequencesNumber";
 	static final Logger logger = LogManager.getLogger(AlignmentResultServlet.class);
 
@@ -91,12 +92,13 @@ public class AlignmentResultServlet extends HttpServlet {
 			
 			if(alignmentResult.getAligmentClustalFilePath() != null){			
 				ClustalFileContentSplitter clustalFileContentSplitter = new ClustalFileContentSplitter(alignmentResult.getAligmentClustalFilePath());
+				request.setAttribute(ALIGNMENT_FILE_CLUSTAL_SECTIONS_ATTRIBUTE, clustalFileContentSplitter.getClustalFileSections());
 			}
 								
 			// Redirect the request to index and add info to request
 			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());
-			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
-			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
+			request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
+			request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
 			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
 			

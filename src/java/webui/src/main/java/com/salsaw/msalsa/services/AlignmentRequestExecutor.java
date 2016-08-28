@@ -43,6 +43,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.salsaw.msalsa.cli.SalsaAlgorithmExecutor;
+import com.salsaw.msalsa.clustal.ClustalFileMapper;
+import com.salsaw.msalsa.clustal.ClustalWManager;
+import com.salsaw.msalsa.clustal.ClustalWOputputFormat;
 import com.salsaw.msalsa.config.ConfigurationManager;
 import com.salsaw.msalsa.config.ServerConfiguration;
 import com.salsaw.msalsa.datamodel.AlignmentRequest;
@@ -116,7 +119,7 @@ public class AlignmentRequestExecutor implements Runnable {
 			// Create M-SALSA output file name
 			String inputFileName = FilenameUtils.getBaseName(salsaWebParameters.getInputFile());
 			salsaWebParameters.setOutputFile(Paths.get(this.alignmentRequest.getAlignmentRequestPath().toString(),
-					inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_SUFFIX).toString());
+					inputFileName + SalsaAlgorithmExecutor.SALSA_ALIGMENT_FASTA_SUFFIX).toString());
 
 			// Save parameters inside file
 			SalsaParametersXMLExporter salsaParametersExporter = new SalsaParametersXMLExporter();
@@ -127,7 +130,12 @@ public class AlignmentRequestExecutor implements Runnable {
 					salsaWebParameters.getSalsaParametersFile());
 
 			// Start alignment
-			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);
+			SalsaAlgorithmExecutor.callClustal(salsaWebParameters);			
+			
+			// Convert output also to CLUSTAL format for visualization
+			ClustalFileMapper clustalFileMapper = new ClustalFileMapper(salsaWebParameters.getOutputFile());
+			ClustalWManager clustalWManager = new ClustalWManager();
+			clustalWManager.convertSequence(salsaWebParameters.getClustalWPath(), clustalFileMapper, ClustalWOputputFormat.CLUSTAL);
 
 			String recipientEmail = salsaWebParameters.getRecipientEmail();
 			if (recipientEmail != null && recipientEmail.isEmpty() == false) {

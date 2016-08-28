@@ -43,15 +43,28 @@
 		<div class="tab-content" id="results-tab">
 			<div id="alignment" class="tab-pane fade in active">
 				<button id="colorsButton" class="btn btn-default">Show colors</button>
+				
+				<h2>FASTA format aggregate result</h2>
 				<div class="row correct-margin">
 					<%
 						// Print all alignment data
 					%>
-					<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${alignmentSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
-					<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+					<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${alignmentFastaSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
+					<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentFastaSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
 				</div>
+				
+				<c:if test="${not empty alignmentClustalSections}">
+					<h2>CLUSTAL format result</h2>
+					<c:forEach items="${alignmentClustalSections}" var="clustalFileSection">
+						<div class="row correct-margin">	
+							<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${clustalFileSection.sequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
+							<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${clustalFileSection.sequences}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+						</div>
+					</c:forEach>
+				</c:if>
+				
 			</div>
-
+			
             <div id="tree" class="tab-pane fade">
                 <c:if test="${requestScope.phylogeneticTreeDataAvailable}">
                     <div class="col-md-12 text-center" >

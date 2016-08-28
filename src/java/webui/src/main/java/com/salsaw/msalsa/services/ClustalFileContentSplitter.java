@@ -16,6 +16,11 @@ public class ClustalFileContentSplitter {
 		readInputSequences(clustalFilePath);
 	}
 
+	// GET
+	public List<ClustalFileSection> getClustalFileSections() {
+		return this.clustalFileSections;
+	}
+	
 	private void readInputSequences(String clustalFilePath) throws FileNotFoundException, IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(clustalFilePath))) {
 			String line;
@@ -26,15 +31,9 @@ public class ClustalFileContentSplitter {
 			while ((line = br.readLine()) != null) {
 				// Skip first comment line
 				if (lineIndex != 0) {
-
 					if (line.trim().isEmpty() == true) {
 						// Store previous section and start a new one
-						if (sequencesHeaders.size() != 0) {
-							ClustalFileSection clustalFileSection = new ClustalFileSection(
-									sequencesHeaders.stream().toArray(String[]::new),
-									sequences.stream().toArray(String[]::new));
-							this.clustalFileSections.add(clustalFileSection);
-						}
+						updateFileSection(sequencesHeaders, sequences);
 						sequencesHeaders = new ArrayList<>();
 						sequences = new ArrayList<>();
 					} else {
@@ -48,11 +47,19 @@ public class ClustalFileContentSplitter {
 
 				lineIndex++;
 			}
+			
+			// Ensure to save also last section data
+			updateFileSection(sequencesHeaders, sequences);
 		}
 	}
-
-	// GET
-	public List<ClustalFileSection> getClustalFileSections() {
-		return this.clustalFileSections;
+	
+	private void updateFileSection(List<String> sequencesHeaders, List<String> sequences){
+		if (sequencesHeaders.size() != 0) {
+			ClustalFileSection clustalFileSection = new ClustalFileSection(
+					sequencesHeaders.stream().toArray(String[]::new),
+					sequences.stream().toArray(String[]::new));
+			this.clustalFileSections.add(clustalFileSection);
+		}
 	}
+	
 }

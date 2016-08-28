@@ -25,7 +25,7 @@ const NonPolarClass: string = "nonPolar";
 const AcidicPolarClass: string = "acidicPolar";
 const BasicPolarClass: string = "basicPolar";
 const PolarClass: string = "polar";
-const NotAminoAcidClas: string  = "NotAA";
+const NotAminoAcidClas: string = "NotAA";
 
 // Create a map to get amino acid polarity
 interface IAminoPolarityMap {
@@ -58,45 +58,54 @@ AminoPolarityMap["G"] = PolarClass;
 AminoPolarityMap["Q"] = PolarClass;
 
 interface IAminoColour {
-    htmlContent : string;
-    styleClass : string;
+    htmlContent: string;
+    styleClass: string;
 }
 
 class AminoAcidColorsApplyer {
     private static colourApplayed: boolean = false;
-    private static alignmentContentNoColour: string;
-    private static alignmentContentWithColour: string = "";
+    private static alignmentContentNoColour: Array<string> = [];
+    private static alignmentContentWithColour: Array<string> = [];
 
     private static applyColour(): void {
-        // Save clean content
-        AminoAcidColorsApplyer.alignmentContentNoColour = $("#" + AlignmentSequenceId).html();
-        
-        if (AminoAcidColorsApplyer.alignmentContentNoColour.length === 0)
-        {
-            // nothing to do
-            return;
-        }
+        // Find all sequences
+        let alignmentSequenceSections = $("." + AlignmentSequenceId);
 
-        if (AminoAcidColorsApplyer.alignmentContentWithColour === "") {
-            // Create first element color
-            let styleClass = AminoAcidColorsApplyer.getAminoClass(AminoAcidColorsApplyer.alignmentContentNoColour[0]);
-            let htmlContent = '<span class="' + styleClass + '">' + AminoAcidColorsApplyer.alignmentContentNoColour[0];
-            let aminoColour: IAminoColour = {
-                htmlContent: htmlContent,
-                styleClass: styleClass
-            };
-            AminoAcidColorsApplyer.alignmentContentWithColour += htmlContent;
-            // Create colours for amino acids
-            for (var i = 1, len = AminoAcidColorsApplyer.alignmentContentNoColour.length; i < len; i++) {
-                aminoColour = AminoAcidColorsApplyer.applySimbolColour(AminoAcidColorsApplyer.alignmentContentNoColour[i], aminoColour);
-                AminoAcidColorsApplyer.alignmentContentWithColour += aminoColour.htmlContent;
+        for (let i = 0, len = alignmentSequenceSections.length; i < len; i++) {
+            let alignmentSequenceSection = $(alignmentSequenceSections[i]);
+
+            // Save clean content
+            if (AminoAcidColorsApplyer.alignmentContentNoColour.length - 1 < i) {
+                AminoAcidColorsApplyer.alignmentContentNoColour.push(alignmentSequenceSection.html());
             }
-            // Close last span
-            AminoAcidColorsApplyer.alignmentContentWithColour += '</span>';
+
+            if (AminoAcidColorsApplyer.alignmentContentNoColour[i].length === 0) {
+                // nothing to do
+                return;
+            }
+
+            if (AminoAcidColorsApplyer.alignmentContentWithColour.length - 1 < i) {
+                let alignmentContentNoColourToProcess = AminoAcidColorsApplyer.alignmentContentNoColour[i];
+                // Create first element color
+                let styleClass = AminoAcidColorsApplyer.getAminoClass(alignmentContentNoColourToProcess[0]);
+                let htmlContent = '<span class="' + styleClass + '">' + alignmentContentNoColourToProcess[0];
+                let aminoColour: IAminoColour = {
+                    htmlContent: htmlContent,
+                    styleClass: styleClass
+                };
+                AminoAcidColorsApplyer.alignmentContentWithColour[i] = htmlContent;
+                // Create colours for amino acids
+                for (let j = 1, len = alignmentContentNoColourToProcess.length; j < len; j++) {
+                    aminoColour = AminoAcidColorsApplyer.applySimbolColour(alignmentContentNoColourToProcess[j], aminoColour);
+                    AminoAcidColorsApplyer.alignmentContentWithColour[i] += aminoColour.htmlContent;
+                }
+                // Close last span
+                AminoAcidColorsApplyer.alignmentContentWithColour[i] += '</span>';
+            }
+
+            // Set colour to content
+            alignmentSequenceSection.html(AminoAcidColorsApplyer.alignmentContentWithColour[i]);
         }
-        
-        // Set colour to content
-        $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentWithColour);        
     }
 
     public static toogleColour() {
@@ -107,12 +116,16 @@ class AminoAcidColorsApplyer {
             AminoAcidColorsApplyer.colourApplayed = true;
         } else {
             // Restore content
-            $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentNoColour);
+            let alignmentSequenceSections = $("." + AlignmentSequenceId);
+            for (let i = 0, len = alignmentSequenceSections.length; i < len; i++) {
+                let alignmentSequenceSection = $(alignmentSequenceSections[i]);
+                alignmentSequenceSection.html(AminoAcidColorsApplyer.alignmentContentNoColour[i]);
+            }
             $("#" + ApplyAlignmentColoursButtonId).html('Show Colors');
             AminoAcidColorsApplyer.colourApplayed = false;
         }
     }
-    
+
     private static getAminoClass(aminoAcid: string): string {
         if (aminoAcid in AminoPolarityMap) {
             // Is an amino acid
@@ -142,4 +155,4 @@ class AminoAcidColorsApplyer {
 }
 
 // Attach evet to button
-$("#" + ApplyAlignmentColoursButtonId).click(function() { AminoAcidColorsApplyer.toogleColour(); });
+$("#" + ApplyAlignmentColoursButtonId).click(function () { AminoAcidColorsApplyer.toogleColour(); });

@@ -49,16 +49,16 @@
 					<%
 						// Print all alignment data
 					%>
-					<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${alignmentFastaSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
-					<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${alignmentFastaSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+					<pre class="col-sm-2 sequencesNames"><c:forEach items="${alignmentFastaSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
+					<pre class="col-sm-10 sequencesContent"><c:forEach items="${alignmentFastaSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
 				</div>
 				
 				<c:if test="${not empty alignmentClustalSections}">
 					<h2>CLUSTAL format result</h2>
 					<c:forEach items="${alignmentClustalSections}" var="clustalFileSection">
 						<div class="row correct-margin">	
-							<pre id="sequencesNames" class="col-sm-2"><c:forEach items="${clustalFileSection.sequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
-							<pre id="sequencesContent" class="col-sm-10"><c:forEach items="${clustalFileSection.sequences}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+							<pre class="col-sm-2 sequencesNames"><c:forEach items="${clustalFileSection.sequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
+							<pre class="col-sm-10 sequencesContent"><c:forEach items="${clustalFileSection.sequences}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
 						</div>
 					</c:forEach>
 				</c:if>

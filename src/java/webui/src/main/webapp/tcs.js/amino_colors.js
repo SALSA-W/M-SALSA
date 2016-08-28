@@ -51,31 +51,39 @@ var AminoAcidColorsApplyer = (function () {
     function AminoAcidColorsApplyer() {
     }
     AminoAcidColorsApplyer.applyColour = function () {
-        // Save clean content
-        AminoAcidColorsApplyer.alignmentContentNoColour = $("#" + AlignmentSequenceId).html();
-        if (AminoAcidColorsApplyer.alignmentContentNoColour.length === 0) {
-            // nothing to do
-            return;
-        }
-        if (AminoAcidColorsApplyer.alignmentContentWithColour === "") {
-            // Create first element color
-            var styleClass = AminoAcidColorsApplyer.getAminoClass(AminoAcidColorsApplyer.alignmentContentNoColour[0]);
-            var htmlContent = '<span class="' + styleClass + '">' + AminoAcidColorsApplyer.alignmentContentNoColour[0];
-            var aminoColour = {
-                htmlContent: htmlContent,
-                styleClass: styleClass
-            };
-            AminoAcidColorsApplyer.alignmentContentWithColour += htmlContent;
-            // Create colours for amino acids
-            for (var i = 1, len = AminoAcidColorsApplyer.alignmentContentNoColour.length; i < len; i++) {
-                aminoColour = AminoAcidColorsApplyer.applySimbolColour(AminoAcidColorsApplyer.alignmentContentNoColour[i], aminoColour);
-                AminoAcidColorsApplyer.alignmentContentWithColour += aminoColour.htmlContent;
+        // Find all sequences
+        var alignmentSequenceSections = $("." + AlignmentSequenceId);
+        for (var i = 0, len = alignmentSequenceSections.length; i < len; i++) {
+            var alignmentSequenceSection = $(alignmentSequenceSections[i]);
+            // Save clean content
+            if (AminoAcidColorsApplyer.alignmentContentNoColour.length - 1 < i) {
+                AminoAcidColorsApplyer.alignmentContentNoColour.push(alignmentSequenceSection.html());
             }
-            // Close last span
-            AminoAcidColorsApplyer.alignmentContentWithColour += '</span>';
+            if (AminoAcidColorsApplyer.alignmentContentNoColour[i].length === 0) {
+                // nothing to do
+                return;
+            }
+            if (AminoAcidColorsApplyer.alignmentContentWithColour.length - 1 < i) {
+                var alignmentContentNoColourToProcess = AminoAcidColorsApplyer.alignmentContentNoColour[i];
+                // Create first element color
+                var styleClass = AminoAcidColorsApplyer.getAminoClass(alignmentContentNoColourToProcess[0]);
+                var htmlContent = '<span class="' + styleClass + '">' + alignmentContentNoColourToProcess[0];
+                var aminoColour = {
+                    htmlContent: htmlContent,
+                    styleClass: styleClass
+                };
+                AminoAcidColorsApplyer.alignmentContentWithColour[i] = htmlContent;
+                // Create colours for amino acids
+                for (var j = 1, len_1 = alignmentContentNoColourToProcess.length; j < len_1; j++) {
+                    aminoColour = AminoAcidColorsApplyer.applySimbolColour(alignmentContentNoColourToProcess[j], aminoColour);
+                    AminoAcidColorsApplyer.alignmentContentWithColour[i] += aminoColour.htmlContent;
+                }
+                // Close last span
+                AminoAcidColorsApplyer.alignmentContentWithColour[i] += '</span>';
+            }
+            // Set colour to content
+            alignmentSequenceSection.html(AminoAcidColorsApplyer.alignmentContentWithColour[i]);
         }
-        // Set colour to content
-        $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentWithColour);
     };
     AminoAcidColorsApplyer.toogleColour = function () {
         if (AminoAcidColorsApplyer.colourApplayed == false) {
@@ -86,7 +94,11 @@ var AminoAcidColorsApplyer = (function () {
         }
         else {
             // Restore content
-            $("#" + AlignmentSequenceId).html(AminoAcidColorsApplyer.alignmentContentNoColour);
+            var alignmentSequenceSections = $("." + AlignmentSequenceId);
+            for (var i = 0, len = alignmentSequenceSections.length; i < len; i++) {
+                var alignmentSequenceSection = $(alignmentSequenceSections[i]);
+                alignmentSequenceSection.html(AminoAcidColorsApplyer.alignmentContentNoColour[i]);
+            }
             $("#" + ApplyAlignmentColoursButtonId).html('Show Colors');
             AminoAcidColorsApplyer.colourApplayed = false;
         }
@@ -117,7 +129,8 @@ var AminoAcidColorsApplyer = (function () {
         }
     };
     AminoAcidColorsApplyer.colourApplayed = false;
-    AminoAcidColorsApplyer.alignmentContentWithColour = "";
+    AminoAcidColorsApplyer.alignmentContentNoColour = [];
+    AminoAcidColorsApplyer.alignmentContentWithColour = [];
     return AminoAcidColorsApplyer;
 }());
 // Attach evet to button

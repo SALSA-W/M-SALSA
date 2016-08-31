@@ -103,6 +103,7 @@ public class AlignmentResultServlet extends HttpServlet {
 				request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
 				
 				RequestDispatcher requestDispatcher =
+					request.getRequestDispatcher("results.jsp");
 				requestDispatcher.forward(request, response);
 			}
 		}
@@ -140,6 +141,7 @@ public class AlignmentResultServlet extends HttpServlet {
 			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 			if (idRequest == null) {
 				// The input data are invalid
+				response.sendError(response.getStatus());
 			}
 			else {
 				AlignmentResult alignmentResult = new AlignmentResult(idRequest);

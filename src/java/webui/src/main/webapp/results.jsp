@@ -44,15 +44,14 @@
 			<div id="alignment" class="tab-pane fade in active">
 				<button id="colorsButton" class="btn btn-default">Show colors</button>
 				
-				<h2>FASTA format aggregate result</h2>
-				<div class="row correct-margin">
-					<%
-						// Print all alignment data
-					%>
-					<pre class="col-sm-2 sequencesNames"><c:forEach items="${alignmentFastaSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<%=Constants.NEW_LINE%></c:forEach></pre>
-					<pre class="col-sm-10 sequencesContent"><c:forEach items="${alignmentFastaSequencesContent}" var="sequence">${sequence}<%=Constants.NEW_LINE%></c:forEach></pre>
+				<% /*
+ 				<h2>FASTA format aggregate result</h2>
+ 				<div class="row correct-margin">
+ 					// Print all alignment data
+					<pre class="col-sm-2 sequencesNames"><c:forEach items="${alignmentFastaSequencesHeaders}" var="sequenceHeader">${sequenceHeader}<=Constants.NEW_LINE></c:forEach></pre>
+ 					<pre class="col-sm-10 sequencesContent"><c:forEach items="${alignmentFastaSequencesContent}" var="sequence">${sequence}<=Constants.NEW_LINE></c:forEach></pre>
 				</div>
-				
+				*/ %>
 				<c:if test="${not empty alignmentClustalSections}">
 					<h2>CLUSTAL format result</h2>
 					<c:forEach items="${alignmentClustalSections}" var="clustalFileSection">

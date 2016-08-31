@@ -97,8 +97,8 @@ public class AlignmentResultServlet extends HttpServlet {
 								
 			// Redirect the request to index and add info to request
 			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());
-			request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
-			request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
+			//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
+			//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
 			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
 			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
 			

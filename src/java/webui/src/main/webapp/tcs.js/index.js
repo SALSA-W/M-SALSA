@@ -76,7 +76,7 @@ function SetUniProtIdsValues() {
             type: 'hidden',
             id: 'uniProtIds',
             name: 'uniProtIds',
-            value: uniProtIdsValueArray.join(','),
+            value: uniProtIdsValueArray.join(',')
         }).appendTo("#salsa-parameters-form");
     }
 }
@@ -119,7 +119,7 @@ function asyncUniProtValidation(callback) {
                 window.ParsleyUI.removeError(dynamicListItem, ErrorInvalidIdLabel);
                 dynamicListItem.validate();
                 callback(true);
-            },
+            }
         },
         error: function () {
             // Add errors
@@ -135,7 +135,7 @@ function asyncUniProtValidation(callback) {
             window.ParsleyUI.addError(dynamicListItem, ErrorInvalidIdLabel, "The input value doesn't exists inside UniProt");
             callback(false);
         },
-        timeout: 2000,
+        timeout: 2000
     });
 }
 //# sourceMappingURL=index.js.map

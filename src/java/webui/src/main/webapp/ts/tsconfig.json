@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es3",
         "module": "commonjs",
         "sourceMap": true,
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
+        "noImplicitReturns": true,
+        "noImplicitUseStrict": false,
         "outDir": "../tcs.js",
         "rootDir": "src"
     },

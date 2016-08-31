@@ -79,32 +79,32 @@ public class AlignmentResultServlet extends HttpServlet {
 				// The input data are invalid
 				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
+			else {
+				AlignmentResult alignmentResult = new AlignmentResult(idRequest);
 				
-			AlignmentResult alignmentResult = new AlignmentResult(idRequest);
-			
-			boolean phylogeneticTreeDataAvailable = false;
-			if (alignmentResult.getPhylogeneticTreeFilePath() != null) {
-				phylogeneticTreeDataAvailable = true;
-				String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
-				request.setAttribute("newickTree", newickTree);
-			}	
-			request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
-			
-			if(alignmentResult.getAligmentClustalFilePath() != null){			
-				ClustalFileContentSplitter clustalFileContentSplitter = new ClustalFileContentSplitter(alignmentResult.getAligmentClustalFilePath());
-				request.setAttribute(ALIGNMENT_FILE_CLUSTAL_SECTIONS_ATTRIBUTE, clustalFileContentSplitter.getClustalFileSections());
+				boolean phylogeneticTreeDataAvailable = false;
+				if (alignmentResult.getPhylogeneticTreeFilePath() != null) {
+					phylogeneticTreeDataAvailable = true;
+					String newickTree = getPhylogeneticTreeFileContent(alignmentResult.getPhylogeneticTreeFilePath());
+					request.setAttribute("newickTree", newickTree);
+				}	
+				request.setAttribute(PHYLOGENETIC_TREE_DATA_AVAILABLE_ATTRIBUTE, phylogeneticTreeDataAvailable);
+				
+				if(alignmentResult.getAligmentClustalFilePath() != null){			
+					ClustalFileContentSplitter clustalFileContentSplitter = new ClustalFileContentSplitter(alignmentResult.getAligmentClustalFilePath());
+					request.setAttribute(ALIGNMENT_FILE_CLUSTAL_SECTIONS_ATTRIBUTE, clustalFileContentSplitter.getClustalFileSections());
+				}
+									
+				// Redirect the request to index and add info to request
+				FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());
+				//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
+				//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
+				request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
+				request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
+				
+				RequestDispatcher requestDispatcher =
+				requestDispatcher.forward(request, response);
 			}
-								
-			// Redirect the request to index and add info to request
-			FastaFileReader fastaFileReader = new FastaFileReader(alignmentResult.getAligmentFastaFilePath());
-			//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_HEADERS_ATTRIBUTE, fastaFileReader.getSequencesHeaders());
-			//request.setAttribute(ALIGNMENT_FILE_FASTA_SEQUENCES_CONTENT_ATTRIBUTE, fastaFileReader.getSequences());
-			request.setAttribute(ALIGNMENT_FILE_SEQUENCES_NUMBER, fastaFileReader.getSequences().size());
-			request.setAttribute(AlignmentStatusServlet.ID_PARAMETER, idRequest);
-			
-			RequestDispatcher requestDispatcher =
-				    request.getRequestDispatcher("results.jsp");
-			requestDispatcher.forward(request, response);
 		}
 		catch (AlignmentExecutionException alignmentExecutionException) {
 			// Show message to user but not log exception because alredey logged
@@ -140,24 +140,24 @@ public class AlignmentResultServlet extends HttpServlet {
 			UUID idRequest = AlignmentStatusServlet.readAndValidateProcessId(request, response);
 			if (idRequest == null) {
 				// The input data are invalid
-				return;
 			}
+			else {
+				AlignmentResult alignmentResult = new AlignmentResult(idRequest);
 
-			AlignmentResult alignmentResult = new AlignmentResult(idRequest);
+				String fileToDownloadPath = null;
+				switch (alignmentResultFileType) {
+				case Alignment:
+					fileToDownloadPath = alignmentResult.getAligmentFastaFilePath();
+					break;
 
-			String fileToDownloadPath = null;
-			switch (alignmentResultFileType) {
-			case Alignment:
-				fileToDownloadPath = alignmentResult.getAligmentFastaFilePath();
-				break;
+				case PhylogeneticTree:
+					fileToDownloadPath = alignmentResult.getPhylogeneticTreeFilePath();
+					break;
+				}
 
-			case PhylogeneticTree:
-				fileToDownloadPath = alignmentResult.getPhylogeneticTreeFilePath();
-				break;
-			}
-
-			Path fileToDownload = Paths.get(fileToDownloadPath);
-			doDownload(request, response, fileToDownloadPath, fileToDownload.getFileName().toString());
+				Path fileToDownload = Paths.get(fileToDownloadPath);
+				doDownload(request, response, fileToDownloadPath, fileToDownload.getFileName().toString());
+			}			
 		} catch (Exception e) {
 			ServletExceptionManager.manageException(e, request, response);
 		}

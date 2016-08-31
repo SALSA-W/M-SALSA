@@ -57,12 +57,13 @@ public class ProcessCheckerServlet extends HttpServlet {
 				// The input data are invalid
 				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
-
-			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
-				response.setStatus(HttpServletResponse.SC_ACCEPTED);
-			} else {
-				response.setStatus(HttpServletResponse.SC_OK);
-			}
+			else {
+				if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
+					response.setStatus(HttpServletResponse.SC_ACCEPTED);
+				} else {
+					response.setStatus(HttpServletResponse.SC_OK);
+				}
+			}			
 		} catch (Exception e) {
 			ServletExceptionManager.manageException(e, request, response);
 		}

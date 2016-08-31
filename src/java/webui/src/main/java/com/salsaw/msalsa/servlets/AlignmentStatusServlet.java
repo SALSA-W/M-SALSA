@@ -44,19 +44,20 @@ public class AlignmentStatusServlet extends HttpServlet {
 				// The input data are invalid
 				ServletExceptionManager.manageErrorMessageException("Invalid input data", request, response);
 			}
+			else {
+				if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
+					// Redirect the request to loading
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher("/loading.jsp");
+					requestDispatcher.forward(request, response);
+				} else {
 
-			if (AlignmentRequestManager.getInstance().IsRequestCompleted(idRequest) == false) {
-				// Redirect the request to loading
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/loading.jsp");
-				requestDispatcher.forward(request, response);
-			} else {
-
-				String aligmentResultServlet = "/" + AlignmentResultServlet.class.getSimpleName() + "?" + ID_PARAMETER
-						+ URLEncoder.encode(idRequest.toString(), StandardCharsets.UTF_8.toString());
-				// Redirect the request to result servlet
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
-				requestDispatcher.forward(request, response);
-			}
+					String aligmentResultServlet = "/" + AlignmentResultServlet.class.getSimpleName() + "?"
+							+ ID_PARAMETER + URLEncoder.encode(idRequest.toString(), StandardCharsets.UTF_8.toString());
+					// Redirect the request to result servlet
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(aligmentResultServlet);
+					requestDispatcher.forward(request, response);
+				}
+			}		
 		}  catch (Exception e) {
 			ServletExceptionManager.manageException(e, request, response);
 		}
@@ -72,14 +73,14 @@ public class AlignmentStatusServlet extends HttpServlet {
 
 		if (idRequestString == null) {
 			logger.warn(ID_PARAMETER + " not set");
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return null;
 		}
 
 		UUID idRequest = UUID.fromString(idRequestString);
 		if (AlignmentRequestManager.getInstance().RequestExists(idRequest) == false) {
 			logger.warn(idRequestString + " not exists");
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		}
 

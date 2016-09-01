@@ -33,7 +33,7 @@
 
 		<jsp:include page="footer.jsp" />
 		<jsp:include page="standard-js.jsp" />
-		<script src="js/loading.js" type="text/javascript"></script>
+		<script src="js/loading.js" type="text/javascript" charset="utf-8"></script>
 	</div>
 	<!-- Container -->
 </body>

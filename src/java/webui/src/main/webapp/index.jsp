@@ -307,11 +307,11 @@ P69905" data-toggle="tooltip" class="info-button" data-placement="left"><span cl
 		<jsp:include page="standard-js.jsp" />
 		<!-- Parsley Validation -->
 		<script src="http://parsleyjs.org/dist/parsley.min.js"></script>
-		<script src="js/header.js" type="text/javascript"></script>
+		<script src="js/header.js" type="text/javascript" charset="utf-8"></script>
 		<!-- Load TypeScript compilation output -->
-		<script src="tcs.js/dynamicList.js" type="text/javascript"></script>
-		<script src="tcs.js/input_form_validation.js" type="text/javascript"></script>
-		<script src="tcs.js/index.js" type="text/javascript"></script>
+		<script src="tcs.js/dynamicList.js" type="text/javascript" charset="utf-8"></script>
+		<script src="tcs.js/input_form_validation.js" type="text/javascript" charset="utf-8"></script>
+		<script src="tcs.js/index.js" type="text/javascript" charset="utf-8"></script>
 	</div>
 	<!-- Container -->
 </body>
